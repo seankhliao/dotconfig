@@ -1,0 +1,16 @@
+configstore/
+dconf/
+docker/
+git/credentials
+goinsta
+google-*
+gtk*
+menus/
+nvim/
+qBittorrent/
+rclone/
+SECRETS
+spotify/
+Trolltech.conf
+yarn/
+zsh/.zcompdump

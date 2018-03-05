@@ -1,0 +1,9 @@
+# term screen-256color
+# term st-256color
+term xterm-256color
+attrcolor b ".I"
+termcapinfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E38;5;%dm'
+defbce "on"
+startup_message off
+# termcapinfo xterm* ti@:te@
+defscrollback 10000

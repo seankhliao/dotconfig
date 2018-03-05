@@ -1,0 +1,25 @@
+[user]
+    email = seankhliao@gmail.com
+    name = Sean Liao
+
+[credential]
+    helper = store
+
+[alias]
+    a = add
+    cam = commit -a -m
+    camp = !git commit -a -m \"$1\" && git push && :
+    cl = clone --depth=1
+    clm = !git clone --depth=1 https://github.com/seankhliao/$1 && :
+    cm = commit -m
+    l = pull
+    lr = pull --rebase
+    lo = log --graph --color=always --format='%C(auto)%h%d %s %C( bold black)%cr %C(blue)<%an>'
+    p = push
+    s = status
+    va = !git tag $(semver -i major $(git tag | tail -n 1))
+    vm = !git tag $(semver -i minor $(git tag | tail -n 1))
+    vp = !git tag $(semver -i patch $(git tag | tail -n 1))
+
+[tag]
+	sort = version:refname

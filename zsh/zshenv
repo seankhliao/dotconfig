@@ -1,0 +1,75 @@
+# XDG dirs
+export XDG_CONFIG_HOME="$HOME"/.config
+export XDG_CACHE_HOME="$HOME"/.cache
+export XDG_DATA_HOME="$HOME"/.local/share
+
+# XDG RUNTIME
+export RXVT_SOCKET="$XDG_RUNTIME_DIR"/urxvtd
+export XAUTHORITY="$XDG_RUNTIME_DIR"/Xauthority
+#
+# language
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+# preferences
+if [ -f "/usr/bin/nvim" ]; then
+    export EDITOR=nvim
+else
+    export EDITOR=vim
+fi
+export BROWSER=google-chrome-unstable
+
+# path
+export GOPATH=$HOME/projects
+export PATH=$GOPATH/bin:$PATH
+
+# make things work
+export QEMU_AUDIO_DRV=alsa
+# export GTK_IM_MODULE=fcitx
+# export XMODIFIERS=@im=fcitx
+# export QT_IM_MODULE=fcitx
+
+# XDG CACHE
+export __GL_SHADER_DISK_CACHE_PATH="$XDG_CACHE_HOME"/nv
+export CCACHE_DIR="$XDG_CACHE_HOME"/ccache
+export CUDA_CACHE_PATH="$XDG_CACHE_HOME"/nv
+export PYTHON_EGG_CACHE="$XDG_CACHE_HOME"/python-eggs
+export RANDFILE="$XDG_CACHE_HOME"/rnd
+
+# XDG DATA
+export LESSHISTFILE=-
+export HISTFILE="$XDG_DATA_HOME"/zsh/history
+export HISTSIZE=999999999
+export SAVEHIST=$HISTSIZE
+export GNUPGHOME="$XDG_DATA_HOME"/gnupg
+export TERMINFO="$XDG_DATA_HOME"/terminfo
+export TERMINFO_DIRS="$XDG_DATA_HOME"/terminfo:/usr/share/terminfo
+export PGPASSFILE="$XDG_DATA_HOME"/psql/pgpass
+export PSQL_HISTORY="$XDG_DATA_HOME"/psql/history
+export PYLINTHOME=$XDG_DATA_HOME/pylint
+# Python history is set in PYTHONSTARTUP
+
+# XDG CONFIG
+export CARGO_HOME="$XDG_DATA_HOME"/cargo
+export CURL_HOME="$XDG_CONFIG_HOME"/curl
+export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker
+export GTK2_RC_FILES="$XDG_CONFIG_HOME"/gtk-2.0/gtkrc
+export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME"/jupyter
+export IPYTHONDIR="$XDG_CONFIG_HOME"/jupyter
+export LESSKEY="$XDG_CONFIG_HOME"/lesskey
+export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME"/npmrc
+export PSQLRC="$XDG_CONFIG_HOME"/psqlrc
+# export PYTHONSTARTUP="$XDG_CONFIG_HOME"/pythonrc.py
+export SCREENRC="$XDG_CONFIG_HOME"/screenrc
+export VIMINIT=":source $XDG_CONFIG_HOME"/nvim/init.vim
+export WGETRC="$XDG_CONFIG_HOME"/wgetrc
+export ZDOTDIR="$XDG_CONFIG_HOME"/zsh
+
+# cuda
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/cuda/lib64"
+export CUDA_HOME=/opt/cuda/
+
+# misc
+export TAG_SEARCH_PROG=rg
+
+source $XDG_CONFIG_HOME/SECRETS

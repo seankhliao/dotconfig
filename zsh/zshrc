@@ -1,0 +1,169 @@
+# ==================== KeyBindings ===================
+sudo-command-line() {
+[[ -z $BUFFER ]] && zle up-history
+if [[ $BUFFER == sudo\ * ]]; then
+    LBUFFER="${LBUFFER#sudo }"
+else
+    LBUFFER="sudo $LBUFFER"
+fi
+}
+zle -N sudo-command-line
+zle -N history-substring-search-up
+zle -N history-substring-search-down
+# Defined shortcut keys: [Esc] [Esc]
+bindkey -e
+bindkey "\e\e" sudo-command-line
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+bindkey '^[[H' beginning-of-line
+bindkey '^[[4~' end-of-line
+bindkey '^[[F' end-of-line
+
+# =================== ZSH Options ==================
+setopt AUTOCD
+setopt COMPLETE_ALIASES
+setopt COMPLETEINWORD
+setopt HIST_EXPIRE_DUPS_FIRST
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_FIND_NO_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_SAVE_NO_DUPS
+setopt INC_APPEND_HISTORY
+setopt SHARE_HISTORY
+
+# =================== ZSH Completion =================
+zstyle ':completion:*' menu select
+zstyle ':completion:*' rehash true
+zstyle ':completion:*' list-colors "${(@s.:.)LS_COLORS}"
+zstyle ':completion:*' matcher-list '' \
+    'm:{a-z\-}={A-Z\_}' \
+    'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-}={A-Z\_}' \
+    'r:|?=** m:{a-z\-}={A-Z\_}'
+autoload -Uz compinit
+compinit -d "$XDG_RUNTIME_DIR"/zcompdump
+
+# ===================== Aliases ===================
+alias ..='cd ..'
+
+alias ..2='cd ../..'
+alias ...='cd ../..'
+
+alias ..3='cd ../../..'
+alias ....='cd ../../..'
+
+alias ..4='cd ../../../..'
+alias .....='cd ../../../..'
+
+alias ..5='cd ../../../../..'
+alias ......='cd ../../../../..'
+
+alias ..6='cd ../../../../../..'
+alias .......='cd ../../../../../..'
+
+alias cdr='cd -P .'
+
+alias diskspace="df -P -kHl"
+alias filespace='du -d 1 -h . 2>/dev/null | sort -h -r'
+
+alias g='git'
+# compdef g='git'
+alias gd='git --git-dir=$HOME/code/dotfiles --work-tree=$HOME'
+# compdef gd='git'
+#
+fucntion gsall() {
+    bold=$(tput bold)
+    normal=$(tput sgr0)
+
+    for dir in ~/code/*; do
+        if [ -d "$dir" ]; then
+            if [ -d "$dir"/.git ]; then
+                echo "${bold}$dir${normal}"
+                cd $dir
+                git status -s
+                echo ""
+                cd ..
+            fi
+        fi
+    done
+}
+
+alias h='htop'
+alias l='ls -lGh'
+alias ll='ls -alGh'
+alias ls='ls --color'
+
+function buildpkg() {
+    makepkg -ifsrc --noconfirm
+    CUR=$(pwd)
+    TMP=$(mktemp -d)
+    cp PKGBUILD $TMP
+    rm -rf $CUR
+    mkdir $CUR
+    cd $CUR
+    mv $TMP/PKGBUILD .
+    rm -rf $TMP
+}
+
+# alias ipy='ipython3'
+alias py='python3'
+
+alias s='ssh'
+compinit s='ssh'
+
+if [ -f '/usr/bin/nvim' ]; then
+    alias v='nvim'
+else
+    alias v='vim'
+fi
+
+
+# ===================== Functions =====================
+# function enc() {openssl enc -AES256 -in "$@" -out "$@.enc"}
+# function encd() {openssl enc -d -AES256 -in "$@" -out "${@%.*}"}
+
+
+# ===================== Local =========================
+if [ "$HOST" = 'daenerys' ]; then
+    alias cr='google-chrome-unstable'
+    alias p='yay'
+    alias sd='sudo systemctl'
+    compdef sd='systemctl'
+    alias t='tag -i'
+
+    export TAG_CMD_FMT_STRING="$EDITOR {{.Filename }} +{{ .LineNumber }}"
+    if (( $+commands[tag] )); then
+        tag() {
+            command tag "$@";
+            source ${TAG_ALIAS_FILE:-/tmp/tag_aliases} 2>/dev/null
+        }
+    fi
+fi
+
+
+# ==================== Plugins =======================
+PLUGIN_HOME=$XDG_DATA_HOME/zsh/plugins
+if [ ! -d $PLUGIN_HOME ] ; then
+    mkdir -p $PLUGIN_HOME
+fi
+
+PLUG=$PLUGIN_HOME/dadl/dadl.zsh
+if [ ! -f $PLUG ] ; then
+    git clone --depth=1 https://github.com/seankhliao/dadl $PLUGIN_HOME/dadl
+fi
+source $PLUG
+PLUG=$PLUGIN_HOME/zsh-autosuggestions/zsh-autosuggestions.zsh
+if [ ! -f $PLUG ] ; then
+    git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions $PLUGIN_HOME/zsh-autosuggestions
+fi
+source $PLUG
+PLUG=$PLUGIN_HOME/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+if [ ! -f $PLUG ] ; then
+    git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting $PLUGIN_HOME/zsh-syntax-highlighting
+fi
+source $PLUG
+PLUG=$PLUGIN_HOME/zsh-history-substring-search/zsh-history-substring-search.zsh
+if [ ! -f $PLUG ] ; then
+    git clone --depth=1 https://github.com/zsh-users/zsh-history-substring-search $PLUGIN_HOME/zsh-history-substring-search
+fi
+source $PLUG

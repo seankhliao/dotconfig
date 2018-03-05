@@ -1,0 +1,8 @@
+[Unit]
+Description=Udiskie automount
+
+[Service]
+ExecStart=/usr/bin/udiskie -aNC2
+
+[Install]
+WantedBy=default.target

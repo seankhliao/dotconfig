@@ -6,9 +6,9 @@
 	"pacmanconf": "/etc/pacman.conf",
 	"tarbin": "/usr/bin/bsdtar",
 	"requestsplitn": 150,
-	"sortmode": 1,
+	"sortmode": 0,
 	"sudoloop": false,
 	"timeupdate": false,
 	"devel": true,
-	"cleanAfter": false
+	"cleanAfter": true
 }

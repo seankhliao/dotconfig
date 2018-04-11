@@ -44,6 +44,9 @@ autoload -Uz compinit
 compinit -d "$XDG_RUNTIME_DIR"/zcompdump
 
 # ===================== Aliases ===================
+alias -s go='go run'
+#
+#
 alias ..='cd ..'
 
 alias ..2='cd ../..'
@@ -109,7 +112,7 @@ function buildpkg() {
 alias py='python3'
 
 alias s='ssh'
-compinit s='ssh'
+compdef s='ssh'
 
 if [ -f '/usr/bin/nvim' ]; then
     alias v='nvim'
@@ -127,6 +130,7 @@ fi
 if [ "$HOST" = 'daenerys' ]; then
     alias cr='google-chrome-unstable'
     alias p='yay'
+    compdef p='yay'
     alias sd='sudo systemctl'
     compdef sd='systemctl'
     alias t='tag -i'

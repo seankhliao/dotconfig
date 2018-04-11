@@ -20,7 +20,7 @@ fi
 export BROWSER=google-chrome-unstable
 
 # path
-export GOPATH=$HOME/projects
+export GOPATH="$XDG_DATA_HOME"/go
 export PATH=$GOPATH/bin:$PATH
 
 # make things work

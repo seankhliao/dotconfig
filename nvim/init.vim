@@ -165,6 +165,10 @@ autocmd BufNewFile,BufReadPost *.md setlocal filetype=markdown
 let g:markdown_fenced_languages = ['html', 'python', 'bash=sh']
 let g:markdown_syntax_conceal = 0
 
+" Proto
+autocmd FileType proto setlocal shiftwidth=2
+autocmd FileType proto setlocal softtabstop=2
+autocmd FileType proto setlocal tabstop=2
 
 " Python
 " Plug'davidhalter/jedi-vim'

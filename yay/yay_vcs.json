@@ -2,11 +2,11 @@
 	{
 		"pkgname": "ttf-google-fonts-git",
 		"url": "https://api.github.com/repos/google/fonts",
-		"sha": "8311edb74d146679a93d79571f038c2c29190a14"
+		"sha": "98670058578c5d93f157347bccce91b23f6b245e"
 	},
 	{
 		"pkgname": "ttf-tw",
-		"url": "https://api.github.com/repos/Jiehong/TW-fonts/branches",
+		"url": "https://api.github.com/repos/Jiehong/TW-fonts",
 		"sha": "b30ae75e9dc299afd61e31cfd43f7a0a157dfb1f"
 	}
 ]

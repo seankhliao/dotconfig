@@ -7,7 +7,7 @@ set $left   Left
 set $down   Down
 set $up     Up
 set $right  Right
-set $term   st
+set $term   kitty
 set $menu   dmenu_run
 
 # background
@@ -26,6 +26,7 @@ bindsym $mod+s exec spotify
 
 # window management
 bindsym $mod+Return     exec $term
+bindsym $mod+Shift+Return     exec st
 bindsym $mod+d          exec $menu
 bindsym $mod+q          kill
 
@@ -49,9 +50,9 @@ bindsym $mod+space          focus mode_toggle
 # for_window [window_role="pop-up"] floating enable
 
 # volume and backlight
-        bindsym XF86AudioRaiseVolume    exec amixer set Master 5%+ && killall -s USR1 py3status
-        bindsym XF86AudioLowerVolume    exec amixer set Master 5%- && killall -s USR1 py3status
-        bindsym XF86AudioMute           exec amixer set Master toggle && killall -s USR1 py3status
+        bindsym XF86AudioRaiseVolume    exec amixer set Master 5%+
+        bindsym XF86AudioLowerVolume    exec amixer set Master 5%-
+        bindsym XF86AudioMute           exec amixer set Master toggle 
         bindsym XF86MonBrightnessUp     exec light -A 10
         bindsym XF86MonBrightnessDown   exec light -U 10
 

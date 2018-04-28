@@ -1,13 +1,17 @@
 configstore/
 dconf/
 docker/
+gcloud/
 git/credentials
 goinsta
 google-*
 gtk*
+hub
 menus/
 nvim/
+Outline Manager/
 qBittorrent/
+QtProject.conf
 rclone/
 SECRETS
 spotify/

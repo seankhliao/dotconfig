@@ -101,7 +101,7 @@ function buildpkg() {
     CUR=$(pwd)
     TMP=$(mktemp -d)
     cp PKGBUILD $TMP
-    rm -rf $CUR
+    # rm -rf $CUR
     mkdir $CUR
     cd $CUR
     mv $TMP/PKGBUILD .
@@ -174,6 +174,8 @@ if [ "$HOST" = 'daenerys' ]; then
     alias cr='google-chrome-unstable'
     alias p='yay'
     compdef p='yay'
+    alias p_clean='yay -Rns $(p -Qdtq)'
+    alias p_update='yay -Syu --noconfirm'
     alias sd='sudo systemctl'
     compdef sd='systemctl'
     alias t='tag -i'

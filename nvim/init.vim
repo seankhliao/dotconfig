@@ -25,7 +25,6 @@ comm! W exec 'w !sudo tee % > /dev/null' | e!
 
 call plug#begin('$XDG_DATA_HOME/nvim/plugged')
 
-    Plug 'Quramy/vim-js-pretty-template'
     Plug 'arcticicestudio/nord-vim'
     Plug 'airblade/vim-gitgutter'
     Plug 'ap/vim-css-color'
@@ -36,6 +35,8 @@ call plug#begin('$XDG_DATA_HOME/nvim/plugged')
     Plug 'alvan/vim-closetag'
     Plug 'tyru/caw.vim' " commenrs
     Plug 'sheerun/vim-polyglot'
+    Plug 'hail2u/vim-css3-syntax'
+    Plug 'Shougo/context_filetype.vim'
 
     Plug 'w0rp/ale'
 
@@ -51,12 +52,11 @@ call plug#begin('$XDG_DATA_HOME/nvim/plugged')
     Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
     Plug 'zchee/deoplete-go', { 'do': 'make'}
     " js
+    Plug 'Quramy/vim-js-pretty-template'
     Plug 'wokalski/autocomplete-flow'
     Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
     " python
     Plug 'zchee/deoplete-jedi'
-    " ts
-    Plug 'mhartington/nvim-typescript'
 
 call plug#end()
 
@@ -95,7 +95,7 @@ let g:delimitMate_expand_cr = 2
 let g:delimitMate_smart_quotes = 1
 let g:delimitMate_matchpairs = '(:),[:],{:}'
 
-let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.ejs'
+let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.ejs,*.js'
 
 
 set completeopt+=longest,menuone,noselect,noinsert
@@ -117,7 +117,6 @@ let g:ale_fixers = {
 \ 'c'       : ['clang-format'],
 \ 'cpp'     : ['clang-format'],
 \ 'go'      : ['goimports'],
-\ 'html'    : ['tidy'],
 \ 'javascript': ['prettier'],
 \ 'javascript.jsx': ['prettier'],
 \ 'json'    : ['prettier'],

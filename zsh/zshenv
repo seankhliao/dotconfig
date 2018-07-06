@@ -47,6 +47,7 @@ export TERMINFO_DIRS="$XDG_DATA_HOME"/terminfo:/usr/share/terminfo
 export PGPASSFILE="$XDG_DATA_HOME"/psql/pgpass
 export PSQL_HISTORY="$XDG_DATA_HOME"/psql/history
 export PYLINTHOME=$XDG_DATA_HOME/pylint
+export NODE_REPL_HISTORY="$XDG_DATA_HOME"/node_repl_history
 # Python history is set in PYTHONSTARTUP
 
 # XDG CONFIG
@@ -59,7 +60,7 @@ export IPYTHONDIR="$XDG_CONFIG_HOME"/jupyter
 export LESSKEY="$XDG_CONFIG_HOME"/lesskey
 export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME"/npmrc
 export PSQLRC="$XDG_CONFIG_HOME"/psqlrc
-# export PYTHONSTARTUP="$XDG_CONFIG_HOME"/pythonrc.py
+export PYTHONSTARTUP="$XDG_CONFIG_HOME"/python_startup.py
 export SCREENRC="$XDG_CONFIG_HOME"/screenrc
 export VIMINIT=":source $XDG_CONFIG_HOME"/nvim/init.vim
 export WGETRC="$XDG_CONFIG_HOME"/wgetrc

@@ -1,3 +1,4 @@
+ardour5
 configstore/
 dconf/
 docker/
@@ -8,6 +9,7 @@ google-*
 gtk*
 hub
 menus/
+mimeapps.list
 nvim/
 Outline Manager/
 qBittorrent/
@@ -16,6 +18,7 @@ rclone/
 SECRETS
 spotify/
 Trolltech.conf
+vlc/
 whoozle.github.io/
 yarn/
 zsh/.zcompdump

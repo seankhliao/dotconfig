@@ -9,8 +9,6 @@
     a = add
     cam = commit -a -m
     camp = !git commit -a -m \"$1\" && git push && :
-    cl = clone --depth=1
-    clm = !git clone --depth=1 https://github.com/seankhliao/$1 && :
     cm = commit -m
     l = pull
     lr = pull --rebase

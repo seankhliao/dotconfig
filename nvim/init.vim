@@ -21,7 +21,8 @@ nnoremap ; :
 " typos
 cnoreabbrev WQ wq
 " Sudo write
-comm! W exec 'w !sudo tee % > /dev/null' | e!
+" comm! W exec 'w !sudo tee % > /dev/null' | e!
+cnoreabbrev W w suda://%
 
 call plug#begin('$XDG_DATA_HOME/nvim/plugged')
 
@@ -37,6 +38,7 @@ call plug#begin('$XDG_DATA_HOME/nvim/plugged')
     Plug 'sheerun/vim-polyglot'
     Plug 'hail2u/vim-css3-syntax'
     Plug 'Shougo/context_filetype.vim'
+    Plug 'lambdalisue/suda.vim'
 
     Plug 'w0rp/ale'
 

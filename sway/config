@@ -21,12 +21,10 @@ bindsym insert exec xdotool type --clearmodifiers $PASSWD && xdotool key KP_Ente
 
 # custome keys
 bindsym $mod+t exec google-chrome-unstable --disk-cache-dir=/tmp/cache
-bindsym $mod+Shift+t exec firefox
 bindsym $mod+s exec spotify
 
 # window management
 bindsym $mod+Return     exec $term
-bindsym $mod+Shift+Return     exec st
 bindsym $mod+d          exec $menu
 bindsym $mod+q          kill
 
@@ -114,12 +112,12 @@ bindsym $mod+Shift+Tab  workspace prev
 # resize
 mode "resize" {
     bindsym $left   resize shrink   width   10 px or 10 ppt
-        bindsym $down   resize grow     height  10 px or 10 ppt
-        bindsym $up     resize shrink   height  10 px or 10 ppt
-        bindsym $right  resize grow     width   10 px or 10 ppt
+    bindsym $down   resize grow     height  10 px or 10 ppt
+    bindsym $up     resize shrink   height  10 px or 10 ppt
+    bindsym $right  resize grow     width   10 px or 10 ppt
 # return to default mode
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
 }
 bindsym $mod+r mode "resize"
 
@@ -133,42 +131,18 @@ gaps outer  0
 smart_gaps  on
 hide_edge_borders smart
 
-# colors
-set $bord-col   #f0c674
-set $bg-color   #81a2be
-set $i-bg-col   #1d1f21
-set $text-color #222222
-set $i-t-col    #c5c8c6
-set $u-bg-col   #E53935
-
-# window colors
-#                       border      background  text        indicator
-client.focused          $bord-col   $bord-col   $text-color #ffffff
-client.unfocused        $i-bg-col   $i-bg-col   $i-t-col    #ffffff
-client.focused_inactive $i-bg-col   $i-bg-col   $i-t-col    #ffffff
-client.urgent           $u-bg-col   $u-bg-col   $text-color #ffffff
-
 # bar
 bar {
     # status_command      py3status -c $XDG_CONFIG_HOME/i3status.conf
     status_command      go3status
     position            top
     workspace_buttons   yes
-
-    colors {
-        background  #1d1f21
-        separator   #c5c8c6
-#                       border      background  text
-        focused_workspace       $bg-color   $bg-color   $text-color
-        inactive_workspace      $i-bg-col   $i-bg-col   $i-t-col
-        urgent_workspace        $u-bg-col   $u-bg-col   $text-color
-    }
 }
 
 # Input configuration
 # get id with "swaymsg -t get_inputs"
 input "1739:30382:DLL0704:01_06CB:76AE_To" {
     tap enabled
-        natural_scroll enabled
-        middle_emulation enabled
+    natural_scroll enabled
+    middle_emulation enabled
 }

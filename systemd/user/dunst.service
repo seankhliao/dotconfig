@@ -6,7 +6,8 @@ PartOf=graphical-session.target
 [Service]
 Type=dbus
 BusName=org.freedesktop.Notifications
-ExecStart=/usr/bin/dunst -print > ~/debug
+ExecStart=/usr/bin/dunst
+; ExecStart=/usr/bin/dunst -print > ~/debug
 
 Environment=DISPLAY=:0
 

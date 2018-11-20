@@ -6,7 +6,7 @@ export XDG_DATA_HOME="$HOME"/.local/share
 # XDG RUNTIME
 export RXVT_SOCKET="$XDG_RUNTIME_DIR"/urxvtd
 export XAUTHORITY="$XDG_RUNTIME_DIR"/Xauthority
-#
+
 # language
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
@@ -18,12 +18,15 @@ else
     export EDITOR=vim
 fi
 export BROWSER=google-chrome-unstable
+eval $(dircolors $XDG_CONFIG_HOME/dircolors)
 
 # path
 export GOPATH="$XDG_DATA_HOME"/go
-export PATH=$GOPATH/bin:$PATH
+export YARNPATH="$HOME"/.yarn/bin
+export PATH=$GOPATH/bin:$YARNPATH:$PATH
 
 # make things work
+# export WLR_DRM_DEVICES=card0 
 export QEMU_AUDIO_DRV=alsa
 # export GTK_IM_MODULE=fcitx
 # export XMODIFIERS=@im=fcitx

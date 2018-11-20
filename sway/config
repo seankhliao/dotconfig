@@ -134,14 +134,16 @@ hide_edge_borders smart
 # bar
 bar {
     # status_command      py3status -c $XDG_CONFIG_HOME/i3status.conf
-    status_command      go3status
+    status_command i3status
+    # status_command while date +'%Y-%m-%d %l:%M:%S %p'; do sleep 1; done
+    # status_command      go3status
     position            top
     workspace_buttons   yes
 }
 
 # Input configuration
 # get id with "swaymsg -t get_inputs"
-input "1739:30382:DLL0704:01_06CB:76AE_To" {
+input "1739:30382:DLL0704:01_06CB:76AE_Touchpad" {
     tap enabled
     natural_scroll enabled
     middle_emulation enabled

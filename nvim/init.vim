@@ -1,146 +1,125 @@
-" neovim
-let g:python_host_prog = '/usr/bin/python2'
-let g:python3_host_prog = '/usr/bin/python3'
-
-" background
-set autoread                    
-set clipboard=unnamedplus       
-set confirm                 
-set encoding=utf-8          
 scriptencoding utf-8
-set fileencoding=utf-8
-set hidden                  
-set mouse=a                     
-set noerrorbells                
-set nobackup                
-set noswapfile              
-set updatetime=750              
-" set wildmode=list:longest,full
-
-nnoremap ; :
-" typos
-cnoreabbrev WQ wq
-" Sudo write
-" comm! W exec 'w !sudo tee % > /dev/null' | e!
-cnoreabbrev W w suda://%
 
 call plug#begin('$XDG_DATA_HOME/nvim/plugged')
 
-    Plug 'arcticicestudio/nord-vim'
-    Plug 'airblade/vim-gitgutter'
+    Plug 'alvan/vim-closetag' " xml tags
+    Plug 'airblade/vim-gitgutter' " git gutter
     Plug 'ap/vim-css-color'
+    Plug 'brooth/far.vim'       " advanced find and replace
+	Plug 'cyansprite/extract'   " list of yanks
+    Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }} " live preview in browser
+    Plug 'itchyny/lightline.vim' " status line
+    Plug 'lambdalisue/suda.vim' " sudo write
+	Plug 'mhartington/oceanic-next' " colorscheme
     Plug 'nathanaelkane/vim-indent-guides'
-    Plug 'itchyny/lightline.vim'
-    Plug 'romainl/vim-cool' " hlsearch tolerable
-    Plug 'Raimondi/delimitMate'
-    Plug 'alvan/vim-closetag'
-    Plug 'tyru/caw.vim' " commenrs
-    Plug 'sheerun/vim-polyglot'
-    Plug 'hail2u/vim-css3-syntax'
+    Plug 'raimondi/delimitmate' " parens
+    Plug 'tyru/caw.vim'         " comments
     Plug 'Shougo/context_filetype.vim'
-    Plug 'lambdalisue/suda.vim'
 
+    Plug 'roxma/nvim-yarp'
+    Plug 'ncm2/ncm2'
+    Plug 'ncm2/ncm2-bufword'
+    Plug 'ncm2/ncm2-cssomni'
+    Plug 'ncm2/ncm2-go' | Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+    Plug 'ncm2/ncm2-html-subscope'
+    Plug 'ncm2/ncm2-jedi' | Plug 'davidhalter/jedi-vim'
+    Plug 'ncm2/ncm2-markdown-subscope'
+    Plug 'ncm2/ncm2-neoinclude' | Plug 'Shougo/neoinclude.vim'
+    Plug 'ncm2/ncm2-path'
+    " Plug 'ncm2/ncm2-pyclang'
+    Plug 'ncm2/ncm2-racer' | Plug 'racer-rust/vim-racer'
+    Plug 'ncm2/ncm2-syntax' | Plug 'Shougo/neco-syntax'
+    Plug 'ncm2/ncm2-tern',  {'do': 'npm install'}
+    Plug 'ncm2/ncm2-vim' | Plug 'Shougo/neco-vim'
+    " Plug 'filipekiss/ncm2-look.vim' " english word completion
+    
     Plug 'w0rp/ale'
-
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-    Plug 'Shougo/neosnippet'
-    Plug 'Shougo/neosnippet-snippets'
-    Plug 'Shougo/neco-syntax' " from syntax files
-
-    " Other
-    Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh'}
-
-    " go
-    Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-    Plug 'zchee/deoplete-go', { 'do': 'make'}
-    " js
-    Plug 'Quramy/vim-js-pretty-template'
-    Plug 'wokalski/autocomplete-flow'
-    Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
-    " python
-    Plug 'zchee/deoplete-jedi'
 
 call plug#end()
 
-set background=dark             
-set tgc                         
-colorscheme nord
-
-set number                      ""
-set expandtab
-set shiftwidth=4
-set softtabstop=4
-set tabstop=4
-let g:indent_guides_enable_on_vim_startup = 1
-let g:indent_guides_auto_colors = 0
-autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#3B4252   ctermbg=2
-autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#2E3340   ctermbg=0
-
-" Folding
-set foldmethod=syntax       
-set foldlevelstart=10           
-
-" Line wrapping
-set breakindent                 
-set scrolloff=3                 
-
-set noshowmode                  
-let g:lightline = {'colorscheme': 'nord'}
-
-set ignorecase                  
-set smartcase               
-
-
-set showmatch                   ""
-let g:delimitMate_expand_space = 1
-let g:delimitMate_expand_cr = 2
-let g:delimitMate_smart_quotes = 1
-let g:delimitMate_matchpairs = '(:),[:],{:}'
-
-let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.ejs,*.js'
-
-
-set completeopt+=longest,menuone,noselect,noinsert
-set shortmess+=c                ""
-
-
-" Autolint
-" Plug'w0rp/ale'
+let g:ale_enabled = 1
+let g:ale_fix_on_save = 1
+let g:ale_sign_column_always = 1
 let g:ale_sign_error = '✗✗'
 let g:ale_sign_warning = '⚠⚠'
 let g:ale_lint_on_insert_leave = 1
 let g:ale_set_signs = 1
-" let g:ale_linters = {
-"             \   'go': ['gofmt', 'goimports', 'golint'],
-"             \}
-let g:ale_fix_on_save = 1
+
 let g:ale_fixers = {
 \ 'bash'    : ['shfmt'],
 \ 'c'       : ['clang-format'],
 \ 'cpp'     : ['clang-format'],
+\ 'css'     : ['prettier'],
 \ 'go'      : ['goimports'],
+\ 'html'    : ['prettier'],
 \ 'javascript': ['prettier'],
 \ 'javascript.jsx': ['prettier'],
 \ 'json'    : ['prettier'],
 \ 'less'    : ['prettier'],
+\ 'markdown': ['prettier'],
 \ 'python'  : ['yapf'],
 \ 'scss'    : ['prettier'],
 \ 'sql'     : ['sqlint'],
+\ 'typescript': ['prettier'],
 \ 'xml'     : ['xmllint'],
-\ 'yaml'    : ['yamllint'],
+\ 'yaml'    : ['prettier'],
 \}
+let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.ejs,*.js'
+let g:delimitMate_expand_space = 1
+let g:delimitMate_expand_cr = 2
+let g:delimitMate_smart_quotes = 1
+let g:delimitMate_matchpairs = '(:),[:],{:}'
+let g:indent_guides_enable_on_vim_startup = 1
+let g:jedi#auto_initialization = 0
+let g:lightline = {'colorscheme': 'oceanicnext'}
+let g:ncm2_look_enabled = 1
 
-" Autocomplete
-" Plug 'Shougo/deoplete
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#enable_smart_case = 1
+let g:indent_guides_auto_colors = 0
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#1b2b34   ctermbg=2
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#4f5b66   ctermbg=0
 
-let g:deoplete#sources#go#pointer = 1
+autocmd BufEnter * call ncm2#enable_for_buffer()
 
-" let g:LanguageClient_serverCommands = {
-"     \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
-"     \ 'javascript': ['javascript-typescript-stdio'],
-"     \ 'javascript.jsx': ['tcp://127.0.0.1:2089'],
-"     \ }
+syntax enable
+colorscheme OceanicNext
 
-let g:necosyntax#min_keyword_length = 2
+set autoindent
+set autoread
+set background=dark
+set breakindent
+set clipboard=unnamedplus
+set completeopt=noinsert,menuone,noselect
+set confirm
+set copyindent
+set expandtab
+set foldlevelstart=10           
+set foldmethod=syntax
+set fsync
+set grepprg=rg
+set ignorecase
+set incsearch
+set mouse=a
+set mousefocus
+set number
+set scrolloff=4
+set shiftwidth=4
+set shortmess=aoOtTIc
+set sidescrolloff=4
+set smartcase
+set smartindent
+set smarttab
+set softtabstop=4
+set spell
+set tabstop=4
+set termguicolors
+
+au FileType html set shiftwidth=2 softtabstop=2 tabstop=2
+
+cnoreabbrev cr !google-chrome-unstable % 2>/dev/null
+cnoreabbrev gi GoImport
+cnoreabbrev WQ wq
+cnoreabbrev W w suda://%
+inoremap <c-c> <ESC>
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+nnoremap ; :

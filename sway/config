@@ -148,3 +148,9 @@ input "1739:30382:DLL0704:01_06CB:76AE_Touchpad" {
     natural_scroll enabled
     middle_emulation enabled
 }
+
+input "1:1:AT_Translated_Set_2_keyboard" {
+    # xkb_options ctrl:nocaps
+    # xkb_options caps:swapescape
+    xkb_options caps:escape
+}

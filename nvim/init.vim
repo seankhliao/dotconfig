@@ -1,7 +1,6 @@
 scriptencoding utf-8
 
 call plug#begin('$XDG_DATA_HOME/nvim/plugged')
-
     Plug 'alvan/vim-closetag' " xml tags
     Plug 'airblade/vim-gitgutter' " git gutter
     Plug 'ap/vim-css-color'
@@ -15,6 +14,8 @@ call plug#begin('$XDG_DATA_HOME/nvim/plugged')
     Plug 'raimondi/delimitmate' " parens
     Plug 'tyru/caw.vim'         " comments
     Plug 'Shougo/context_filetype.vim'
+
+    Plug 'cespare/vim-toml'
 
     Plug 'roxma/nvim-yarp'
     Plug 'ncm2/ncm2'
@@ -100,6 +101,7 @@ set ignorecase
 set incsearch
 set mouse=a
 set mousefocus
+set noswapfile
 set number
 set scrolloff=4
 set shiftwidth=4
@@ -117,9 +119,14 @@ au FileType html set shiftwidth=2 softtabstop=2 tabstop=2
 
 cnoreabbrev cr !google-chrome-unstable % 2>/dev/null
 cnoreabbrev gi GoImport
+cnoreabbrev gd GoDoc
 cnoreabbrev WQ wq
 cnoreabbrev W w suda://%
 inoremap <c-c> <ESC>
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 nnoremap ; :
+
+autocmd BufNewFile *.sh 0r ~/.config/nvim/skeleton/skeleton.sh
+autocmd BufNewFile main.go 0r ~/.config/nvim/skeleton/skeleton.go
+autocmd BufNewFile *.html 0r ~/.config/nvim/skeleton/skeleton.html

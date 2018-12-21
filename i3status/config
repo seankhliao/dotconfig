@@ -4,6 +4,7 @@ general {
         interval = 1
 }
 
+order += "ethernet wg0"
 order += "disk /"
 order += "wireless wlp58s0"
 order += "ethernet enp7s0u2u3"
@@ -20,6 +21,11 @@ ethernet enp7s0u2u3 {
         # if you use %speed, i3status requires the cap_net_admin capability
         format_up = "E: %ip (%speed)"
         format_down = "E: down"
+}
+
+ethernet wg0 {
+    format_up = "wg0: %ip"
+    format_down = "wg0: offline"
 }
 
 battery 0 {

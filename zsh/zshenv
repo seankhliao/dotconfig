@@ -12,22 +12,26 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
 # preferences
+source $XDG_CONFIG_HOME/SECRETS
 if [ -f "/usr/bin/nvim" ]; then
     export EDITOR=nvim
 else
     export EDITOR=vim
 fi
 export BROWSER=google-chrome-unstable
+export TAG_SEARCH_PROG=rg
 eval $(dircolors $XDG_CONFIG_HOME/dircolors)
 
 # path
 export GOPATH="$XDG_DATA_HOME"/go
-export YARNPATH="$HOME"/.yarn/bin
-export PATH=$GOPATH/bin:$YARNPATH:$PATH
+export PATH="$GOPATH"/bin:"$PATH"
+# export YARNPATH="$HOME"/.yarn/bin
+# export PATH=$YARNPATH:$PATH
+export PATH="$HOME"/code/scripts:"$PATH"
 
 # make things work
 # export WLR_DRM_DEVICES=card0 
-export QEMU_AUDIO_DRV=alsa
+# export QEMU_AUDIO_DRV=alsa
 # export GTK_IM_MODULE=fcitx
 # export XMODIFIERS=@im=fcitx
 # export QT_IM_MODULE=fcitx
@@ -70,10 +74,5 @@ export WGETRC="$XDG_CONFIG_HOME"/wgetrc
 export ZDOTDIR="$XDG_CONFIG_HOME"/zsh
 
 # cuda
-export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/cuda/lib64"
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH":/opt/cuda/lib64
 export CUDA_HOME=/opt/cuda/
-
-# misc
-export TAG_SEARCH_PROG=rg
-
-source $XDG_CONFIG_HOME/SECRETS

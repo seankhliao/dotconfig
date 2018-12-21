@@ -130,3 +130,9 @@ nnoremap ; :
 autocmd BufNewFile *.sh 0r ~/.config/nvim/skeleton/skeleton.sh
 autocmd BufNewFile main.go 0r ~/.config/nvim/skeleton/skeleton.go
 autocmd BufNewFile *.html 0r ~/.config/nvim/skeleton/skeleton.html
+
+autocmd BufNewFile LICENSE 0r ~/.config/nvim/skeleton/LICENSE-MIT
+autocmd BufNewFile LICENSE ks|call LicenseYear()|'s
+fun LicenseYear()
+    call setline(3, substitute(getline(3), "INSERT_YEAR", strftime("%Y"), ""))
+endfun

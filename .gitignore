@@ -11,9 +11,12 @@ hub
 menus/
 mimeapps.list
 nvim/
+!nvim/init.vim
+!nvim/skeleton/
 Outline Manager/
 qBittorrent/
 QtProject.conf
+ranger/
 rclone/
 SECRETS
 spotify/

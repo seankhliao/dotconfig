@@ -76,10 +76,7 @@ alias ..6='cd ../../../../../..'
 alias .......='cd ../../../../../..'
 
 alias cdr='cd -P .'
-
-if [ -f '/usr/bin/chrome-unstable' ]; then
-    alias cr='google-chrome-unstable'
-fi
+alias cr='google-chrome-unstable'
 
 alias diskspace="df -P -kHl"
 alias filespace='du -d 1 -h . 2>/dev/null | sort -h -r'
@@ -147,9 +144,9 @@ if [ ! -d $PLUGIN_HOME ] ; then
     mkdir -p $PLUGIN_HOME
 fi
 
-PLUG=$PLUGIN_HOME/dadl/dadl.zsh
+PLUG=$PLUGIN_HOME/prompt/prompt.zsh
 if [ ! -f $PLUG ] ; then
-    git clone https://github.com/seankhliao/dadl $PLUGIN_HOME/dadl
+    git clone https://github.com/seankhliao/prompt.zsh $PLUGIN_HOME/prompt
 fi
 source $PLUG
 

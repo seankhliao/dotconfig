@@ -26,6 +26,7 @@ setopt AUTOCD
 setopt COMPLETE_IN_WORD
 setopt HASH_LIST_ALL
 
+setopt EXTENDED_GLOB
 setopt GLOB_DOTS
 
 setopt HIST_IGNORE_ALL_DUPS
@@ -56,23 +57,14 @@ compinit -d "$XDG_RUNTIME_DIR"/zcompdump
 
 # ===================== Aliases ===================
 alias -s go='go run'
-#
-#
+alias -s py='python3'
+
+
 alias ..='cd ..'
-
-alias ..2='cd ../..'
 alias ...='cd ../..'
-
-alias ..3='cd ../../..'
 alias ....='cd ../../..'
-
-alias ..4='cd ../../../..'
 alias .....='cd ../../../..'
-
-alias ..5='cd ../../../../..'
 alias ......='cd ../../../../..'
-
-alias ..6='cd ../../../../../..'
 alias .......='cd ../../../../../..'
 
 alias cdr='cd -P .'
@@ -81,11 +73,10 @@ alias cr='google-chrome-unstable'
 alias diskspace="df -P -kHl"
 alias filespace='du -d 1 -h . 2>/dev/null | sort -h -r'
 
+alias forget="sed -i '$ d' $HISTFILE ; sed -i '$ d' $HISTFILE"
+
 alias g='git'
-alias gd='git --git-dir=$HOME/code/dotfiles --work-tree=$HOME'
-# compdef gd='git'
-#
-fucntion gsall() {
+function gsall() {
     bold=$(tput bold)
     normal=$(tput sgr0)
 
@@ -126,13 +117,13 @@ if (( $+commands[tag] )); then
     }
 fi
 
-if [ -f '/usr/bin/nvim' ]; then
+if [[ -f '/usr/bin/nvim' ]]; then
     alias v='nvim'
 else
     alias v='vim'
 fi
 
-if [ -f '/usr/bin/yay' ]; then
+if [[ -f '/usr/bin/yay' ]]; then
     alias y='yay'
     alias y-update='yay -Syu --noconfirm'
     alias y-clean=' yay -Rns $(yay -Qtdq); yay -Sc'
@@ -140,33 +131,31 @@ fi
 
 # ==================== Plugins =======================
 PLUGIN_HOME=$XDG_DATA_HOME/zsh/plugins
-if [ ! -d $PLUGIN_HOME ] ; then
-    mkdir -p $PLUGIN_HOME
-fi
 
-PLUG=$PLUGIN_HOME/prompt/prompt.zsh
-if [ ! -f $PLUG ] ; then
-    git clone https://github.com/seankhliao/prompt.zsh $PLUGIN_HOME/prompt
-fi
-source $PLUG
+update_pligin () {
+    if [[ -d $PLUGIN_HOME/$2 ]] ; then
+        git -C $PLUGIN_HOME/$2 pull
+    else
+        git clone "https://github.com/"$1/$2 $PLUGIN_HOME/$2
+    fi
+    zcompile $PLUGIN_HOME/$2/$2.zsh
+}
 
-PLUG=$PLUGIN_HOME/zsh-autosuggestions/zsh-autosuggestions.zsh
-if [ ! -f $PLUG ] ; then
-    git clone https://github.com/zsh-users/zsh-autosuggestions $PLUGIN_HOME/zsh-autosuggestions
-fi
-source $PLUG
+update_plugins () {
+    if [[ ! -d $PLUGIN_HOME ]] ; then
+        mkdir -p $PLUGIN_HOME
+    fi
 
-PLUG=$PLUGIN_HOME/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-if [ ! -f $PLUG ] ; then
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting $PLUGIN_HOME/zsh-syntax-highlighting
-fi
-source $PLUG
+    update_pligin zsh-users zsh-autosuggestions
+    update_pligin zsh-users zsh-history-substring-search
+    update_pligin zsh-users zsh-syntax-highlighting
+    update_pligin seankhliao zsh-prompt
+}
 
-PLUG=$PLUGIN_HOME/zsh-history-substring-search/zsh-history-substring-search.zsh
-if [ ! -f $PLUG ] ; then
-    git clone https://github.com/zsh-users/zsh-history-substring-search $PLUGIN_HOME/zsh-history-substring-search
-fi
-source $PLUG
+plugins=('zsh-autosuggestions' 'zsh-history-substring-search' 'zsh-syntax-highlighting' 'zsh-prompt')
+for f in $plugins; do 
+    source $PLUGIN_HOME/$f/$f.zsh
+done
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/opt/google-cloud-sdk/path.zsh.inc' ]; then source '/opt/google-cloud-sdk/path.zsh.inc'; fi

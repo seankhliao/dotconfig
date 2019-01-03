@@ -1,0 +1,38 @@
+[[Filter]]
+Label = "CATEGORY_PROMOTIONS"
+QueryOr = [
+    "from:(*@edm.ibon.com.tw)",
+    "from:(*@myotgcard.starbucks.com.tw)",
+]
+Archive = true
+Read = true
+
+[[Filter]]
+Label = "CATEGORY_SOCIAL"
+QueryOr = [
+    "from:(notifications@redditmail.com)",
+    "(from:(*@linkedin.com) -from:(security-noreply@linkedin.com))",
+]
+Archive = true
+
+[[Filter]]
+Label = "Account Security"
+QueryOR = [
+    "(password AROUND 5 change)",
+    "(login noti)",
+    "(account access)",
+    "(verify AROUND 3 email)",
+    "(security alert)",
+    "(new device)",
+    "(new login)",
+    "(new ip)",
+    "(網路銀行登入)",
+]
+
+[[Filter]]
+Label = "Logging"
+QueryOr = [
+    "from:(builds@travis-ci.org)",
+]
+Archive = true
+Read = true

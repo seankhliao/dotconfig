@@ -1,10 +1,3 @@
-[user]
-    email = seankhliao@gmail.com
-    name = Sean Liao
-
-[credential]
-    helper = store
-
 [alias]
     a = add
     cam = commit -a -m
@@ -18,6 +11,24 @@
     va = !git tag $(semver -i major $(git tag | tail -n 1))
     vm = !git tag $(semver -i minor $(git tag | tail -n 1))
     vp = !git tag $(semver -i patch $(git tag | tail -n 1))
+
+[blame]
+    coloring = highlightRecent
+
+[color]
+    branch = false
+    diff = false
+    pager = false
+    ui = always
+    
+
+[credential]
+    helper = store
+
+
+[user]
+    email = seankhliao@gmail.com
+    name = Sean Liao
 
 [tag]
 	sort = version:refname

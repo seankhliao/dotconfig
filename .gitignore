@@ -4,6 +4,7 @@ dconf/
 docker/
 gcloud/
 git/credentials
+gmail/credentials.json
 goinsta
 google-*
 gtk*

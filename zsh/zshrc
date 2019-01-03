@@ -70,6 +70,7 @@ alias .......='cd ../../../../../..'
 alias cdr='cd -P .'
 alias cr='google-chrome-unstable'
 
+alias diff='diff --color=always'
 alias diskspace="df -P -kHl"
 alias filespace='du -d 1 -h . 2>/dev/null | sort -h -r'
 
@@ -124,9 +125,9 @@ else
 fi
 
 if [[ -f '/usr/bin/yay' ]]; then
-    alias y='yay'
-    alias y-update='yay -Syu --noconfirm'
-    alias y-clean=' yay -Rns $(yay -Qtdq); yay -Sc'
+    alias p='yay'
+    alias p-update='yay -Syu --noconfirm'
+    alias p-clean=' yay -Rns $(yay -Qtdq); yay -Sc'
 fi
 
 # ==================== Plugins =======================

@@ -93,6 +93,8 @@ function gsall() {
         fi
     done
 }
+alias gmail-filters-upload="gmailfilters $XDG_CONFIG_HOME/gmail/filters.toml"
+alias gmail-filters-edit="nvim $XDG_CONFIG_HOME/gmail/filters.toml"
 
 alias h='htop'
 alias l='ls -lGh'

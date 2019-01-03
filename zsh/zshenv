@@ -22,7 +22,7 @@ export PAGER="nvim -R"
 export MANPAGER="nvim -c 'set ft=man' -" 
 export BROWSER=google-chrome-unstable
 export TAG_SEARCH_PROG=rg
-export GMAIL_CREDENTIAL_FILE=$XDG_CONFIG_HOME/gmail_credential.json
+export GMAIL_CREDENTIAL_FILE=$XDG_CONFIG_HOME/gmail/credential.json
 eval $(dircolors $XDG_CONFIG_HOME/dircolors)
 
 # path

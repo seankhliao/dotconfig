@@ -77,6 +77,24 @@ alias filespace='du -d 1 -h . 2>/dev/null | sort -h -r'
 alias forget="sed -i '$ d' $HISTFILE ; sed -i '$ d' $HISTFILE"
 
 alias g='git'
+
+# create aliases for git
+# g<alias> where <alias> is defined in git/config
+local start_alias=false
+while read line; do
+    if ! $start_alias; then
+        if [[ $line =~ '\s*\[alias\]' ]]; then
+            start_alias=true
+        fi
+    else
+        if [[ $line =~ '\s*\[[a-z]*\]' ]]; then
+            break
+        fi
+        sub=${${line%%=*}// /}
+        [[ $sub ]] && alias g${sub}="git ${sub}"
+    fi
+done < $XDG_CONFIG_HOME/git/config
+
 function gsall() {
     bold=$(tput bold)
     normal=$(tput sgr0)
@@ -126,16 +144,14 @@ else
     alias v='vim'
 fi
 
-if [[ -f '/usr/bin/yay' ]]; then
-    alias p='yay'
-    alias p-update='yay -Syu --noconfirm'
-    alias p-clean=' yay -Rns $(yay -Qtdq); yay -Sc'
-fi
+alias p='yay'
+alias p-update='yay -Syu --noconfirm'
+alias p-clean=' yay -Rns $(yay -Qtdq); yay -Sc'
 
 # ==================== Plugins =======================
 PLUGIN_HOME=$XDG_DATA_HOME/zsh/plugins
 
-update_pligin () {
+update_plugin () {
     if [[ -d $PLUGIN_HOME/$2 ]] ; then
         git -C $PLUGIN_HOME/$2 pull
     else
@@ -149,10 +165,10 @@ update_plugins () {
         mkdir -p $PLUGIN_HOME
     fi
 
-    update_pligin zsh-users zsh-autosuggestions
-    update_pligin zsh-users zsh-history-substring-search
-    update_pligin zsh-users zsh-syntax-highlighting
-    update_pligin seankhliao zsh-prompt
+    update_plugin zsh-users zsh-autosuggestions
+    update_plugin zsh-users zsh-history-substring-search
+    update_plugin zsh-users zsh-syntax-highlighting
+    update_plugin seankhliao zsh-prompt
 }
 
 plugins=('zsh-autosuggestions' 'zsh-history-substring-search' 'zsh-syntax-highlighting' 'zsh-prompt')

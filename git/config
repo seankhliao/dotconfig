@@ -7,8 +7,7 @@
     lr = pull --rebase
     lo = log --graph --color=always --format='%C(auto)%h%d %s %C( bold black)%cr %C(blue)<%an>'
     p = push
-    puom = push -u origin master
-    rao = remote add origin
+    po = !git remote add origin \"$1\" && git push -u origin master
     s = status
 
 [blame]

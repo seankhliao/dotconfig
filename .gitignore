@@ -1,23 +1,21 @@
-ardour5
+ardour5/
 configstore/
 dconf/
 docker/
 gcloud/
+Genymobile/
 git/credentials
 gmail/credentials.json
-goinsta
 google-*
-gtk*
-hub
+gtk-*
+hub/
 menus/
 mimeapps.list
-nvim/
-!nvim/init.vim
-!nvim/skeleton/
+nvim/autoload
+nvim/plugged
 Outline Manager/
 qBittorrent/
 QtProject.conf
-ranger/
 rclone/
 SECRETS
 spotify/
@@ -26,5 +24,4 @@ vlc/
 whoozle.github.io/
 yarn/
 zsh/.zcompdump
-Genymobile
-VirtualBox
+VirtualBox/

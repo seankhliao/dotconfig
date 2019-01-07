@@ -7,18 +7,14 @@
     lr = pull --rebase
     lo = log --graph --color=always --format='%C(auto)%h%d %s %C( bold black)%cr %C(blue)<%an>'
     p = push
+    puom = push -u origin master
+    rao = remote add origin
     s = status
-    va = !git tag $(semver -i major $(git tag | tail -n 1))
-    vm = !git tag $(semver -i minor $(git tag | tail -n 1))
-    vp = !git tag $(semver -i patch $(git tag | tail -n 1))
 
 [blame]
     coloring = highlightRecent
 
 [color]
-    branch = false
-    diff = false
-    pager = false
     ui = always
     
 
@@ -32,3 +28,5 @@
 
 [tag]
 	sort = version:refname
+[core]
+	page = nvim -R

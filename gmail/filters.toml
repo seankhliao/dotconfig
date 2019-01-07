@@ -32,24 +32,24 @@
 
 
 [[Filter]]
-    Label = "CATEGORY_PROMOTIONS"
+    Label   = "CATEGORY_PROMOTIONS"
+    Archive = true
+    Read    = true
     QueryOr = [
         "from:(*@edm.ibon.com.tw)",
         "from:(*@myotgcard.starbucks.com.tw)",
     ]
-    Archive = true
-    Read = true
 
 [[Filter]]
-    Label = "CATEGORY_SOCIAL"
+    Label   = "CATEGORY_SOCIAL"
+    Archive = true
     QueryOr = [
         "from:(notifications@redditmail.com)",
         "(from:(*@linkedin.com) -from:(security-noreply@linkedin.com))",
     ]
-    Archive = true
 
 [[Filter]]
-    Label = "Account Security"
+    Label   = "Account Security"
     QueryOR = [
         "(password AROUND 5 change)",
         "(login noti)",
@@ -63,9 +63,16 @@
     ]
 
 [[Filter]]
-    Label = "Logging"
+    Label   = "Logging"
+    Archive = true
+    Read    = true
     QueryOr = [
         "from:(builds@travis-ci.org)",
     ]
-    Archive = true
-    Read = true
+
+[[Filter]]
+    Label   = "University"
+    QueryOr = [
+        "from:(*@ntu.edu.tw)",
+        "university",
+    ]

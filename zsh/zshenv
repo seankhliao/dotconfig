@@ -1,7 +1,7 @@
 # XDG dirs
 export XDG_CONFIG_HOME="$HOME"/.config
 export XDG_CACHE_HOME="$HOME"/.cache
-export XDG_DATA_HOME="$HOME"/.local/share
+export XDG_DATA_HOME="$HOME"/.data
 
 # XDG RUNTIME
 export RXVT_SOCKET="$XDG_RUNTIME_DIR"/urxvtd
@@ -18,11 +18,11 @@ if [ -f "/usr/bin/nvim" ]; then
 else
     export EDITOR=vim
 fi
-export PAGER="nvim -R"
+# export PAGER="nvim -R"
 export MANPAGER="nvim -c 'set ft=man' -" 
 export BROWSER=google-chrome-unstable
 export TAG_SEARCH_PROG=rg
-export GMAIL_CREDENTIAL_FILE=$XDG_CONFIG_HOME/gmail/credential.json
+export GMAIL_CREDENTIAL_FILE=$XDG_CONFIG_HOME/gmail/credentials.json
 eval $(dircolors $XDG_CONFIG_HOME/dircolors)
 
 # path

@@ -115,8 +115,6 @@ set spell
 set tabstop=4
 set termguicolors
 
-au FileType html set shiftwidth=2 softtabstop=2 tabstop=2
-
 cnoreabbrev cr !google-chrome-unstable % 2>/dev/null
 cnoreabbrev gi GoImport
 cnoreabbrev gd GoDoc
@@ -127,11 +125,22 @@ inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 nnoremap ; :
 
-autocmd BufNewFile *.sh 0r ~/.config/nvim/skeleton/skeleton.sh
-autocmd BufNewFile main.go 0r ~/.config/nvim/skeleton/skeleton.go
-autocmd BufNewFile *.html 0r ~/.config/nvim/skeleton/skeleton.html
+autocmd BufNewFile *.sh 0r $XDG_CONFIG_HOME/nvim/skeleton/skeleton.sh
+autocmd BufNewFile main.go 0r $XDG_CONFIG_HOME/nvim/skeleton/skeleton.go
+autocmd BufNewFile *.html 0r $XDG_CONFIG_HOME/nvim/skeleton/skeleton.html
+autocmd BufNewFile .travis.yml 0r $XDG_CONFIG_HOME/nvim/skeleton/travis.yml
 
-autocmd BufNewFile LICENSE 0r ~/.config/nvim/skeleton/LICENSE-MIT
+autocmd BufNewFile README.md 0r $XDG_CONFIG_HOME/nvim/skeleton/README.md
+autocmd BufNewFile README.md ks|call RepoName()|'s
+fun RepoName()
+    let l = 1
+    for line in getline(1,"$")
+        call setline(l, substitute(line, 'REPONAME', substitute(getcwd(), '^.*/', '', ''), "g"))
+        let l = l + 1
+    endfor
+endfun
+
+autocmd BufNewFile LICENSE 0r $XDG_CONFIG_HOME/nvim/skeleton/LICENSE-MIT
 autocmd BufNewFile LICENSE ks|call LicenseYear()|'s
 fun LicenseYear()
     call setline(3, substitute(getline(3), "INSERT_YEAR", strftime("%Y"), ""))

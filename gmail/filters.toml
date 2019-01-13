@@ -56,10 +56,11 @@
         "(account access)",
         "(verify AROUND 3 email)",
         "(security alert)",
+        "(GitHub a new public key)",
         "(new device)",
         "(new login)",
         "(new ip)",
-        "(網路銀行登入)",
+        "(網路銀行 AROUND 5 登入)",
     ]
 
 [[Filter]]
@@ -68,6 +69,7 @@
     Read    = true
     QueryOr = [
         "from:(builds@travis-ci.org)",
+        "from:(builds@travis-ci.com)",
     ]
 
 [[Filter]]

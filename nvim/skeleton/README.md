@@ -4,5 +4,6 @@
 [![License](https://img.shields.io/github/license/seankhliao/REPONAME.svg?style=for-the-badge)](githib.com/seankhliao/REPONAME)
 [![Build Status](https://img.shields.io/travis-ci/seankhliao/REPONAME.svg?style=for-the-badge)](https://travis-ci.org/seankhliao/REPONAME)
 [![Codecov](https://img.shields.io/codecov/c/github/seankhliao/REPONAME.svg?style=for-the-badge)](https://codecov.io/gh/seankhliao/REPONAME)
+![](https://img.shields.io/github/tag/seankhliao/REPONAME.svg?style=for-the-badge)
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/seankhliao/REPONAME?style=flat-square)](https://goreportcard.com/report/github.com/seankhliao/REPONAME)

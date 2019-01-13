@@ -1,14 +1,30 @@
 [alias]
-    a = add
-    cam = commit -a -m
-    camp = !git commit -a -m \"$1\" && git push && :
-    cm = commit -m
-    l = pull
-    lr = pull --rebase
-    lo = log --graph --color=always --format='%C(auto)%h%d %s %C( bold black)%cr %C(blue)<%an>'
-    p = push
-    po = !git remote add origin \"$1\" && git push -u origin master
-    s = status
+    a   = add
+
+    b   = checkout
+    bd  = branch -d
+    bl  = branch
+    bn  = checkout -b
+    bm  = !git checkout $1 && git rebase -i master && git checkout master && git merge $1 && :
+
+    cma     = commit --amend -m
+    cama    = commit --amend -a -m
+    cm      = commit -m
+    cam     = commit -a -m
+    camp    = !git commit -a -m \"$1\" && git push && :
+
+    cl  = clone
+    clm = !git clone "https://github.com/seankhliao/$1" $2 && :
+
+    l   = pull
+    lr  = pull --rebase
+
+    lo  = log --graph --color=always --format='%C(auto)%h%d %s %C( bold black)%cr %C(blue)<%an>'
+
+    p   = push
+    po  = !git remote add origin $1 && git push -u origin master && :
+
+    s   = status
 
 [blame]
     coloring = highlightRecent

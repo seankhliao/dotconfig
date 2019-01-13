@@ -1,6 +1,6 @@
 language: go
 go:
-  - master
+  - stable
 
 script:
   - go test -race -coverprofile=coverage.txt -covermode=atomic

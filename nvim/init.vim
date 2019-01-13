@@ -1,38 +1,47 @@
 scriptencoding utf-8
 
+let g:nord_comment_brightness = 14
+let g:nord_italic = 1
+let g:nord_italic_comments = 1
+let g:nord_underline = 1
+let g:nord_uniform_status_lines = 1
+let g:nord_cursor_line_number_background = 1
+
 call plug#begin('$XDG_DATA_HOME/nvim/plugged')
     Plug 'alvan/vim-closetag' " xml tags
     Plug 'airblade/vim-gitgutter' " git gutter
     Plug 'ap/vim-css-color'
-    Plug 'brooth/far.vim'       " advanced find and replace
-	Plug 'cyansprite/extract'   " list of yanks
-    Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }} " live preview in browser
     Plug 'itchyny/lightline.vim' " status line
     Plug 'lambdalisue/suda.vim' " sudo write
-	Plug 'mhartington/oceanic-next' " colorscheme
     Plug 'nathanaelkane/vim-indent-guides'
     Plug 'raimondi/delimitmate' " parens
     Plug 'tyru/caw.vim'         " comments
-    Plug 'Shougo/context_filetype.vim'
 
-    Plug 'cespare/vim-toml'
+	" Plug 'mhartington/oceanic-next' " colorscheme
+	Plug 'arcticicestudio/nord-vim'
+	" Plug 'rakr/vim-two-firewatch'
+
+    Plug 'sheerun/vim-polyglot'
+    " Plug 'Shougo/context_filetype.vim'
 
     Plug 'roxma/nvim-yarp'
     Plug 'ncm2/ncm2'
-    Plug 'ncm2/ncm2-bufword'
-    Plug 'ncm2/ncm2-cssomni'
-    Plug 'ncm2/ncm2-go' | Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-    Plug 'ncm2/ncm2-html-subscope'
-    Plug 'ncm2/ncm2-jedi' | Plug 'davidhalter/jedi-vim'
+
+    Plug 'ncm2/ncm2-bufword' " words in buffer
+    Plug 'fgrsnau/ncm-otherbuf' " other buffers
+    Plug 'ncm2/ncm2-path'   " path completion
+    Plug 'ncm2/ncm2-syntax' | Plug 'Shougo/neco-syntax' " syntax completion
+
     Plug 'ncm2/ncm2-markdown-subscope'
-    Plug 'ncm2/ncm2-neoinclude' | Plug 'Shougo/neoinclude.vim'
-    Plug 'ncm2/ncm2-path'
-    " Plug 'ncm2/ncm2-pyclang'
-    Plug 'ncm2/ncm2-racer' | Plug 'racer-rust/vim-racer'
-    Plug 'ncm2/ncm2-syntax' | Plug 'Shougo/neco-syntax'
-    Plug 'ncm2/ncm2-tern',  {'do': 'npm install'}
-    Plug 'ncm2/ncm2-vim' | Plug 'Shougo/neco-vim'
-    " Plug 'filipekiss/ncm2-look.vim' " english word completion
+    Plug 'ncm2/ncm2-html-subscope'
+
+    " Plug 'ncm2/ncm2-cssomni'
+    " Plug 'ncm2/ncm2-vim' | Plug 'Shougo/neco-vim'
+
+    Plug 'autozimu/LanguageClient-neovim', {
+       \ 'branch': 'next',
+       \ 'do': 'bash install.sh',
+       \ }
     
     Plug 'w0rp/ale'
 
@@ -72,17 +81,24 @@ let g:delimitMate_smart_quotes = 1
 let g:delimitMate_matchpairs = '(:),[:],{:}'
 let g:indent_guides_enable_on_vim_startup = 1
 let g:jedi#auto_initialization = 0
-let g:lightline = {'colorscheme': 'oceanicnext'}
-let g:ncm2_look_enabled = 1
+let g:lightline = {'colorscheme': 'nord'}
+let g:LanguageClient_rootMarkers = {
+        \ 'go': ['.git', 'go.mod'],
+        \ }
+
+let g:LanguageClient_serverCommands = {
+    \ 'go': ['bingo', '--mode', 'stdio', '--logfile', '/tmp/lspserver.log','--trace', '--pprof', ':6060'],
+    \ 'bash': ['bash-language-server', 'start'],
+    \ }
 
 let g:indent_guides_auto_colors = 0
-autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#1b2b34   ctermbg=2
-autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#4f5b66   ctermbg=0
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#2E3440   ctermbg=2
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#3B4252   ctermbg=0
 
 autocmd BufEnter * call ncm2#enable_for_buffer()
 
 syntax enable
-colorscheme OceanicNext
+colorscheme nord
 
 set autoindent
 set autoread
@@ -98,6 +114,7 @@ set foldmethod=syntax
 set fsync
 set grepprg=rg
 set ignorecase
+set inccommand=split
 set incsearch
 set mouse=a
 set mousefocus
@@ -111,7 +128,7 @@ set smartcase
 set smartindent
 set smarttab
 set softtabstop=4
-set spell
+" set spell
 set tabstop=4
 set termguicolors
 

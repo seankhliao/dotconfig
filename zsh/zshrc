@@ -44,6 +44,7 @@ setopt ALIASES
 setopt CORRECT
 
 # =================== ZSH Completion =================
+zstyle ':completion:*' group-name ''
 zstyle ':completion:*' menu select
 zstyle ':completion:*' rehash true
 zstyle ':completion:*' list-colors "${(@s.:.)LS_COLORS}"
@@ -67,6 +68,9 @@ alias .....='cd ../../../..'
 alias ......='cd ../../../../..'
 alias .......='cd ../../../../../..'
 
+function c() {
+    cd ~/"$1"
+}
 alias cdr='cd -P .'
 alias cr='google-chrome-unstable'
 
@@ -119,6 +123,13 @@ alias l='ls -lGh'
 alias ll='ls -alGh'
 alias ls='ls --color'
 
+function md() {
+    mkdir -p "$1" && cd "$1"
+}
+
+alias p='yay'
+alias p-update='yay -Syu --noconfirm'
+alias p-clean=' yay -Rns $(yay -Qtdq); yay -Sc'
 
 alias py='python3'
 alias py2='python3'
@@ -129,14 +140,12 @@ alias sd='sudo systemctl'
 alias start-vpn='sudo systemctl start wg-quick@wg0'
 alias stop-vpn='sudo systemctl stop wg-quick@wg0'
 
-alias t='tag -i'
 export TAG_CMD_FMT_STRING="$EDITOR {{.Filename }} +{{ .LineNumber }}"
-if (( $+commands[tag] )); then
-    tag() {
-        command tag "$@";
-        source ${TAG_ALIAS_FILE:-/tmp/tag_aliases} 2>/dev/null
-    }
-fi
+t() {
+    command tag -i "$@";
+    source ${TAG_ALIAS_FILE:-/tmp/tag_aliases} 2>/dev/null
+}
+alias tag='t'
 
 if [[ -f '/usr/bin/nvim' ]]; then
     alias v='nvim'
@@ -144,9 +153,7 @@ else
     alias v='vim'
 fi
 
-alias p='yay'
-alias p-update='yay -Syu --noconfirm'
-alias p-clean=' yay -Rns $(yay -Qtdq); yay -Sc'
+alias zrc="nvim $XDG_CONFIG_HOME/zsh/zshrc"
 
 # ==================== Plugins =======================
 PLUGIN_HOME=$XDG_DATA_HOME/zsh/plugins

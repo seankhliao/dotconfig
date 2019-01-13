@@ -44,11 +44,11 @@ setopt ALIASES
 setopt CORRECT
 
 # =================== ZSH Completion =================
+zstyle ':completion::complete:*' gain-privileges 1
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' menu select
 zstyle ':completion:*' rehash true
 zstyle ':completion:*' list-colors "${(@s.:.)LS_COLORS}"
-zstyle ':completion::complete:*' gain-privileges 1
 zstyle ':completion:*' matcher-list '' \
     '+m:{a-z}={A-Z}' '+m:{A-Z}={a-z}' \
     'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-}={A-Z\_}' \
@@ -68,9 +68,6 @@ alias .....='cd ../../../..'
 alias ......='cd ../../../../..'
 alias .......='cd ../../../../../..'
 
-function c() {
-    cd ~/"$1"
-}
 alias cdr='cd -P .'
 alias cr='google-chrome-unstable'
 
@@ -84,34 +81,28 @@ alias g='git'
 
 # create aliases for git
 # g<alias> where <alias> is defined in git/config
-local start_alias=false
-while read line; do
-    if ! $start_alias; then
-        if [[ $line =~ '\s*\[alias\]' ]]; then
-            start_alias=true
+function git_aliases() {
+    local start_alias=false
+    while read line; do
+        if ! $start_alias; then
+            [[ $line =~ '\s*\[alias\]' ]] && start_alias=true
+        else
+            [[ $line =~ '\s*\[[a-z]*\]' ]] && break
+            sub=${${line%%=*}// /}
+            [[ $sub ]] && alias g${sub}="git ${sub}"
         fi
-    else
-        if [[ $line =~ '\s*\[[a-z]*\]' ]]; then
-            break
-        fi
-        sub=${${line%%=*}// /}
-        [[ $sub ]] && alias g${sub}="git ${sub}"
-    fi
-done < $XDG_CONFIG_HOME/git/config
+    done < $XDG_CONFIG_HOME/git/config
+}
+git_aliases
 
 function gsall() {
-    bold=$(tput bold)
-    normal=$(tput sgr0)
+    local bold=$(tput bold)
+    local normal=$(tput sgr0)
 
     for dir in ~/code/*; do
-        if [ -d "$dir" ]; then
-            if [ -d "$dir"/.git ]; then
-                echo "${bold}$dir${normal}"
-                cd $dir
-                git status -s
-                echo ""
-                cd ..
-            fi
+        if [[ -d ${dir} ]] && [[ -d ${dir}/.git ]]; then
+            echo "\n${bold}$dir${normal}"
+            git -C ${dir} status -s
         fi
     done
 }
@@ -141,24 +132,22 @@ alias start-vpn='sudo systemctl start wg-quick@wg0'
 alias stop-vpn='sudo systemctl stop wg-quick@wg0'
 
 export TAG_CMD_FMT_STRING="$EDITOR {{.Filename }} +{{ .LineNumber }}"
-t() {
-    command tag -i "$@";
+function t() {
+    command tag -i "$@"
     source ${TAG_ALIAS_FILE:-/tmp/tag_aliases} 2>/dev/null
 }
 alias tag='t'
 
-if [[ -f '/usr/bin/nvim' ]]; then
-    alias v='nvim'
-else
-    alias v='vim'
-fi
+alias v='vim'
+[[ -f '/usr/bin/nvim' ]] && alias v='nvim'
 
 alias zrc="nvim $XDG_CONFIG_HOME/zsh/zshrc"
 
 # ==================== Plugins =======================
-PLUGIN_HOME=$XDG_DATA_HOME/zsh/plugins
+local PLUGIN_HOME=$XDG_DATA_HOME/zsh/plugins
 
-update_plugin () {
+function _update_plugin () {
+    echo "\n$1/$2"
     if [[ -d $PLUGIN_HOME/$2 ]] ; then
         git -C $PLUGIN_HOME/$2 pull
     else
@@ -167,24 +156,22 @@ update_plugin () {
     zcompile $PLUGIN_HOME/$2/$2.zsh
 }
 
-update_plugins () {
-    if [[ ! -d $PLUGIN_HOME ]] ; then
-        mkdir -p $PLUGIN_HOME
-    fi
+function update_plugins () {
+    [[ -d $PLUGIN_HOME ]] || mkdir -p $PLUGIN_HOME
 
-    update_plugin zsh-users zsh-autosuggestions
-    update_plugin zsh-users zsh-history-substring-search
-    update_plugin zsh-users zsh-syntax-highlighting
-    update_plugin seankhliao zsh-prompt
+    _update_plugin zsh-users zsh-autosuggestions
+    _update_plugin zsh-users zsh-history-substring-search
+    _update_plugin zsh-users zsh-syntax-highlighting
+    _update_plugin seankhliao zsh-prompt
 }
 
-plugins=('zsh-autosuggestions' 'zsh-history-substring-search' 'zsh-syntax-highlighting' 'zsh-prompt')
+local plugins=('zsh-autosuggestions' 'zsh-history-substring-search' 'zsh-syntax-highlighting' 'zsh-prompt')
 for f in $plugins; do 
     source $PLUGIN_HOME/$f/$f.zsh
 done
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/opt/google-cloud-sdk/path.zsh.inc' ]; then source '/opt/google-cloud-sdk/path.zsh.inc'; fi
+[[ -f '/opt/google-cloud-sdk/path.zsh.inc' ]] &&  source '/opt/google-cloud-sdk/path.zsh.inc'
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/opt/google-cloud-sdk/completion.zsh.inc' ]; then source '/opt/google-cloud-sdk/completion.zsh.inc'; fi
+[[ -f '/opt/google-cloud-sdk/completion.zsh.inc' ]] && source '/opt/google-cloud-sdk/completion.zsh.inc'

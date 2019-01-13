@@ -11,6 +11,7 @@ gtk-*
 hub/
 menus/
 mimeapps.list
+nvim/.netrwhist
 nvim/autoload
 nvim/plugged
 Outline Manager/

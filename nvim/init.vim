@@ -17,9 +17,7 @@ call plug#begin('$XDG_DATA_HOME/nvim/plugged')
     Plug 'raimondi/delimitmate' " parens
     Plug 'tyru/caw.vim'         " comments
 
-	" Plug 'mhartington/oceanic-next' " colorscheme
 	Plug 'arcticicestudio/nord-vim'
-	" Plug 'rakr/vim-two-firewatch'
 
     Plug 'sheerun/vim-polyglot'
     " Plug 'Shougo/context_filetype.vim'

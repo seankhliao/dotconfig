@@ -1,9 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =7
-let g:netrw_dirhist_1='/home/arccy/code/com-seankhliao/src/static/icons'
-let g:netrw_dirhist_2='/home/arccy/code/com-seankhliao-old/.firebase'
-let g:netrw_dirhist_3='/home/arccy/code/go-wireguard'
-let g:netrw_dirhist_4='/home/arccy/code/wg/testutils'
-let g:netrw_dirhist_5='/home/arccy/code/com-seankhliao-wg'
-let g:netrw_dirhist_6='/home/arccy/info'
-let g:netrw_dirhist_7='/home/arccy/code/dockerfiles/nvim'

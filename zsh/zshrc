@@ -133,7 +133,7 @@ alias s='ssh'
 alias sd='sudo systemctl'
 alias start-vpn='sudo systemctl start wg-quick@wg0'
 alias stop-vpn='sudo systemctl stop wg-quick@wg0'
-alias sudo='sudp --preserve-env'
+alias sudo='sudo --preserve-env'
 
 export TAG_CMD_FMT_STRING="$EDITOR {{.Filename }} +{{ .LineNumber }}"
 function t() {

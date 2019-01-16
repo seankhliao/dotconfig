@@ -129,6 +129,8 @@ set softtabstop=4
 " set spell
 set tabstop=4
 set termguicolors
+set undofile
+set undodir=$XDG_DATA_HOME/nvim/undo
 
 cnoreabbrev cr !google-chrome-unstable % 2>/dev/null
 cnoreabbrev gi GoImport

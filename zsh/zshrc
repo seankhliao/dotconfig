@@ -69,6 +69,7 @@ alias ......='cd ../../../../..'
 alias .......='cd ../../../../../..'
 
 alias cdr='cd -P .'
+alias cp='cp -iv'
 alias cr='google-chrome-unstable'
 
 alias diff='diff --color=always'
@@ -78,7 +79,6 @@ alias filespace='du -d 1 -h . 2>/dev/null | sort -h -r'
 alias forget="sed -i '$ d' $HISTFILE ; sed -i '$ d' $HISTFILE"
 
 alias g='git'
-
 # create aliases for git
 # g<alias> where <alias> is defined in git/config
 function git_aliases() {
@@ -95,6 +95,10 @@ function git_aliases() {
 }
 git_aliases
 
+alias gmail-filters-upload="gmailfilters $XDG_CONFIG_HOME/gmail/filters.toml"
+alias gmail-filters-edit="nvim $XDG_CONFIG_HOME/gmail/filters.toml"
+alias grep='grep --color=auto'
+
 function gsall() {
     local bold=$(tput bold)
     local normal=$(tput sgr0)
@@ -106,17 +110,17 @@ function gsall() {
         fi
     done
 }
-alias gmail-filters-upload="gmailfilters $XDG_CONFIG_HOME/gmail/filters.toml"
-alias gmail-filters-edit="nvim $XDG_CONFIG_HOME/gmail/filters.toml"
 
 alias h='htop'
 alias l='ls -lGh'
 alias ll='ls -alGh'
+alias ln='ln -v'
 alias ls='ls --color'
 
 function md() {
     mkdir -p "$1" && cd "$1"
 }
+alias mv='mv -iv'
 
 alias p='yay'
 alias p-update='yay -Syu --noconfirm'
@@ -127,9 +131,9 @@ alias py2='python3'
 
 alias s='ssh'
 alias sd='sudo systemctl'
-
 alias start-vpn='sudo systemctl start wg-quick@wg0'
 alias stop-vpn='sudo systemctl stop wg-quick@wg0'
+alias sudo='sudp --preserve-env'
 
 export TAG_CMD_FMT_STRING="$EDITOR {{.Filename }} +{{ .LineNumber }}"
 function t() {

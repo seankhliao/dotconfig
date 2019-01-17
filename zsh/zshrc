@@ -69,7 +69,7 @@ alias ......='cd ../../../../..'
 alias .......='cd ../../../../../..'
 
 alias cdr='cd -P .'
-alias cp='cp -iv'
+alias cp='cp -v'
 alias cr='google-chrome-unstable'
 
 alias diff='diff --color=always'
@@ -120,7 +120,7 @@ alias ls='ls --color'
 function md() {
     mkdir -p "$1" && cd "$1"
 }
-alias mv='mv -iv'
+alias mv='mv -v'
 
 alias p='yay'
 alias p-update='yay -Syu --noconfirm'
@@ -131,6 +131,7 @@ alias py2='python3'
 
 alias s='ssh'
 alias sd='sudo systemctl'
+alias sdu='systemctl --user'
 alias start-vpn='sudo systemctl start wg-quick@wg0'
 alias stop-vpn='sudo systemctl stop wg-quick@wg0'
 alias sudo='sudo --preserve-env'

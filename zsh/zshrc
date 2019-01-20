@@ -23,11 +23,14 @@ bindkey '^[[F' end-of-line
 # =================== ZSH Options ==================
 setopt AUTOCD
 
-setopt COMPLETE_IN_WORD
-setopt HASH_LIST_ALL
-
 setopt EXTENDED_GLOB
 setopt GLOB_DOTS
+
+setopt AUTO_LIST
+setopt AUTO_MENU
+setopt AUTO_PARAM_SLASH
+setopt COMPLETE_IN_WORD
+setopt HASH_LIST_ALL
 
 setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_IGNORE_DUPS
@@ -55,6 +58,9 @@ zstyle ':completion:*' matcher-list '' \
     'r:|?=** m:{a-z\-}={A-Z\_}'
 autoload -Uz compinit
 compinit -d "$XDG_RUNTIME_DIR"/zcompdump
+
+autoload -Uz url-quote-magic
+zle -N self-insert url-quote-magic
 
 # ===================== Aliases ===================
 alias -s go='go run'

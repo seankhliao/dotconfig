@@ -1,0 +1,6 @@
+export TAG_CMD_FMT_STRING="$EDITOR {{.Filename }} +{{ .LineNumber }}"
+function t() {
+    command tag -i "$@"
+    source ${TAG_ALIAS_FILE:-/tmp/tag_aliases} 2>/dev/null
+}
+t "$@"

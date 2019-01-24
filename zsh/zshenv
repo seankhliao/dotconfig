@@ -30,7 +30,7 @@ export GOPATH="$XDG_DATA_HOME"/go
 export PATH="$GOPATH"/bin:"$PATH"
 # export YARNPATH="$HOME"/.yarn/bin
 # export PATH=$YARNPATH:$PATH
-export PATH="$HOME"/code/scripts:"$PATH"
+# export PATH="$HOME"/code/scripts:"$PATH"
 
 # make things work
 # export WLR_DRM_DEVICES=card0 

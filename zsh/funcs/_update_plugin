@@ -1,0 +1,11 @@
+function _update_plugin () {
+    echo "\n$1/$2"
+    if [[ -d $PLUGIN_HOME/$2 ]] ; then
+        git -C $PLUGIN_HOME/$2 pull
+    else
+        git clone "https://github.com/"$1/$2 $PLUGIN_HOME/$2
+    fi
+    zcompile $PLUGIN_HOME/$2/$2.zsh
+    source $PLUGIN_HOME/$2/$2.zsh
+}
+_update_plugin "$@"

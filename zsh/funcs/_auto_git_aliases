@@ -1,0 +1,13 @@
+function _auto_git_aliases() {
+    local start_alias=false
+    while read line; do
+        if ! $start_alias; then
+            [[ $line =~ '\s*\[alias\]' ]] && start_alias=true
+        else
+            [[ $line =~ '\s*\[[a-z]*\]' ]] && break
+            sub=${${line%%=*}// /}
+            [[ $sub ]] && alias g${sub}="git ${sub}"
+        fi
+    done < $XDG_CONFIG_HOME/git/config
+}
+_auto_git_aliases

@@ -1,6 +1,6 @@
-# .config
+# config
 
-[![License](https://img.shields.io/github/license/seankhliao/.config.svg?style=for-the-badge)](githib.com/seankhliao/.config)
+[![License](https://img.shields.io/github/license/seankhliao/config.svg?style=for-the-badge)](githib.com/seankhliao/config)
 
 Dotfiles, buyer beware
 

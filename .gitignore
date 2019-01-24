@@ -25,4 +25,5 @@ vlc/
 whoozle.github.io/
 yarn/
 zsh/.zcompdump
+*.zwc
 VirtualBox/

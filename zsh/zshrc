@@ -75,6 +75,14 @@ alias ......='cd ../../../../..'
 alias .......='cd ../../../../../..'
 
 alias cdr='cd -P .'
+function colortest () {
+    for i in {0..255} ; do
+        printf "\x1b[48;5;%sm%3d\e[0m " "$i" "$i"
+        if (( i == 15 )) || (( i > 15 )) && (( (i-15) % 6 == 0 )); then
+            printf "\n";
+        fi
+    done
+}
 alias cp='cp -v'
 alias cr='google-chrome-unstable'
 
@@ -151,6 +159,11 @@ alias tag='t'
 
 alias v='vim'
 [[ -f '/usr/bin/nvim' ]] && alias v='nvim'
+
+function wifi-add() {
+    wpa_passphrase "$@" | sudo tee -a /etc/wpa_supplicant/wpa_supplicant-wlp58s0.conf
+}
+alias wifi-restart="sudo systemctl restart wpa_supplicant@wlp58s0.service"
 
 alias zrc="nvim $XDG_CONFIG_HOME/zsh/zshrc"
 

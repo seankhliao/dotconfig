@@ -35,6 +35,8 @@ call plug#begin('$XDG_DATA_HOME/nvim/plugged')
 
     " Plug 'ncm2/ncm2-cssomni'
     " Plug 'ncm2/ncm2-vim' | Plug 'Shougo/neco-vim'
+    
+    Plug 'ncm2/ncm2-go'
 
     Plug 'autozimu/LanguageClient-neovim', {
        \ 'branch': 'next',
@@ -85,9 +87,9 @@ let g:LanguageClient_rootMarkers = {
         \ }
 
 let g:LanguageClient_serverCommands = {
-    \ 'go': ['bingo', '--mode', 'stdio', '--logfile', '/tmp/lspserver.log','--trace', '--pprof', ':6060'],
     \ 'bash': ['bash-language-server', 'start'],
     \ }
+     " 'go': ['bingo', '--mode', 'stdio', '--logfile', '/tmp/lspserver.log','--trace', '--pprof', ':6060'],
 
 let g:indent_guides_auto_colors = 0
 autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#2E3440   ctermbg=2

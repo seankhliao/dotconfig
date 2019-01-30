@@ -5,30 +5,30 @@ general {
 }
 
 order += "ethernet wg0"
+order += "wireless _first_"
+order += "ethernet _first_"
 order += "disk /"
-order += "wireless wlp58s0"
-order += "ethernet enp7s0u2u3"
-order += "battery 0"
+order += "battery all"
 order += "volume master"
 order += "tztime local"
 
-wireless wlp58s0 {
-        format_up = "W: (%quality at %essid, %bitrate) %ip"
-        format_down = "W: down"
+wireless _first_ {
+        format_up = "W: (%quality @ %essid, %bitrate) %ip"
+        format_down = "W: --"
 }
 
-ethernet enp7s0u2u3 {
+ethernet _first_ {
         # if you use %speed, i3status requires the cap_net_admin capability
         format_up = "E: %ip (%speed)"
-        format_down = "E: down"
+        format_down = "E: --"
 }
 
 ethernet wg0 {
     format_up = "wg0: %ip"
-    format_down = "wg0: offline"
+    format_down = "wg0: --"
 }
 
-battery 0 {
+battery all {
         format = "%status %percentage"
         format_down = "No battery"
         status_chr = "⚡ "

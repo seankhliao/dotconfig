@@ -1,8 +1,8 @@
-function update-plugins () {
+function z-update-plugins () {
     [[ -d $PLUGIN_HOME ]] || mkdir -p $PLUGIN_HOME
 
     for p in ${plugins}; do
         _update_plugin zsh-users ${p}
     done
 }
-update-plugins
+z-update-plugins

@@ -27,8 +27,8 @@ funcs=(
     keyless-ssh
     md
     t
-    update_plugins
     wifi-add
+    z-update-plugins
     zcompfuncs
 )
 autoload -Uz ${funcs}
@@ -90,6 +90,9 @@ zstyle ':completion:*' matcher-list '' \
     'r:|?=** m:{a-z\-}={A-Z\_}'
 autoload -Uz compinit
 compinit -d "$XDG_RUNTIME_DIR"/zcompdump
+
+autoload -Uz url-quote-magic
+zle -N self-insert url-quote-magic
 
 _profile "completion"
 
@@ -165,6 +168,7 @@ alias gmail-filters-upload="gmailfilters $XDG_CONFIG_HOME/gmail/filters.toml"
 alias gmail-filters-edit="nvim $XDG_CONFIG_HOME/gmail/filters.toml"
 alias p-update='yay -Syu --noconfirm'
 alias p-clean=' yay -Rns $(yay -Qtdq); yay -Sc'
+alias sd-failed='sudo systemctl list-units --failed'
 alias start-vpn='sudo systemctl start wg-quick@wg0'
 alias stop-vpn='sudo systemctl stop wg-quick@wg0'
 alias wifi-restart="sudo systemctl restart wpa_supplicant@wlp58s0.service"

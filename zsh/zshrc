@@ -52,6 +52,7 @@ _profile "bindkey"
 
 # =================== ZSH Options ==================
 setopt AUTOCD
+setopt IGNORE_EOF
 
 setopt EXTENDED_GLOB
 setopt GLOB_DOTS

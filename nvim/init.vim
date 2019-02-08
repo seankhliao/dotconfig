@@ -35,7 +35,8 @@ call plug#begin('$XDG_DATA_HOME/nvim/plugged')
 
     " Plug 'ncm2/ncm2-cssomni'
     " Plug 'ncm2/ncm2-vim' | Plug 'Shougo/neco-vim'
-    
+
+    Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
     Plug 'ncm2/ncm2-go'
 
     Plug 'autozimu/LanguageClient-neovim', {
@@ -145,22 +146,31 @@ inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 nnoremap ; :
 
 autocmd BufNewFile *.sh 0r $XDG_CONFIG_HOME/nvim/skeleton/skeleton.sh
-autocmd BufNewFile main.go 0r $XDG_CONFIG_HOME/nvim/skeleton/skeleton.go
 autocmd BufNewFile *.html 0r $XDG_CONFIG_HOME/nvim/skeleton/skeleton.html
 autocmd BufNewFile .travis.yml 0r $XDG_CONFIG_HOME/nvim/skeleton/travis.yml
 
-autocmd BufNewFile README.md 0r $XDG_CONFIG_HOME/nvim/skeleton/README.md
-autocmd BufNewFile README.md ks|call RepoName()|'s
+augroup go
+    au!
+    au BufNewFile main.go 0r $XDG_CONFIG_HOME/nvim/skeleton/skeleton.go
+    au BufNewFile main.go call cursor(4, 4)
+augroup END
+
+augroup md
+    au!
+    au BufNewFile README.md 0r $XDG_CONFIG_HOME/nvim/skeleton/README.md
+    au BufNewFile README.md call RepoName()
+augroup END
 fun RepoName()
     let l = 1
     for line in getline(1,"$")
         call setline(l, substitute(line, 'REPONAME', substitute(getcwd(), '^.*/', '', ''), "g"))
         let l = l + 1
     endfor
+    call cursor(5, 1)
 endfun
 
-autocmd BufNewFile LICENSE 0r $XDG_CONFIG_HOME/nvim/skeleton/LICENSE-MIT
-autocmd BufNewFile LICENSE ks|call LicenseYear()|'s
-fun LicenseYear()
-    call setline(3, substitute(getline(3), "INSERT_YEAR", strftime("%Y"), ""))
-endfun
+augroup license
+    au!
+    au BufNewFile LICENSE 0r $XDG_CONFIG_HOME/nvim/skeleton/LICENSE-MIT
+    au BufNewFile LICENSE setline(3, substitute(getline(3), "INSERT_YEAR", strftime("%Y"), ""))
+augroup END

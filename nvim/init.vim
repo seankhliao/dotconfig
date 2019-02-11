@@ -145,9 +145,18 @@ inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 nnoremap ; :
 
-autocmd BufNewFile *.sh 0r $XDG_CONFIG_HOME/nvim/skeleton/skeleton.sh
-autocmd BufNewFile *.html 0r $XDG_CONFIG_HOME/nvim/skeleton/skeleton.html
 autocmd BufNewFile .travis.yml 0r $XDG_CONFIG_HOME/nvim/skeleton/travis.yml
+
+augroup sh
+    au!
+    au BufNewFile *.sh 0r $XDG_CONFIG_HOME/nvim/skeleton/skeleton.sh
+    au BufNewFile *.sh call cursor(2, 1)
+augroup END
+augroup html
+    au!
+    au BufNewFile *.html 0r $XDG_CONFIG_HOME/nvim/skeleton/skeleton.html
+    au BufNewFile *.html call cursor(5, 6)
+augroup END
 
 augroup go
     au!
@@ -172,5 +181,5 @@ endfun
 augroup license
     au!
     au BufNewFile LICENSE 0r $XDG_CONFIG_HOME/nvim/skeleton/LICENSE-MIT
-    au BufNewFile LICENSE setline(3, substitute(getline(3), "INSERT_YEAR", strftime("%Y"), ""))
+    au BufNewFile LICENSE call setline(3, substitute(getline(3), "INSERT_YEAR", strftime("%Y"), ""))
 augroup END

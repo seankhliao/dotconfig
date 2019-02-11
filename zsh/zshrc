@@ -18,6 +18,7 @@ fpath=(
 )
 funcs=(
     _auto_git_aliases
+    _kubectl_complete
     _prompt
     _source_plugins
     _sudo_cmdline
@@ -149,6 +150,8 @@ alias cr='google-chrome-unstable'
 alias g='git'
 _auto_git_aliases
 alias h='htop'
+alias kaf='kubectl apply -f'
+alias kdf='kubectl delete -f'
 alias l='ls -lGh'
 alias ll='ls -alGh'
 alias p='yay'

@@ -23,7 +23,7 @@ export MANPAGER="nvim -c 'set ft=man' -"
 export BROWSER=google-chrome-unstable
 export TAG_SEARCH_PROG=rg
 export GMAIL_CREDENTIAL_FILE=$XDG_CONFIG_HOME/gmail/credentials.json
-eval $(dircolors $XDG_CONFIG_HOME/dircolors)
+eval $(dircolors $XDG_CONFIG_HOME/dircolors/dircolors)
 
 # path
 export GOPATH="$XDG_DATA_HOME"/go
@@ -70,7 +70,7 @@ export IPYTHONDIR="$XDG_CONFIG_HOME"/jupyter
 export LESSKEY="$XDG_CONFIG_HOME"/lesskey
 export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME"/npmrc
 export PSQLRC="$XDG_CONFIG_HOME"/psqlrc
-export PYTHONSTARTUP="$XDG_CONFIG_HOME"/python_startup.py
+export PYTHONSTARTUP="$XDG_CONFIG_HOME"/python/startup.py
 export SCREENRC="$XDG_CONFIG_HOME"/screenrc
 export VIMINIT=":source $XDG_CONFIG_HOME"/nvim/init.vim
 export WGETRC="$XDG_CONFIG_HOME"/wgetrc

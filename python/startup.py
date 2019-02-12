@@ -8,9 +8,13 @@ class HistoryConsole(code.InteractiveConsole):
     def __init__(self,
                  locals=None,
                  filename="<console>",
-                 histfile=os.path.expanduser("~/.local/share/python_history")):
+                 histfile=os.path.expandvars("$XDG_DATA_HOME/python/history")):
+        d = os.path.expandvars("$XDG_DATA_HOME/python")
+        if not os.path.exists(d):
+            os.makedirs(d)
         code.InteractiveConsole.__init__(self, locals, filename)
         self.init_history(histfile)
+        # print("init history: ", histfile)
 
     def init_history(self, histfile):
         readline.parse_and_bind("tab: complete")
@@ -24,3 +28,7 @@ class HistoryConsole(code.InteractiveConsole):
     def save_history(self, histfile):
         readline.set_history_length(1000)
         readline.write_history_file(histfile)
+        # print("wrote history: ", histfile)
+
+
+HistoryConsole()

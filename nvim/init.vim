@@ -20,7 +20,7 @@ call plug#begin('$XDG_DATA_HOME/nvim/plugged')
 	Plug 'arcticicestudio/nord-vim'
 
     Plug 'sheerun/vim-polyglot'
-    " Plug 'Shougo/context_filetype.vim'
+    Plug 'Shougo/context_filetype.vim'
 
     Plug 'roxma/nvim-yarp'
     Plug 'ncm2/ncm2'
@@ -80,6 +80,7 @@ let g:delimitMate_expand_space = 1
 let g:delimitMate_expand_cr = 2
 let g:delimitMate_smart_quotes = 1
 let g:delimitMate_matchpairs = '(:),[:],{:}'
+" let g:html_indent_style1 = "inc"
 let g:indent_guides_enable_on_vim_startup = 1
 let g:jedi#auto_initialization = 0
 let g:lightline = {'colorscheme': 'nord'}

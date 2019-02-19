@@ -16,8 +16,8 @@
     cl  = clone
     clm = !git clone "https://github.com/seankhliao/$1" $2 && :
 
-    l   = pull
-    lr  = pull --rebase
+    l       = pull --rebase
+    lnr     = pull
 
     lo  = log --graph --color=always --format='%C(auto)%h%d %s %C( bold black)%cr %C(blue)<%an>'
 
@@ -25,6 +25,10 @@
     po  = !git remote add origin $1 && git push -u origin master && :
 
     s   = status
+
+    suba    = submodule add -b master
+    subl    = submodule update --recursive --remote --rebase
+    subp    = push --recurse-submodules=on-demand
 
 [blame]
     coloring = highlightRecent

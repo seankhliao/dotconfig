@@ -6,6 +6,6 @@ setlocal tabstop=2
 " call jspretmpl#register_tag('html', 'html')
 "
 " JsPreTmpl html
-autocmd FileType javascript.jsx JsPreTmpl html
+" autocmd FileType javascript.jsx JsPreTmpl html
 
 

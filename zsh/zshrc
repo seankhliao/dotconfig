@@ -152,6 +152,7 @@ _auto_git_aliases
 alias h='htop'
 alias kaf='kubectl apply -f'
 alias kdf='kubectl delete -f'
+alias kdp='kubectl delete po -l'
 alias l='ls -lGh'
 alias ll='ls -alGh'
 alias p='yay'

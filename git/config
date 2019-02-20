@@ -16,6 +16,8 @@
     cl  = clone
     clm = !git clone "https://github.com/seankhliao/$1" $2 && :
 
+    dh  = diff HEAD
+
     l       = pull --rebase
     lnr     = pull
 

@@ -1,21 +1,32 @@
 # config
 
-[![License](https://img.shields.io/github/license/seankhliao/config.svg?style=for-the-badge)](githib.com/seankhliao/config)
+dotfiles, buyer beware
 
-Dotfiles, buyer beware
+[![License](https://img.shields.io/github/license/seankhliao/config.svg?style=for-the-badge&maxAge=31536000)](LICENSE)
 
-Note to self: check everything before reuse
+## About
 
-## Interesting bits
+only tested for whatever I'm currently using
 
-#### neovim
+## Usage
 
-skeletons / template files from filename
+#### Prerequisites
 
-#### zshrc
+- Arch Linux?
+- Sway WM?
+- neovim?
+- kitty?
+- zsh?
 
-auto create alias for git
+#### Install
+
+```sh
+git clone https://github.com/seankhliao/config ~/.config
+
+# edit SECRETS
+```
 
 ## Todo
 
-automate install
+- [ ] run feature checks
+- [ ] automate install, make?

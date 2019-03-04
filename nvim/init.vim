@@ -21,6 +21,7 @@ call plug#begin('$XDG_DATA_HOME/nvim/plugged')
 
     Plug 'sheerun/vim-polyglot'
     Plug 'Shougo/context_filetype.vim'
+    Plug 'cdata/vim-tagged-template'
 
     Plug 'roxma/nvim-yarp'
     Plug 'ncm2/ncm2'
@@ -81,6 +82,7 @@ let g:delimitMate_expand_cr = 2
 let g:delimitMate_smart_quotes = 1
 let g:delimitMate_matchpairs = '(:),[:],{:}'
 " let g:html_indent_style1 = "inc"
+let g:indent_guides_auto_colors = 0
 let g:indent_guides_enable_on_vim_startup = 1
 let g:jedi#auto_initialization = 0
 let g:lightline = {'colorscheme': 'nord'}
@@ -93,7 +95,12 @@ let g:LanguageClient_serverCommands = {
     \ }
      " 'go': ['bingo', '--mode', 'stdio', '--logfile', '/tmp/lspserver.log','--trace', '--pprof', ':6060'],
 
-let g:indent_guides_auto_colors = 0
+
+let g:taggedtemplate#tagSyntaxMap = {
+  \ "html": "html",
+  \ "md":   "markdown",
+  \ "css":  "css" }
+
 autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#2E3440   ctermbg=2
 autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#3B4252   ctermbg=0
 
@@ -145,6 +152,8 @@ inoremap <c-c> <ESC>
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 nnoremap ; :
+
+autocmd FileType javascript,typescript call taggedtemplate#applySyntaxMap()
 
 autocmd BufNewFile .travis.yml 0r $XDG_CONFIG_HOME/nvim/skeleton/travis.yml
 

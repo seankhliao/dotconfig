@@ -72,7 +72,6 @@ setopt HIST_NO_FUNCTIONS
 setopt HIST_NO_STORE
 setopt HIST_REDUCE_BLANKS
 setopt HIST_SAVE_NO_DUPS
-setopt INC_APPEND_HISTORY
 setopt SHARE_HISTORY
 
 setopt ALIASES
@@ -128,6 +127,10 @@ _profile "plugins"
 alias -s go='go run'
 alias -s py='python3'
 
+# cd with autocomplete: c <tab>
+c () { cd ~/seankhliao/"$1" }
+compctl -W ~/seankhliao/ -/ c
+
 # go up
 alias ..='cd ..'
 alias ...='cd ../..'
@@ -157,7 +160,7 @@ alias kdp='kubectl delete po -l'
 alias l='exa -l --git'
 # alias ll='ls -alGh'
 alias ll='exa -la --git'
-alias p='yay'
+alias p='yay --pacman powerpill'
 alias py='python3'
 alias py2='python3'
 alias s='ssh'
@@ -168,13 +171,14 @@ alias tree='exa -T'
 alias v='vim'; [[ -f '/usr/bin/nvim' ]] && alias v='nvim'
 
 # convenience
+cb () { gcloud builds list --limit=5 --filter='source.repo_source.repo_name="github_seankhliao_'$(basename $(git rev-parse --show-toplevel))'"' }
 alias cdr='cd -P .'
 alias diskspace="df -P -kHl"
 alias filespace='du -d 1 -h . 2>/dev/null | sort -h -r'
 alias forget="sed -i '$ d' $HISTFILE ; sed -i '$ d' $HISTFILE"
 alias gmail-filters-upload="gmailfilters $XDG_CONFIG_HOME/gmail/filters.toml"
 alias gmail-filters-edit="nvim $XDG_CONFIG_HOME/gmail/filters.toml"
-alias p-update='yay -Syu --noconfirm'
+alias p-update='yay --pacman powerpill -Syu --noconfirm'
 alias p-clean=' yay -Rns $(yay -Qtdq); yay -Sc'
 alias sd-failed='sudo systemctl list-units --failed'
 alias start-vpn='sudo systemctl start wg-quick@wg0'

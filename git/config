@@ -14,12 +14,12 @@
     camp    = !git commit -a -m \"$1\" && git push && :
 
     cl  = clone
-    clm = !git clone "https://github.com/seankhliao/$1" $2 && :
+    mcl = !git clone "git@github.com:seankhliao/$1" && :
+    hcl = !git clone "git@github.com:$1" && :
 
     dh  = diff HEAD
 
     l       = pull --rebase
-    lnr     = pull
 
     lo  = log --graph --color=always --format='%C(auto)%h%d %s %C( bold black)%cr %C(blue)<%an>'
 

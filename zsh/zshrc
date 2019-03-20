@@ -172,6 +172,20 @@ alias v='vim'; [[ -f '/usr/bin/nvim' ]] && alias v='nvim'
 
 # convenience
 cb () { gcloud builds list --limit=5 --filter='source.repo_source.repo_name="github_seankhliao_'$(basename $(git rev-parse --show-toplevel))'"' }
+
+gcpd-create () {
+    gcloud deployment-manager deployments create "$1" --config "$2"
+}
+gcpd-preview () {
+    gcloud deployment-manager deployments create --preview "$1" --config "$2"
+}
+gcpd-delete () {
+    gcloud deployment-manager deployments delete "$@"
+}
+gcpd-cancel () {
+    gcloud deployment-manager deployments cancel-preview "$1"
+}
+alias gcpd-create='gcloud deployment-manager '
 alias cdr='cd -P .'
 alias diskspace="df -P -kHl"
 alias filespace='du -d 1 -h . 2>/dev/null | sort -h -r'

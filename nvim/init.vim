@@ -153,9 +153,8 @@ inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 nnoremap ; :
 
+autocmd BufNewFile,BufRead *.py.schema setfiletype yaml
 autocmd FileType javascript,typescript call taggedtemplate#applySyntaxMap()
-
-autocmd BufNewFile .travis.yml 0r $XDG_CONFIG_HOME/nvim/skeleton/travis.yml
 
 augroup sh
     au!

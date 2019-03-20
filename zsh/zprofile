@@ -1,4 +1,7 @@
 if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
-    exec sway --my-next-gpu-wont-be-nvidia
+    # mute on login
+    amixer set Master mute  
+
     # exec sway
+    exec sway --my-next-gpu-wont-be-nvidia
 fi

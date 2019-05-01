@@ -19,7 +19,7 @@ else
     export EDITOR=vim
 fi
 # export PAGER="nvim -R"
-export MANPAGER="nvim -c 'set ft=man' -" 
+export MANPAGER="nvim -c 'set ft=man' -"
 export BROWSER=google-chrome-unstable
 export TAG_SEARCH_PROG=rg
 export GMAIL_CREDENTIAL_FILE=$XDG_CONFIG_HOME/gmail/credentials.json
@@ -33,7 +33,7 @@ export PATH="$GOPATH"/bin:"$PATH"
 # export PATH="$HOME"/code/scripts:"$PATH"
 
 # make things work
-# export WLR_DRM_DEVICES=card0 
+# export WLR_DRM_DEVICES=card0
 # export QEMU_AUDIO_DRV=alsa
 # export GTK_IM_MODULE=fcitx
 # export XMODIFIERS=@im=fcitx
@@ -79,3 +79,6 @@ export ZDOTDIR="$XDG_CONFIG_HOME"/zsh
 # cuda
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH":/opt/cuda/lib64
 export CUDA_HOME=/opt/cuda/
+
+# wayland
+export KITTY_ENABLE_WAYLAND=1

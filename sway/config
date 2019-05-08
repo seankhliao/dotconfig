@@ -8,10 +8,10 @@ set $down   Down
 set $up     Up
 set $right  Right
 set $term   kitty
-set $menu   dmenu_run
+set $menu   bemenu-run
 
 # background
-output * bg $XDG_CONFIG_HOME/sway/bg.jpg fill
+output * background $XDG_CONFIG_HOME/sway/bg.jpg fill
 
 # Screenshot
 # bindsym $mod+p exec grim -g "$(slurp)" "$HOME/info/daenerys-$(date +'%Y-%m-%d-%H%M%S').png"
@@ -48,9 +48,9 @@ bindsym $mod+space              focus mode_toggle
 # for_window [window_role="pop-up"] floating enable
 
 # volume and backlight
-bindsym XF86AudioRaiseVolume    exec amixer set Master 5%+
-bindsym XF86AudioLowerVolume    exec amixer set Master 5%-
-bindsym XF86AudioMute           exec amixer set Master toggle
+bindsym XF86AudioRaiseVolume    exec amixer sset Master 5%+
+bindsym XF86AudioLowerVolume    exec amixer sset Master 5%-
+bindsym XF86AudioMute           exec amixer sset Master toggle
 bindsym XF86MonBrightnessUp     exec light -A 10
 bindsym XF86MonBrightnessDown   exec light -U 10
 
@@ -144,3 +144,13 @@ input "1739:30382:DLL0704:01_06CB:76AE_Touchpad" {
     natural_scroll      enabled
     middle_emulation    enabled
 }
+
+# ================== Exec
+
+# mute
+exec amixer sset Speaker on
+exec amixer sset Master mute
+
+# systemd --user integration
+# exec systemctl --user import-environment
+# exec systemctl --user start sway-session.target

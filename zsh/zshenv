@@ -30,19 +30,13 @@ export GOPATH="$XDG_DATA_HOME"/go
 export PATH="$GOPATH"/bin:"$PATH"
 # export YARNPATH="$HOME"/.yarn/bin
 # export PATH=$YARNPATH:$PATH
-# export PATH="$HOME"/code/scripts:"$PATH"
-
-# make things work
-# export WLR_DRM_DEVICES=card0
-# export QEMU_AUDIO_DRV=alsa
-# export GTK_IM_MODULE=fcitx
-# export XMODIFIERS=@im=fcitx
-# export QT_IM_MODULE=fcitx
 
 # XDG CACHE
 export __GL_SHADER_DISK_CACHE_PATH="$XDG_CACHE_HOME"/nv
 export CCACHE_DIR="$XDG_CACHE_HOME"/ccache
 export CUDA_CACHE_PATH="$XDG_CACHE_HOME"/nv
+export GEM_SPEC_CACHE="$XDG_CACHE_HOME"/gem
+export NUGET_PACKAGES="$XDG_CACHE_HOME"/NuGetPackages
 export PYTHON_EGG_CACHE="$XDG_CACHE_HOME"/python-eggs
 export RANDFILE="$XDG_CACHE_HOME"/rnd
 
@@ -50,23 +44,28 @@ export RANDFILE="$XDG_CACHE_HOME"/rnd
 export LESSHISTFILE=-
 export HISTFILE="$XDG_DATA_HOME"/zsh/history
 export HISTSIZE=999999999
-export SAVEHIST=$HISTSIZE
+export GEM_HOME="$XDG_DATA_HOME"/gem
 export GNUPGHOME="$XDG_DATA_HOME"/gnupg
-export TERMINFO="$XDG_DATA_HOME"/terminfo
-export TERMINFO_DIRS="$XDG_DATA_HOME"/terminfo:/usr/share/terminfo
+export NODE_REPL_HISTORY="$XDG_DATA_HOME"/node_repl_history
 export PGPASSFILE="$XDG_DATA_HOME"/psql/pgpass
 export PSQL_HISTORY="$XDG_DATA_HOME"/psql/history
 export PYLINTHOME=$XDG_DATA_HOME/pylint
-export NODE_REPL_HISTORY="$XDG_DATA_HOME"/node_repl_history
-# Python history is set in PYTHONSTARTUP
+export SAVEHIST=$HISTSIZE
+export SQLITE_HISTORY=$XDG_DATA_HOME/sqlite_history
+export TERMINFO="$XDG_DATA_HOME"/terminfo
+export TERMINFO_DIRS="$XDG_DATA_HOME"/terminfo:/usr/share/terminfo
 
 # XDG CONFIG
+export ANDROID_SDK_HOME="$XDG_CONFIG_HOME"/android
+export BOTO_PATH="$XDG_CONFIG_HOME"/boto
 export CARGO_HOME="$XDG_DATA_HOME"/cargo
+export CCACHE_CONFIGPATH="$XDG_CONFIG_HOME"/ccache.config
 export CURL_HOME="$XDG_CONFIG_HOME"/curl
 export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker
 export GTK2_RC_FILES="$XDG_CONFIG_HOME"/gtk-2.0/gtkrc
-export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME"/jupyter
 export IPYTHONDIR="$XDG_CONFIG_HOME"/jupyter
+export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME"/jupyter
+export KUBECONFIG="$XDG_CONFIG_HOME"/kube/config
 export LESSKEY="$XDG_CONFIG_HOME"/lesskey
 export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME"/npmrc
 export PSQLRC="$XDG_CONFIG_HOME"/psqlrc

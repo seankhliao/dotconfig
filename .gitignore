@@ -9,6 +9,7 @@ gmail/credentials.json
 google-*
 gtk-*
 hub/
+kube/
 menus/
 mimeapps.list
 nvim/.netrwhist

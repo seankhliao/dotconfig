@@ -8,7 +8,9 @@ let g:ale_sign_warning = '⚠⚠'
 let g:ale_set_signs = 1
 
 let g:ale_linters = {
+\ 'bash': ['bash-language-server'],
 \ 'go': ['gopls'],
+\ 'python':['pyls'],
 \}
 
 let g:ale_fixers = {

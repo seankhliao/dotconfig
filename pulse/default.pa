@@ -1,5 +1,0 @@
-.include /etc/pulse/default.pa
-
-# autoconnect
-load-module module-switch-on-connect
-load-module module-bluetooth-policy auto_switch=2

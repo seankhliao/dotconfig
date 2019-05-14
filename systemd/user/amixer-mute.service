@@ -1,0 +1,10 @@
+[Unit]
+Description=Mutes laptop speakers on boot
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/amixer sset Speaker on
+ExecStart=/usr/bin/amixer sset Master mute
+
+[Install]
+WantedBy=default.target

@@ -16,6 +16,7 @@ output * background $XDG_CONFIG_HOME/sway/bg.jpg fill
 # Screenshot
 # bindsym $mod+p exec grim -g "$(slurp)" "$HOME/info/daenerys-$(date +'%Y-%m-%d-%H%M%S').png"
 bindsym Print                   exec grim -g "$(slurp)" "$HOME/data/screenshot/$HOST-$(date +'%Y-%m-%d-%H%M%S').png"
+bindsym $mod+Print              exec iwctl station wlp58s0 scan
 
 # custom keys
 bindsym $mod+t                  exec google-chrome-unstable --disk-cache-dir=/tmp/cache
@@ -144,13 +145,3 @@ input "1739:30382:DLL0704:01_06CB:76AE_Touchpad" {
     natural_scroll      enabled
     middle_emulation    enabled
 }
-
-# ================== Exec
-
-# mute
-exec amixer sset Speaker on
-exec amixer sset Master mute
-
-# systemd --user integration
-# exec systemctl --user import-environment
-# exec systemctl --user start sway-session.target

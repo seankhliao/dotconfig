@@ -69,6 +69,7 @@ zstyle ':completion:*' group-name ''
 zstyle ':completion:*' menu select
 zstyle ':completion:*' rehash true
 zstyle ':completion:*' list-colors "${(@s.:.)LS_COLORS}"
+zstyle ':completion:*:*:-command-:*:*' ignored-patterns '_*'
 zstyle ':completion:*' matcher-list '' \
     '+m:{a-z}={A-Z}' '+m:{A-Z}={a-z}' \
     'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-}={A-Z\_}' \

@@ -55,10 +55,10 @@
 [diff]
 	renames = copies
 
-[url "git@github.com:seankhliao"]
-    insteadOf = "https://github.com/seankhliao"
-    insetadOf = "s:"
-    insteadOf = "git://github.com/seankhliao"
+[url "git@github.com:seankhliao/"]
+    insteadOf = "https://github.com/seankhliao/"
+    insteadOf = "s:"
+    insteadOf = "git://github.com/seankhliao/"
 
 [url "git@github.com:"]
 	insteadOf = "https://github.com/"

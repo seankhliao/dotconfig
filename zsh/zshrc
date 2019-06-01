@@ -1,42 +1,22 @@
 #!/bin/zsh
-# ==================== Profiler ============================
-PROFILE=0
-_time=$(date +%N)
-function _profile () { [[ $PROFILE -ne 0 ]] && echo "$1: $(( ($(date +%N) - ${_time}) / 1000000 ))ms" && _time=$(date +%N) }
 
-# ==================== Autoload Functions ==================
-# https://unix.stackexchange.com/questions/33255/how-to-define-and-load-your-own-shell-function-in-zsh
+# seankhliao's zshrc
+# sections begin with 20x =
+
+
+# ==================== zshrc profiler
+# at the emd of each section
+# set PROFILER=1
+# usage:
+#   _profiler "section name"
 #
-# naming:
-#   _underscore_prefix: internal
-#   normal-dashed: to be called by user
+local PROFILER=0
+local _time=$(date +%N)
+_profiler () { [[ $PROFILER -ne 0 ]] && echo "$1: $(( ($(date +%N) - ${_time}) / 1000000 ))ms" && _time=$(date +%N) }
+
+
+# ==================== zsh keybindings
 #
-# call zcompfuncs to recompile after changing
-fpath=( 
-    "$ZDOTDIR/funcs"
-    "${fpath[@]}" 
-)
-funcs=(
-    _auto_git_aliases
-    _kubectl_complete
-    _prompt
-    _source_plugins
-    _sudo_cmdline
-    _update_plugin
-    colortest
-    gsall
-    keyless-ssh
-    md
-    t
-    wifi-add
-    z-update-plugins
-    zcompfuncs
-)
-autoload -Uz ${funcs}
-
-_profile "autoload"
-
-# ==================== KeyBindings ===================
 zle -N _sudo_cmdline
 zle -N history-substring-search-up
 zle -N history-substring-search-down
@@ -49,9 +29,11 @@ bindkey '^[[H' beginning-of-line
 bindkey '^[[4~' end-of-line
 bindkey '^[[F' end-of-line
 
-_profile "bindkey"
+_profiler "zsh keybinders"
 
-# =================== ZSH Options ==================
+
+# =================== zsh options
+#
 setopt AUTOCD
 setopt IGNORE_EOF
 
@@ -77,9 +59,11 @@ setopt SHARE_HISTORY
 setopt ALIASES
 setopt CORRECT
 
-_profile "setopt"
+_profiler "zsh options"
 
-# =================== ZSH Completion =================
+
+# =================== zsh completions
+#
 zstyle ':completion::complete:*' gain-privileges 1
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' menu select
@@ -95,41 +79,84 @@ compinit -d "$XDG_RUNTIME_DIR"/zcompdump
 autoload -Uz url-quote-magic
 zle -N self-insert url-quote-magic
 
-_profile "completion"
 
-# ==================== gcloud ======================
-# The next line updates PATH for the Google Cloud SDK.
 [[ -f '/opt/google-cloud-sdk/path.zsh.inc' ]] &&  source '/opt/google-cloud-sdk/path.zsh.inc'
-# The next line enables shell command completion for gcloud.
 [[ -f '/opt/google-cloud-sdk/completion.zsh.inc' ]] && source '/opt/google-cloud-sdk/completion.zsh.inc'
 
-_profile "gcloud"
+_profiler "zsh completion"
 
-# ================= Prompt =====================
-_prompt
 
-_profile "prompt"
+# =================== autoload functions
+# https://unix.stackexchange.com/questions/33255/how-to-define-and-load-your-own-shell-function-in-zsh
+#
+# lazily loaded function per file
+# with cached compilations
+#
+# naming:
+#       _underscore_prefix: internal functions
+#       kebab-casing: user callable
+#
+# recompile:
+#       z-comp-funcs
+#
+fpath=( "$ZDOTDIR"/funcs "${fpath[@]}" )
+funcs=(
+    _auto_git_aliases
+    _kubectl_complete
+    _prompt
+    _source_plugins
+    _sudo_cmdline
+    colortest
+    gsall
+    keyless-ssh
+    man
+    md
+    t
+    z-update-plugins
+    z-comp-funcs
+)
+autoload -Uz ${funcs}
 
-# ==================== Plugins =======================
+_profiler "autoload funcs"
+
+
+# =================== dockerfuncs
+# https://github.com/jessfraz/dockerfiles
+#
+# run things in docker instead of natively
+#
+source "$ZDOTDIR"/dockerfuncs
+
+_profiler "dockerfuncs"
+
+
+# =================== zsh plugins
+#
 local PLUGIN_HOME=$XDG_DATA_HOME/zsh/plugins
 local plugins=(
-    'zsh-autosuggestions' 
-    'zsh-history-substring-search' 
+    'zsh-autosuggestions'
+    'zsh-history-substring-search'
     'zsh-syntax-highlighting'
 )
 _source_plugins
 
-_profile "plugins"
+_profiler "zsh plugins"
 
-# ===================== Aliases ===================
+
+# =================== zsh prompt
+#
+_prompt
+
+_profiler "zsh prompt"
+
+
+# ==================== zsh aliases
 # suffix aliases
-# open files ending in X with these programs
+# usage:
+#       runs files with these programs
 alias -s go='go run'
 alias -s py='python3'
 
-# cd with autocomplete: c <tab>
-c () { cd ~/seankhliao/"$1" }
-compctl -W ~/seankhliao/ -/ c
 
 # go up
 alias ..='cd ..'
@@ -149,20 +176,26 @@ alias mv='mv -v'
 alias sudo='sudo --preserve-env'
 
 # short
+alias cdr='cd -P .'
 alias cr='google-chrome-unstable'
+alias diskspace="df -P -kHl"
+alias drun='docker run --rm -it -v $(pwd):/workspace '
+alias filespace='du -d 1 -h . 2>/dev/null | sort -h -r'
 alias g='git'
+
 _auto_git_aliases
+
 alias h='htop'
 alias kaf='kubectl apply -f'
 alias kdf='kubectl delete -f'
 alias kdp='kubectl delete po -l'
-# alias l='ls -lGh'
 alias l='exa -l --git --time-style iso'
-# alias ll='ls -alGh'
 alias ll='exa -la --git --time-style iso'
 alias p='yay'
 alias py='python3'
-alias py2='python3'
+alias py2='python2'
+alias p-update='yay -Syu --noconfirm'
+alias p-clean=' yay -Yc'
 alias s='ssh'
 alias sd='sudo systemctl'
 alias sdu='systemctl --user'
@@ -170,33 +203,4 @@ alias tag='t'
 alias tree='exa -T'
 alias v='vim'; [[ -f '/usr/bin/nvim' ]] && alias v='nvim'
 
-# convenience
-cb () { gcloud builds list --limit=5 --filter='source.repo_source.repo_name="github_seankhliao_'$(basename $(git rev-parse --show-toplevel))'"' }
-
-gcpd-create () {
-    gcloud deployment-manager deployments create "$1" --config "$2"
-}
-gcpd-preview () {
-    gcloud deployment-manager deployments create --preview "$1" --config "$2"
-}
-gcpd-delete () {
-    gcloud deployment-manager deployments delete "$@"
-}
-gcpd-cancel () {
-    gcloud deployment-manager deployments cancel-preview "$1"
-}
-alias gcpd-create='gcloud deployment-manager '
-alias cdr='cd -P .'
-alias diskspace="df -P -kHl"
-alias filespace='du -d 1 -h . 2>/dev/null | sort -h -r'
-alias forget="sed -i '$ d' $HISTFILE ; sed -i '$ d' $HISTFILE"
-alias gmail-filters-upload="gmailfilters $XDG_CONFIG_HOME/gmail/filters.toml"
-alias gmail-filters-edit="nvim $XDG_CONFIG_HOME/gmail/filters.toml"
-alias p-update='yay -Syu --noconfirm'
-alias p-clean=' yay -Rns $(yay -Qtdq); yay -Sc'
-alias sd-failed='sudo systemctl list-units --failed'
-alias start-vpn='sudo systemctl start wg-quick@wg0'
-alias stop-vpn='sudo systemctl stop wg-quick@wg0'
-alias wifi-restart="sudo systemctl restart wpa_supplicant@wlp58s0.service"
-
-_profile "aliases"
+_profiler "zsh aliases"

@@ -1,3 +1,4 @@
+# https://github.com/aykamko/tag
 export TAG_CMD_FMT_STRING="$EDITOR {{.Filename }} +{{ .LineNumber }}"
 function t() {
     command tag -i "$@"

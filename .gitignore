@@ -22,11 +22,16 @@ QtProject.conf
 rclone/
 Riot/
 SECRETS
+Slack/
 spotify/
+systemd/user/*.wants/
+TabNine/
 Trolltech.conf
 vlc/
+wgetrc
 whoozle.github.io/
 yarn/
+Yubico/
 zsh/.zcompdump
 *.zwc
 VirtualBox/

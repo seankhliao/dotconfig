@@ -28,6 +28,9 @@ let g:ale_fixers = {
     \ 'yaml'           :['prettier'],
     \}
 
+let g:ale_html_prettier_options = '--print-width 120'
+let g:ale_javascript_prettier_options = '--print-width 120'
+
 let g:LanguageClient_serverCommands = {
     \ 'go'             :['gopls', 'serve'],
     \ }
@@ -112,6 +115,7 @@ call plug#begin('$XDG_DATA_HOME/nvim/plugged')
 
     " completion
     Plug 'sheerun/vim-polyglot'
+    Plug 'cespare/vim-go-templates'
     Plug 'alvan/vim-closetag' " xml tags
     Plug 'raimondi/delimitmate' " parens
 
@@ -143,6 +147,8 @@ augroup html
     au BufNewFile *.html 0r $XDG_CONFIG_HOME/nvim/skeleton/skeleton.html
     au BufNewFile *.html call cursor(5, 6)
 augroup END
+
+autocmd BufNewFile,BufRead *.gohtml set filetype=gotplhtml
 
 augroup go
     au!

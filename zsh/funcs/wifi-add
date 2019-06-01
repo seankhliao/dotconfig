@@ -1,4 +1,0 @@
-function wifi-add() {
-    wpa_passphrase "$@" | sudo tee -a /etc/wpa_supplicant/wpa_supplicant-wlp58s0.conf
-}
-wifi-add "$@"

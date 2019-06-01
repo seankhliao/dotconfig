@@ -1,45 +1,69 @@
 [alias]
-    a   = add
+    a       = add
+    amend   = commit --amend --reuse-message=HEAD
 
-    b   = checkout
-    bd  = branch -d
-    bl  = branch
-    bn  = checkout -b
-    bm  = !git checkout $1 && git rebase -i master && git checkout master && git merge $1 && :
+    b       = checkout
+    brm     = branch -d
+    bnew    = checkout -b
+    bmerge  = !git checkout $1 && git rebase -i master && git checkout master && git merge $1 && :
+    branches = branch -a
 
-    cma     = commit --amend -m
-    cama    = commit --amend -a -m
+    cl  = !git clone --recursive "$@" && cd "$1" && :
+    clm = !git clone --recursive "git@github.com:seankhliao/$1" "$2" && cd "$1" || cd "$2" && :
+    hcl = !git clone --recursive "git@github.com:$1" "$2" && :
+
     cm      = commit -m
     cam     = commit -a -m
     camp    = !git commit -a -m \"$1\" && git push && :
 
-    cl  = clone
-    mcl = !git clone "git@github.com:seankhliao/$1" && :
-    hcl = !git clone "git@github.com:$1" && :
+    d   = !git diff-index --quiet HEAD -- || clear && git --no-pager diff --patch-with-stat
 
-    dh  = diff HEAD
-
-    l   = pull --rebase
-
+    l   = !git pull --rebase && git submodule foreach git pull origin master && :
     lo  = log --graph --color=always --format='%C(auto)%h%d %s %C( bold black)%cr %C(blue)<%an>'
 
     p   = push
     po  = !git remote add origin $1 && git push -u origin master && :
 
+    r   = remote -v
+
     s   = status
 
-    suba    = submodule add -b master
-    subl    = submodule update --recursive --remote --rebase
-    subp    = push --recurse-submodules=on-demand
-
-[blame]
-    coloring = highlightRecent
+    tags = tag -l
 
 [color]
-    ui = always
+    ui = auto
 
-[credential]
-    helper = store
+[color "branch"]
+	current = yellow reverse
+	local = yellow
+	remote = green
+
+[color "diff"]
+	meta = yellow bold
+	frag = magenta bold # line info
+	old = red # deletions
+	new = green # additions
+
+[color "status"]
+	added = green
+	changed = yellow
+	untracked = red
+
+[core]
+	page = nvim -R
+
+[diff]
+	renames = copies
+
+[url "git@github.com:seankhliao"]
+    insteadOf = "https://github.com/seankhliao"
+    insetadOf = "s:"
+    insteadOf = "git://github.com/seankhliao"
+
+[url "git@github.com:"]
+	insteadOf = "https://github.com/"
+	insteadOf = "github:"
+	insteadOf = "git://github.com/"
 
 [user]
     email = seankhliao@gmail.com
@@ -47,5 +71,3 @@
 
 [tag]
 	sort = version:refname
-[core]
-	page = nvim -R

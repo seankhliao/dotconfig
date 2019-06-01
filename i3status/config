@@ -8,7 +8,6 @@ order += "ethernet wg0"
 order += "wireless _first_"
 order += "ethernet _first_"
 order += "disk /"
-order += "cpu_temperature 1"
 order += "cpu_temperature 2"
 order += "cpu_temperature 3"
 order += "battery all"
@@ -60,18 +59,13 @@ volume master {
         mixer_idx = 0
 }
 
-cpu_temperature 1 {
-        format = "T: %degrees"
-        path = "/sys/devices/platform/coretemp.0/hwmon/hwmon2/temp1_input"
-        separator = false
-}
 cpu_temperature 2 {
         format = "%degrees"
-        path = "/sys/devices/platform/coretemp.0/hwmon/hwmon2/temp2_input"
+        path = "/sys/devices/platform/coretemp.0/hwmon/hwmon3/temp2_input"
         separator = false
 }
 cpu_temperature 3 {
         format = "%degrees "
         max_threshold = 50
-        path = "/sys/devices/platform/coretemp.0/hwmon/hwmon2/temp3_input"
+        path = "/sys/devices/platform/coretemp.0/hwmon/hwmon3/temp3_input"
 }

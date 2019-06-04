@@ -1,34 +1,35 @@
 [alias]
     a       = add
-    amend   = commit --amend --reuse-message=HEAD
+    am      = commit --amend --reuse-message=HEAD
 
     b       = checkout
-    brm     = branch -d
-    bnew    = checkout -b
-    bmerge  = !git checkout $1 && git rebase -i master && git checkout master && git merge $1 && :
-    branches = branch -a
+    bd      = branch -d
+    bl      = branch -a
+    bm      = rebase master
+    bn      = checkout -b
 
-    cl  = !git clone --recursive "$@" && cd "$1" && :
-    clm = !git clone --recursive "git@github.com:seankhliao/$1" "$2" && cd "$1" || cd "$2" && :
-    hcl = !git clone --recursive "git@github.com:$1" "$2" && :
+    c       = !git clone --recursive "$@" && cd "$1" && :
 
     cm      = commit -m
     cam     = commit -a -m
     camp    = !git commit -a -m \"$1\" && git push && :
 
-    d   = !git diff-index --quiet HEAD -- || clear && git --no-pager diff --patch-with-stat
+    d       = diff
+    dh      = diff HEAD
 
-    l   = !git pull --rebase && git submodule foreach git pull origin master && :
-    lo  = log --graph --color=always --format='%C(auto)%h%d %s %C( bold black)%cr %C(blue)<%an>'
+    l       = !git pull --rebase && git submodule foreach git pull --rebase && :
 
-    p   = push
-    po  = !git remote add origin $1 && git push -u origin master && :
+    lo      = log --graph --format='%C(auto)%h%d %s %C( bold black)%cr %C(blue)<%an>'
 
-    r   = remote -v
+    p       = push
+    po      = !git remote add origin $1 && git push -u origin master && :
 
-    s   = status
+    r       = remote -v
 
-    tags = tag -l
+    s       = status
+
+    t       = tag
+    tl      = tag -l
 
 [color]
     ui = auto
@@ -62,7 +63,7 @@
 
 [url "git@github.com:"]
 	insteadOf = "https://github.com/"
-	insteadOf = "github:"
+	insteadOf = "gh:"
 	insteadOf = "git://github.com/"
 
 [user]

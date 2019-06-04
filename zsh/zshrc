@@ -126,9 +126,9 @@ _profiler "autoload funcs"
 #
 # run things in docker instead of natively
 #
-source "$ZDOTDIR"/dockerfuncs
-
-_profiler "dockerfuncs"
+# source "$ZDOTDIR"/dockerfuncs
+#
+# _profiler "dockerfuncs"
 
 
 # =================== zsh plugins

@@ -180,7 +180,7 @@ alias sudo='sudo --preserve-env'
 alias cdr='cd -P .'
 alias cr='google-chrome-unstable'
 alias diskspace="df -P -kHl"
-alias drun='docker run --rm -it -v $(pwd):/workspace '
+alias drun='docker run --rm -it -v $(pwd):/workspace -w /workspace'
 alias filespace='du -d 1 -h . 2>/dev/null | sort -h -r'
 alias g='git'
 

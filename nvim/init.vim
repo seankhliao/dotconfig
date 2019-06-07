@@ -1,6 +1,5 @@
 scriptencoding utf-8
 
-
 let g:ale_fix_on_save = 1
 let g:ale_sign_column_always = 1
 let g:ale_sign_error = '✗✗'
@@ -60,7 +59,6 @@ set autoread
 set background=dark
 set breakindent
 set clipboard=unnamedplus
-set completeopt=menu,menuone,preview,noselect,noinsert " ale
 set completeopt=noinsert,menuone,noselect " ncm2
 set confirm
 set copyindent
@@ -74,6 +72,7 @@ set inccommand=split
 set incsearch
 set mouse=a
 set mousefocus
+set nomodeline
 set noswapfile
 set number
 set scrolloff=4

@@ -5,10 +5,10 @@
     b       = checkout
     bd      = branch -d
     bl      = branch -a
-    bm      = rebase master
+    bm      = !git rebase master "$1" && git checkout master && git merge
     bn      = checkout -b
 
-    c       = !git clone --recursive "$@" && cd "$1" && :
+    c       = clone --recursive
 
     cm      = commit -m
     cam     = commit -a -m
@@ -17,7 +17,7 @@
     d       = diff
     dh      = diff HEAD
 
-    l       = !git pull --rebase && git submodule foreach git pull --rebase && :
+    l       = pull --rebase --autostash
 
     lo      = log --graph --format='%C(auto)%h%d %s %C( bold black)%cr %C(blue)<%an>'
 

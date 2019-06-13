@@ -62,31 +62,6 @@ setopt CORRECT
 _profiler "zsh options"
 
 
-# =================== zsh completions
-#
-zstyle ':completion::complete:*' gain-privileges 1
-zstyle ':completion:*' group-name ''
-zstyle ':completion:*' menu select
-zstyle ':completion:*' rehash true
-zstyle ':completion:*' list-colors "${(@s.:.)LS_COLORS}"
-zstyle ':completion:*:*:-command-:*:*' ignored-patterns '_*'
-zstyle ':completion:*' matcher-list '' \
-    '+m:{a-z}={A-Z}' '+m:{A-Z}={a-z}' \
-    'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-}={A-Z\_}' \
-    'r:|?=** m:{a-z\-}={A-Z\_}'
-autoload -Uz compinit
-compinit -d "$XDG_RUNTIME_DIR"/zcompdump
-
-autoload -Uz url-quote-magic
-zle -N self-insert url-quote-magic
-
-
-[[ -f '/opt/google-cloud-sdk/path.zsh.inc' ]] &&  source '/opt/google-cloud-sdk/path.zsh.inc'
-[[ -f '/opt/google-cloud-sdk/completion.zsh.inc' ]] && source '/opt/google-cloud-sdk/completion.zsh.inc'
-
-_profiler "zsh completion"
-
-
 # =================== autoload functions
 # https://unix.stackexchange.com/questions/33255/how-to-define-and-load-your-own-shell-function-in-zsh
 #
@@ -121,14 +96,36 @@ autoload -Uz ${funcs}
 _profiler "autoload funcs"
 
 
-# =================== dockerfuncs
-# https://github.com/jessfraz/dockerfiles
+# =================== zsh completions
 #
-# run things in docker instead of natively
+# this section should come after autoload functions
+# to allow loading of shell completion funcs
 #
-# source "$ZDOTDIR"/dockerfuncs
-#
-# _profiler "dockerfuncs"
+# non alphanumeric chars that are part of a word
+# export WORDCHARS=${WORDCHARS//-}
+
+autoload -Uz url-quote-magic
+zle -N self-insert url-quote-magic
+
+zstyle ':completion::complete:*' gain-privileges 1
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*' menu select
+zstyle ':completion:*' rehash true
+zstyle ':completion:*' list-colors "${(@s.:.)LS_COLORS}"
+zstyle ':completion:*:*:-command-:*:*' ignored-patterns '_*'
+zstyle ':completion:*' matcher-list '' \
+    '+m:{a-z}={A-Z}' '+m:{A-Z}={a-z}' \
+    'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-}={A-Z\_}' \
+    'r:|?=** m:{a-z\-}={A-Z\_}'
+
+autoload -Uz compinit
+compinit -d "$XDG_RUNTIME_DIR"/zcompdump
+
+[[ -f '/opt/google-cloud-sdk/path.zsh.inc' ]] &&  source '/opt/google-cloud-sdk/path.zsh.inc'
+[[ -f '/opt/google-cloud-sdk/completion.zsh.inc' ]] && source '/opt/google-cloud-sdk/completion.zsh.inc'
+compdef _chromium google-chrome-unstable
+
+_profiler "zsh completion"
 
 
 # =================== zsh plugins
@@ -142,6 +139,16 @@ local plugins=(
 _source_plugins
 
 _profiler "zsh plugins"
+
+
+# =================== dockerfuncs
+# https://github.com/jessfraz/dockerfiles
+#
+# run things in docker instead of natively
+#
+# source "$ZDOTDIR"/dockerfuncs
+#
+# _profiler "dockerfuncs"
 
 
 # =================== zsh prompt
@@ -178,9 +185,10 @@ alias sudo='sudo --preserve-env'
 
 # short
 alias cdr='cd -P .'
+alias chrome='google-chrome-unstable'
 alias cr='google-chrome-unstable'
 alias diskspace="df -P -kHl"
-alias drun='docker run --rm -it -v $(pwd):/workspace -w /workspace'
+alias drun='docker run --network host --rm -it -v $(pwd):/workspace -w /workspace'
 alias filespace='du -d 1 -h . 2>/dev/null | sort -h -r'
 alias g='git'
 

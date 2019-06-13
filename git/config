@@ -3,10 +3,12 @@
     am      = commit --amend --reuse-message=HEAD
 
     b       = checkout
+    bclean  = fetch --all --prune
     bd      = branch -d
     bl      = branch -a
-    bm      = !git rebase master "$1" && git checkout master && git merge
+    # bm      = !git rebase master "$1" && git checkout master && git merge
     bn      = checkout -b
+    bmaster = checkout master
 
     c       = clone --recursive
 
@@ -19,10 +21,14 @@
 
     l       = pull --rebase --autostash
 
-    lo      = log --graph --format='%C(auto)%h%d %s %C( bold black)%cr %C(blue)<%an>'
+    lo      = log --all --graph --format='%C(auto)%h%d %s %C( bold black)%cr %C(blue)<%an>'
+    los     = log --all --graph --simplify-by-decoration --format='%C(auto)%h%d %s %C( bold black)%cr %C(blue)<%an>'
+
+    m       = merge
 
     p       = push
     po      = !git remote add origin $1 && git push -u origin master && :
+    pu      = !git push -u origin $(git branch --show-current)
 
     r       = remote -v
 

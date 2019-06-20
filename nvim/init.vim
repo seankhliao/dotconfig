@@ -31,7 +31,7 @@ let g:ale_html_prettier_options = '--print-width 120'
 let g:ale_javascript_prettier_options = '--print-width 120'
 
 let g:LanguageClient_serverCommands = {
-    \ 'go'             :['gopls', 'serve'],
+    \ 'go'             :['gopls'],
     \ }
 
 let g:nord_italic = 1

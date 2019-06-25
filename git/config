@@ -3,12 +3,11 @@
     am      = commit --amend --reuse-message=HEAD
 
     b       = checkout
-    bclean  = fetch --all --prune
-    bd      = branch -d
+    bprune  = fetch -a
+    bd      = branch -d -D
     bl      = branch -a
-    # bm      = !git rebase master "$1" && git checkout master && git merge
     bn      = checkout -b
-    bmaster = checkout master
+    bm      = checkout master
 
     c       = clone --recursive
 
@@ -28,9 +27,7 @@
 
     p       = push
     po      = !git remote add origin $1 && git push -u origin master && :
-    pu      = !git push -u origin $(git branch --show-current)
-
-    r       = remote -v
+    pu      = !git push -u origin $(git branch --show-current) && :
 
     s       = status
 
@@ -62,19 +59,22 @@
 [diff]
 	renames = copies
 
+[fetch]
+    prune = true
+
+[tag]
+	sort = version:refname
+
 [url "git@github.com:seankhliao/"]
-    insteadOf = "https://github.com/seankhliao/"
     insteadOf = "s:"
     insteadOf = "git://github.com/seankhliao/"
+    insteadOf = "https://github.com/seankhliao/"
 
 [url "git@github.com:"]
-	insteadOf = "https://github.com/"
 	insteadOf = "gh:"
 	insteadOf = "git://github.com/"
+	insteadOf = "https://github.com/"
 
 [user]
     email = seankhliao@gmail.com
     name = Sean Liao
-
-[tag]
-	sort = version:refname

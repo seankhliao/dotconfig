@@ -214,3 +214,11 @@ alias tree='exa -T'
 alias v='vim'; [[ -f '/usr/bin/nvim' ]] && alias v='nvim'
 
 _profiler "zsh aliases"
+
+mdg () {
+    mkdir $1 &&
+    cd $1 &&
+    git init &&
+    git commit --allow-empty -m "root" &&
+    git remote add origin s:$1
+}

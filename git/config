@@ -4,7 +4,7 @@
 
     b       = checkout
     bprune  = fetch -a
-    bd      = branch -d -D
+    bd      = branch -D
     bl      = branch -a
     bn      = checkout -b
     bm      = checkout master
@@ -13,7 +13,7 @@
 
     cm      = commit -m
     cam     = commit -a -m
-    camp    = !git commit -a -m \"$1\" && git push && :
+    camp    = !git commit -a -m "\"'"$*"'\"" && git push && :
 
     d       = diff
     dh      = diff HEAD
@@ -25,9 +25,11 @@
 
     m       = merge
 
+    new     = !git init && git commit --allow-empty -m "root-commit" && git remote add origin s:$1 && :
+    newp    = !git new && git pu && :
+
     p       = push
-    po      = !git remote add origin $1 && git push -u origin master && :
-    pu      = !git push -u origin $(git branch --show-current) && :
+    pu      = push -u origin HEAD
 
     s       = status
 

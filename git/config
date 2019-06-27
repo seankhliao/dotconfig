@@ -11,12 +11,14 @@
 
     c       = clone --recursive
 
-    cm      = commit -m
     cam     = commit -a -m
-    camp    = !git commit -a -m "\"'"$*"'\"" && git push && :
+    camp    = !git commit -a -m "\""$*"\"" && git push && :
+    cm      = commit -m
 
     d       = diff
     dh      = diff HEAD
+
+    discard   = clean -dfx
 
     l       = pull --rebase --autostash
 

@@ -44,6 +44,7 @@ setopt AUTO_LIST
 setopt AUTO_MENU
 setopt AUTO_PARAM_SLASH
 setopt COMPLETE_IN_WORD
+setopt COMPLETE_ALIASES
 setopt HASH_LIST_ALL
 
 setopt HIST_IGNORE_ALL_DUPS
@@ -57,7 +58,6 @@ setopt HIST_SAVE_NO_DUPS
 setopt SHARE_HISTORY
 
 setopt ALIASES
-setopt CORRECT
 
 _profiler "zsh options"
 
@@ -78,6 +78,7 @@ _profiler "zsh options"
 fpath=( "$ZDOTDIR"/funcs "${fpath[@]}" )
 funcs=(
     _auto_git_aliases
+    _gcloud_complete
     _kubectl_complete
     _prompt
     _source_plugins
@@ -85,11 +86,10 @@ funcs=(
     colortest
     gsall
     keyless-ssh
-    man
     md
     t
-    z-update-plugins
     z-comp-funcs
+    z-update-plugins
 )
 autoload -Uz ${funcs}
 
@@ -121,9 +121,9 @@ zstyle ':completion:*' matcher-list '' \
 autoload -Uz compinit
 compinit -d "$XDG_RUNTIME_DIR"/zcompdump
 
-[[ -f '/opt/google-cloud-sdk/path.zsh.inc' ]] &&  source '/opt/google-cloud-sdk/path.zsh.inc'
-[[ -f '/opt/google-cloud-sdk/completion.zsh.inc' ]] && source '/opt/google-cloud-sdk/completion.zsh.inc'
-compdef _chromium google-chrome-unstable
+# compdef _gcloud_complete gcloud
+_gcloud_complete
+_kubectl_complete
 
 _profiler "zsh completion"
 
@@ -188,9 +188,14 @@ alias cdr='cd -P .'
 alias chrome='google-chrome-unstable'
 alias cr='google-chrome-unstable'
 alias diskspace="df -P -kHl"
+
 alias drun='docker run --network host --rm -it -v $(pwd):/workspace -w /workspace'
+alias gcloud='docker run --network host --rm -it -v $(pwd):/workspace -w /workspace -v $HOME/.config/gcloud:/root/.config/gcloud gcr.io/cloud-builders/gcloud'
+compdef _gcloud_complete gcloud
+
 alias filespace='du -d 1 -h . 2>/dev/null | sort -h -r'
 alias g='git'
+
 
 _auto_git_aliases
 

@@ -1,5 +1,5 @@
 function zcompfuncs () {
-    rm -f ${ZDOTDIR}/funcs/*.zwc
+    rm -f ${ZDOTDIR}/funcs/*.zwc || true;
     for f in ${ZDOTDIR}/funcs/*; do
         zcompile $f
     done

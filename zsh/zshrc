@@ -44,7 +44,6 @@ setopt AUTO_LIST
 setopt AUTO_MENU
 setopt AUTO_PARAM_SLASH
 setopt COMPLETE_IN_WORD
-setopt COMPLETE_ALIASES
 setopt HASH_LIST_ALL
 
 setopt HIST_IGNORE_ALL_DUPS
@@ -78,11 +77,12 @@ _profiler "zsh options"
 fpath=( "$ZDOTDIR"/funcs "${fpath[@]}" )
 funcs=(
     _auto_git_aliases
-    _gcloud_complete
-    _kubectl_complete
+    # _gcloud_complete
+    # _kubectl_complete
     _prompt
     _source_plugins
     _sudo_cmdline
+    cicd
     colortest
     gsall
     keyless-ssh
@@ -121,9 +121,8 @@ zstyle ':completion:*' matcher-list '' \
 autoload -Uz compinit
 compinit -d "$XDG_RUNTIME_DIR"/zcompdump
 
-# compdef _gcloud_complete gcloud
-_gcloud_complete
-_kubectl_complete
+source /opt/google-cloud-sdk/path.zsh.inc
+source /opt/google-cloud-sdk/completion.zsh.inc
 
 _profiler "zsh completion"
 
@@ -185,17 +184,11 @@ alias sudo='sudo --preserve-env'
 
 # short
 alias cdr='cd -P .'
-alias chrome='google-chrome-unstable'
 alias cr='google-chrome-unstable'
 alias diskspace="df -P -kHl"
-
 alias drun='docker run --network host --rm -it -v $(pwd):/workspace -w /workspace'
-alias gcloud='docker run --network host --rm -it -v $(pwd):/workspace -w /workspace -v $HOME/.config/gcloud:/root/.config/gcloud gcr.io/cloud-builders/gcloud'
-compdef _gcloud_complete gcloud
-
 alias filespace='du -d 1 -h . 2>/dev/null | sort -h -r'
 alias g='git'
-
 
 _auto_git_aliases
 
@@ -203,8 +196,9 @@ alias h='htop'
 alias kaf='kubectl apply -f'
 alias kdf='kubectl delete -f'
 alias kdp='kubectl delete po -l'
-alias l='exa -l --git --time-style iso'
-alias ll='exa -la --git --time-style iso'
+alias kubectl='command kubectl --cache-dir=/home/arccy/.cache/kube-http'
+alias l="ls -lh --color=auto"
+alias ll="ls -alh --color=auto"
 alias p='yay'
 alias py='python3'
 alias py2='python2'
@@ -215,7 +209,6 @@ alias s='ssh'
 alias sd='sudo systemctl'
 alias sdu='systemctl --user'
 alias tag='t'
-alias tree='exa -T'
 alias v='vim'; [[ -f '/usr/bin/nvim' ]] && alias v='nvim'
 
 _profiler "zsh aliases"

@@ -1,9 +1,10 @@
+android/
 ardour5/
 configstore/
 dconf/
 docker/
 gcloud/
-Genymobile/
+gsutil/
 git/credentials
 gmail/credentials.json
 google-*

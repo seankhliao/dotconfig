@@ -12,7 +12,7 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
 # preferences
-source $XDG_CONFIG_HOME/SECRETS
+# source $XDG_CONFIG_HOME/SECRETS
 if [ -f "/usr/bin/nvim" ]; then
     export EDITOR=nvim
 else

@@ -8,8 +8,6 @@ function _update_plugin () {
     zcompile $PLUGIN_HOME/$2/$2.zsh
     source $PLUGIN_HOME/$2/$2.zsh
 }
-_update_plugin "$@"
-
 function z-update-plugins () {
     [[ -d $PLUGIN_HOME ]] || mkdir -p $PLUGIN_HOME
 

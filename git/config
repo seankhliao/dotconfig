@@ -11,7 +11,7 @@
 
     c       = clone --recursive
 
-    cam     = commit -a -m
+    cam     = !git commit -a -m "\""$*"\"" && :
     camp    = !git commit -a -m "\""$*"\"" && git push && :
     cm      = commit -m
 

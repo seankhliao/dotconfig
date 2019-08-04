@@ -127,19 +127,6 @@ source /opt/google-cloud-sdk/completion.zsh.inc
 _profiler "zsh completion"
 
 
-# =================== zsh plugins
-#
-local PLUGIN_HOME=$XDG_DATA_HOME/zsh/plugins
-local plugins=(
-    'zsh-autosuggestions'
-    'zsh-history-substring-search'
-    'zsh-syntax-highlighting'
-)
-_source_plugins
-
-_profiler "zsh plugins"
-
-
 # =================== dockerfuncs
 # https://github.com/jessfraz/dockerfiles
 #
@@ -177,10 +164,15 @@ alias .......='cd ../../../../../..'
 alias cp='cp -v'
 alias diff='diff --color=always'
 alias grep='grep --color=auto'
+alias grep='rg -S -p'
+# alias l="ls -lh --color=auto"
+# alias ll="ls -alh --color=auto"
+alias l='exa -l --git --time-style iso'
+alias ll='exa -l -a --git --time-style iso'
 alias ln='ln -v'
 alias ls='ls --color'
 alias mv='mv -v'
-alias sudo='sudo --preserve-env'
+alias sudo='sudo -E'
 
 # short
 alias cdr='cd -P .'
@@ -197,10 +189,6 @@ alias kaf='kubectl apply -f'
 alias kdf='kubectl delete -f'
 alias kdp='kubectl delete po -l'
 alias kubectl='command kubectl --cache-dir=/home/arccy/.cache/kube-http'
-# alias l="ls -lh --color=auto"
-# alias ll="ls -alh --color=auto"
-alias l='exa -l --git --time-style iso'
-alias ll='exa -l -a --git --time-style iso'
 alias p='yay'
 alias p-cl='yay -Yc'
 alias p-rm='yay -Runsc'
@@ -214,3 +202,16 @@ alias tag='t'
 alias v='vim'; [[ -f '/usr/bin/nvim' ]] && alias v='nvim'
 
 _profiler "zsh aliases"
+
+
+# =================== zsh plugins
+#
+local PLUGIN_HOME=$XDG_DATA_HOME/zsh/plugins
+local plugins=(
+    'zsh-autosuggestions'
+    'zsh-history-substring-search'
+    'zsh-syntax-highlighting'
+)
+_source_plugins
+
+_profiler "zsh plugins"

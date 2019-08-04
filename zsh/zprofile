@@ -1,1 +1,2 @@
 [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]] && exec sway --my-next-gpu-wont-be-nvidia
+# [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]] && systemctl --wait --user start sway.service

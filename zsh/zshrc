@@ -87,6 +87,7 @@ funcs=(
     gsall
     keyless-ssh
     md
+    mr
     t
     z-comp-funcs
     z-update-plugins
@@ -163,6 +164,7 @@ alias .......='cd ../../../../../..'
 # set default opts
 alias cp='cp -v'
 alias diff='diff --color=always'
+alias go='go1.13rc1'
 alias grep='grep --color=auto'
 alias grep='rg -S -p'
 # alias l="ls -lh --color=auto"

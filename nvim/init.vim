@@ -42,13 +42,11 @@ let g:nord_cursor_line_number_background = 1
 
 let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.ejs,*.js'
 
-let g:delimitMate_expand_space = 1
-let g:delimitMate_expand_cr = 2
-let g:delimitMate_smart_quotes = 1
-let g:delimitMate_matchpairs = '(:),[:],{:}'
-
 let g:indent_guides_auto_colors = 0
 let g:indent_guides_enable_on_vim_startup = 1
+
+let g:signify_vcs_list = [ 'git' ]
+let g:signify_sign_change = '~'
 
 let g:lightline = {'colorscheme': 'nord'}
 
@@ -101,7 +99,7 @@ call plug#begin('$XDG_DATA_HOME/nvim/plugged')
     " Visual
 	Plug 'arcticicestudio/nord-vim', { 'branch': 'develop' }
     Plug 'ap/vim-css-color'
-    Plug 'airblade/vim-gitgutter' " git gutter
+    Plug 'mhinz/vim-signify'     " git gutter
     Plug 'itchyny/lightline.vim' " status line
     Plug 'nathanaelkane/vim-indent-guides'
 
@@ -114,9 +112,8 @@ call plug#begin('$XDG_DATA_HOME/nvim/plugged')
 
     " completion
     Plug 'sheerun/vim-polyglot'
-    Plug 'cespare/vim-go-templates'
     Plug 'alvan/vim-closetag' " xml tags
-    Plug 'raimondi/delimitmate' " parens
+    Plug 'jiangmiao/auto-pairs'
 
     " ncm2
     Plug 'ncm2/ncm2'
@@ -141,33 +138,12 @@ augroup sh
     au BufNewFile *.sh call cursor(2, 1)
 augroup END
 
-augroup html
-    au!
-    au BufNewFile *.html 0r $XDG_CONFIG_HOME/nvim/skeleton/skeleton.html
-    au BufNewFile *.html call cursor(5, 6)
-augroup END
-
 autocmd BufNewFile,BufRead *.gohtml set filetype=gotplhtml
 
 augroup go
     au!
     au BufNewFile main.go 0r $XDG_CONFIG_HOME/nvim/skeleton/skeleton.go
     au BufNewFile main.go call cursor(4, 4)
-augroup END
-
-fun RepoName()
-    let l = 1
-    for line in getline(1,"$")
-        call setline(l, substitute(line, 'REPONAME', substitute(getcwd(), '^.*/', '', ''), "g"))
-        let l = l + 1
-    endfor
-    call cursor(5, 1)
-endfun
-
-augroup md
-    au!
-    au BufNewFile README.md 0r $XDG_CONFIG_HOME/nvim/skeleton/README.md
-    au BufNewFile README.md call RepoName()
 augroup END
 
 augroup license

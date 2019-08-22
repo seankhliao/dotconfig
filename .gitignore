@@ -2,6 +2,7 @@ android/
 ardour5/
 configstore/
 dconf/
+dlv/
 docker/
 gcloud/
 gsutil/

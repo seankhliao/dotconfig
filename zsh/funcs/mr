@@ -1,0 +1,135 @@
+function mr() {
+    set -x
+    mkdir -p $1
+    cd $1
+    git init
+    git commit --allow-empty -m "root-commit"
+    git remote add origin s:$1
+    go mod init seankhliao.com/$1
+
+
+
+    cat << EOF > .dockerignore
+.dockerignore
+.git
+.gitignore
+
+cloudbuild.yaml
+Dockerfile
+LICENSE
+Makefile
+README.md
+EOF
+
+
+
+    cat << EOF | sed 's/REPONAME/'$1'/g' > .gitignore
+REPONAME
+EOF
+
+
+
+    cat << EOF | sed 's/REPONAME/'$1'/g' > cloudbuild.yaml
+steps:
+  - id: build
+    dir: $_IMG
+    name: gcr.io/cloud-builders/docker:latest
+    args:
+      - build
+      - -t=gcr.io/$PROJECT_ID/$_IMG:$SHORT_SHA
+      - -t=gcr.io/$PROJECT_ID/$_IMG:latest
+      - .
+  - id: deploy
+    name: gcr.io/cloud-builders/kubectl:latest
+    entrypoint: sh
+    args:
+      - -c
+      - >-
+        [ $BRANCH_NAME = "master" ] && kubectl set image deploy $_IMG '*=gcr.io/$PROJECT_ID/$_IMG:$SHORT_SHA
+    env:
+      - CLOUDSDK_COMPUTE_ZONE=$_ZONE
+      - CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER
+images:
+  - gcr.io/$PROJECT_ID/$_IMG:$SHORT_SHA
+  - gcr.io/$PROJECT_ID/$_IMG:latest
+substitutions:
+  _ZONE: us-central1-a
+  _CLUSTER: cluster14
+  _IMG: REPONAME
+EOF
+
+
+
+    cat << EOF > Dockerfile
+FROM golang:alpine AS build
+
+WORKDIR /app
+RUN apk add --no-cache ca-certificates
+COPY . .
+RUN GO111MODULE=on CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -mod=vendor -o app
+
+FROM scratch
+
+COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+COPY --from=build /app/app /bin/
+
+ENTRYPOINT ["/bin/app"]
+EOF
+
+
+
+    cat << EOF | sed 's/YEAR/'$(date +%Y)'/' > LICENSE
+MIT License
+
+Copyright (c) YEAR Sean Liao
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+EOF
+
+
+
+    cat << EOF > Makefile
+.PHONY: build
+build:
+	go build -mod=vendor
+
+.PHONY: test
+test:
+	go test -mod=vendor
+
+.PHONY: update
+update:
+	go get -u
+	go mod tidy
+	go mod vendor
+EOF
+
+
+
+    cat << EOF | sed 's/REPONAME/'$1'/g' > README.md
+# REPONAME
+
+[![License](https://img.shields.io/github/license/seankhliao/REPONAME.svg?style=for-the-badge&maxAge=31536000)](LICENSE)
+[![Build](https://badger.seankhliao.com/i/github_seankhliao_REPONAME)](https://badger.seankhliao.com/l/github_seankhliao_REPONAME)
+EOF
+
+
+
+}
+mr "$@"

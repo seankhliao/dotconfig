@@ -194,7 +194,6 @@ alias .......='cd ../../../../../..'
 # set default opts
 alias cp='cp -v'
 alias diff='diff --color=always'
-# alias go='gotip'
 alias grep='grep --color=auto'; [[ -f /usr/bin/rg ]]    && alias grep='rg -S -p'
 alias l='ls -lh --color=auto'; [[ -f /usr/bin/exa ]]    && alias l='exa -l --git --time-style iso'
 alias ll='ls -alh --color=auto'; [[ -f /usr/bin/exa ]]  && alias ll='exa -l -a --git --time-style iso'

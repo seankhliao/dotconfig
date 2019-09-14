@@ -18,6 +18,9 @@ function _precmd() {
 
     local git_branch
     git_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+    # local go_mod
+    # go_mod=$(go list -f '{{ .Module }}' 2>/dev/null)
+    # go_mod=${go_mod%<nil>}
 
     # date time
     PROMPT="${prompt_newline}%F{green}%*%f "
@@ -28,6 +31,7 @@ function _precmd() {
     PROMPT+="${prompt_newline}"
     [[ -n "${STY}" ]] && PROMPT+="%F{242}${STY%.*}%f "
     [[ -n "${VIRTUAL_ENV}" ]] && PROMPT+="%F{242}${VIRTUAL_ENV:t}%f "
+    # [[ -n ${go_mod} ]] && PROMPT+="%F{242}${go_mod}%f "
     [[ -n "${git_branch}" ]] && PROMPT+="%F{242}${git_branch}%f "
     PROMPT+="%(?.%F{magenta}.%F{red})"
     [[ -n "${SSH_CONNECTION}" ]] && PROMPT+="%n@%m"

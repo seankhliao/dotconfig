@@ -20,6 +20,7 @@ bindsym $mod+Print              exec iwctl station wlan0 scan
 
 # custom keys
 bindsym $mod+t                  exec google-chrome-unstable --disk-cache-dir=/tmp/cache
+bindsym $mod+Shift+t            exec google-chrome-stable --disk-cache-dir=/tmp/cache
 bindsym $mod+s                  exec spotify
 
 # window management
@@ -149,4 +150,4 @@ input "1739:30382:DLL0704:01_06CB:76AE_Touchpad" {
 
 # exec dunst
 
-exec "systemctl --user import-environment; systemctl --user start sway-session.target"
+# exec "systemctl --user import-environment; systemctl --user start sway-session.target"

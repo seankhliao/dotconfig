@@ -34,12 +34,6 @@ let g:LanguageClient_serverCommands = {
     \ 'go'             :['gopls'],
     \ }
 
-let g:nord_italic = 1
-let g:nord_italic_comments = 1
-let g:nord_underline = 1
-let g:nord_uniform_status_lines = 1
-let g:nord_cursor_line_number_background = 1
-
 let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.ejs,*.js'
 
 let g:indent_guides_auto_colors = 0
@@ -48,15 +42,16 @@ let g:indent_guides_enable_on_vim_startup = 1
 let g:signify_vcs_list = [ 'git' ]
 let g:signify_sign_change = '~'
 
-let g:lightline = {'colorscheme': 'nord'}
+let g:lightline = {'colorscheme': 'fahrenheit'}
 
 syntax enable
 
 set autoindent
 set autoread
 set background=dark
+set backupdir=$XDG_DATA_HOME/nvim/backup
 set breakindent
-set clipboard=unnamedplus
+set clipboard+=unnamedplus
 set completeopt=noinsert,menuone,noselect " ncm2
 set confirm
 set copyindent
@@ -97,7 +92,9 @@ nnoremap ; :
 
 call plug#begin('$XDG_DATA_HOME/nvim/plugged')
     " Visual
-	Plug 'arcticicestudio/nord-vim', { 'branch': 'develop' }
+    " Plug 'cocopon/iceberg.vim'
+    Plug 'fcpg/vim-fahrenheit'
+
     Plug 'ap/vim-css-color'
     Plug 'mhinz/vim-signify'     " git gutter
     Plug 'itchyny/lightline.vim' " status line
@@ -125,29 +122,9 @@ call plug#begin('$XDG_DATA_HOME/nvim/plugged')
 
 call plug#end()
 
+colorscheme fahrenheit
 
 autocmd BufEnter * call ncm2#enable_for_buffer()
 
-colorscheme nord
-autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#2E3440   ctermbg=2
-autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#3B4252   ctermbg=0
-
-augroup sh
-    au!
-    au BufNewFile *.sh 0r $XDG_CONFIG_HOME/nvim/skeleton/skeleton.sh
-    au BufNewFile *.sh call cursor(2, 1)
-augroup END
-
-autocmd BufNewFile,BufRead *.gohtml set filetype=gotplhtml
-
-augroup go
-    au!
-    au BufNewFile main.go 0r $XDG_CONFIG_HOME/nvim/skeleton/skeleton.go
-    au BufNewFile main.go call cursor(4, 4)
-augroup END
-
-augroup license
-    au!
-    au BufNewFile LICENSE 0r $XDG_CONFIG_HOME/nvim/skeleton/LICENSE-MIT
-    au BufNewFile LICENSE call setline(3, substitute(getline(3), "INSERT_YEAR", strftime("%Y"), ""))
-augroup END
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven  guibg=#000000   ctermbg=0
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd   guibg=#262626   ctermbg=235

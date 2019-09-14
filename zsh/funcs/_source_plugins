@@ -1,6 +1,0 @@
-function _source_plugins () {
-    for f in ${plugins}; do 
-        source ${PLUGIN_HOME}/${f}/${f}.zsh
-    done
-}
-_source_plugins

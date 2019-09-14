@@ -13,24 +13,97 @@ local _time=$(date +%N)
 _profiler () { [[ $PROFILER -ne 0 ]] && echo "$1: $(( ($(date +%N) - ${_time}) / 1000000 ))ms" && _time=$(date +%N) }
 
 
-# ==================== zsh funcs
+# ==================== zsh keybindings
 #
-function _auto_git_aliases() {
-    local start_alias=false
-    while read line; do
-        if ! $start_alias; then
-            [[ $line =~ '\s*\[alias\]' ]] && start_alias=true
-        else
-            [[ $line =~ '\s*\[[a-z]*\]' ]] && break
-            sub=${${line%%=*}// /}
-            [[ $sub ]] && alias g${sub}="git ${sub}"
-        fi
-    done < $XDG_CONFIG_HOME/git/config
+function _sudo_cmdline() {
+    [[ -z $BUFFER ]] && zle up-history
+    if [[ $BUFFER == sudo\ * ]]; then
+        LBUFFER="${LBUFFER#sudo }"
+    else
+        LBUFFER="sudo $LBUFFER"
+    fi
 }
+
+zle -N _sudo_cmdline
+zle -N history-substring-search-up
+zle -N history-substring-search-down
+# Defined shortcut keys: [Esc] [Esc]
+bindkey -e
+bindkey "\e\e" _sudo_cmdline
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+bindkey '^[[H' beginning-of-line
+bindkey '^[[4~' end-of-line
+bindkey '^[[F' end-of-line
+
+_profiler "zsh keybinds"
+
+
+# =================== zsh options
+#
+setopt AUTOCD
+setopt IGNORE_EOF
+
+setopt EXTENDED_GLOB
+setopt GLOB_DOTS
+
+setopt AUTO_LIST
+setopt AUTO_MENU
+setopt AUTO_PARAM_SLASH
+setopt COMPLETE_IN_WORD
+setopt HASH_LIST_ALL
+
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_IGNORE_DUPS
+setopt HIST_FIND_NO_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_NO_FUNCTIONS
+setopt HIST_NO_STORE
+setopt HIST_REDUCE_BLANKS
+setopt HIST_SAVE_NO_DUPS
+setopt SHARE_HISTORY
+
+setopt ALIASES
+
+_profiler "zsh options"
+
+
+# =================== zsh completions
+#
+# this section should come after autoload functions
+# to allow loading of shell completion funcs
+#
+# non alphanumeric chars that are part of a word
+# export WORDCHARS=${WORDCHARS//-}
+
+autoload -Uz url-quote-magic
+zle -N self-insert url-quote-magic
+
+zstyle ':completion::complete:*' gain-privileges 1
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*' menu select
+zstyle ':completion:*' rehash true
+zstyle ':completion:*' list-colors "${(@s.:.)LS_COLORS}"
+zstyle ':completion:*:*:-command-:*:*' ignored-patterns '_*'
+zstyle ':completion:*' matcher-list '' \
+    '+m:{a-z}={A-Z}' '+m:{A-Z}={a-z}' \
+    'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-}={A-Z\_}' \
+    'r:|?=** m:{a-z\-}={A-Z\_}'
+
+autoload -Uz compinit
+compinit -d "$XDG_RUNTIME_DIR"/zcompdump
+
+local f=/opt/google-cloud-sdk/path.zsh.inc; [[ -f "${f}" ]] && source "${f}"
+local f=/opt/google-cloud-sdk/completion.zsh.inc; [[ -f "${f}" ]] && source "${f}"
+
+_profiler "zsh completion"
+
+
+# =================== zsh prompt
+#
 function _preexec() {
     typeset -g prompt_timestamp=$EPOCHSECONDS
 }
-
 function _precmd() {
     # https://github.com/sindresorhus/pretty-time-zsh
     integer elapsed
@@ -66,44 +139,92 @@ function _precmd() {
     [[ -n "${SSH_CONNECTION}" ]] && PROMPT+="%n@%m"
     PROMPT+="» %f"
 }
+export PROMPT_EOL_MARK=''
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+
+prompt_opts=(subst percent)
+# borrowed from promptinit, sets the prompt options in case pure was not
+# initialized via promptinit.
+setopt noprompt{bang,cr,percent,subst} "prompt${^prompt_opts[@]}"
+if [[ -z $prompt_newline ]]; then
+    typeset -g prompt_newline=$'\n%{\r%}'
+fi
+
+zmodload zsh/datetime
+
+autoload -Uz add-zsh-hook
+
+add-zsh-hook precmd  _precmd
+add-zsh-hook preexec _preexec
+
+_profiler "zsh prompt"
 
 
-function _prompt() {
-    export PROMPT_EOL_MARK=''
-    export VIRTUAL_ENV_DISABLE_PROMPT=1
+# ==================== zsh aliases
+# suffix aliases
+# usage:
+#       runs files with these programs
+alias -s go='go run'
+alias -s py='python'; [[ -f /usr/bin/python3 ]] && alias -s py='python3'
 
-    prompt_opts=(subst percent)
-    # borrowed from promptinit, sets the prompt options in case pure was not
-    # initialized via promptinit.
-    setopt noprompt{bang,cr,percent,subst} "prompt${^prompt_opts[@]}"
-    if [[ -z $prompt_newline ]]; then
-        typeset -g prompt_newline=$'\n%{\r%}'
-    fi
-
-
-    zmodload zsh/datetime
-
-    autoload -Uz add-zsh-hook
-
-    add-zsh-hook precmd  _precmd
-    add-zsh-hook preexec _preexec
+# auto git aliases
+function _auto_git_aliases() {
+    local start_alias=false
+    while read line; do
+        if ! $start_alias; then
+            [[ $line =~ '\s*\[alias\]' ]] && start_alias=true
+        else
+            [[ $line =~ '\s*\[[a-z]*\]' ]] && break
+            sub=${${line%%=*}// /}
+            [[ $sub ]] && alias g${sub}="git ${sub}"
+        fi
+    done < $XDG_CONFIG_HOME/git/config
 }
-_prompt
-function _source_plugins () {
-    for f in ${plugins}; do
-        source ${PLUGIN_HOME}/${f}/${f}.zsh
-    done
-}
-function _sudo_cmdline() {
-    [[ -z $BUFFER ]] && zle up-history
-    if [[ $BUFFER == sudo\ * ]]; then
-        LBUFFER="${LBUFFER#sudo }"
-    else
-        LBUFFER="sudo $LBUFFER"
-    fi
-}
+[[ -f $XDG_CONFIG_HOME/git/config ]] && _auto_git_aliases
 
 
+# go up
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias ......='cd ../../../../..'
+alias .......='cd ../../../../../..'
+
+# set default opts
+alias cp='cp -v'
+alias diff='diff --color=always'
+# alias go='gotip'
+alias grep='grep --color=auto'; [[ -f /usr/bin/rg ]]    && alias grep='rg -S -p'
+alias l='ls -lh --color=auto'; [[ -f /usr/bin/exa ]]    && alias l='exa -l --git --time-style iso'
+alias ll='ls -alh --color=auto'; [[ -f /usr/bin/exa ]]  && alias ll='exa -l -a --git --time-style iso'
+alias ln='ln -v'
+alias ls='ls --color'
+alias mv='mv -v'
+alias sudo='sudo -E'
+
+# short
+alias cdr='cd -P .'
+alias cr='google-chrome-unstable'
+alias diskspace="df -P -kHl"
+alias drun='docker run --rm -it -v $(pwd):/workspace -w /workspace'
+alias filespace='du -d 1 -h . 2>/dev/null | sort -h -r'
+alias g='git'
+alias h='htop'
+alias kubectl='command kubectl --cache-dir=/home/arccy/.cache/kube-http'
+alias p='yay'
+alias py='python3'
+alias py2='python2'
+alias s='ssh'
+alias sd='sudo systemctl'
+alias sdu='systemctl --user'
+alias v='vim'; [[ -f '/usr/bin/nvim' ]] && alias v='nvim'
+
+_profiler "zsh aliases"
+
+
+# =================== zsh user funcs
+#
 function cicd () {
     gcloud builds log \
         --stream \
@@ -273,25 +394,8 @@ function t() {
     command tag -i "$@"
     source ${TAG_ALIAS_FILE:-/tmp/tag_aliases} 2>/dev/null
 }
-function _update_plugin () {
-    echo "\n$1/$2"
-    if [[ -d $PLUGIN_HOME/$2 ]] ; then
-        git -C $PLUGIN_HOME/$2 pull
-    else
-        git clone "https://github.com/"$1/$2 $PLUGIN_HOME/$2
-    fi
-    zcompile $PLUGIN_HOME/$2/$2.zsh
-    source $PLUGIN_HOME/$2/$2.zsh
-}
-function z-update-plugins () {
-    [[ -d $PLUGIN_HOME ]] || mkdir -p $PLUGIN_HOME
 
-    for p in ${plugins}; do
-        _update_plugin zsh-users ${p}
-    done
-}
-
-_profiler "zsh functions"
+_profiler "zsh user funcs"
 
 
 # ==================== zsh plugins
@@ -2331,164 +2435,3 @@ builtin unset zsh_highlight__aliases
 # ========== profiler
 
 _profiler "zsh plugins"
-
-
-# ==================== zsh keybindings
-#
-
-zle -N _sudo_cmdline
-zle -N history-substring-search-up
-zle -N history-substring-search-down
-# Defined shortcut keys: [Esc] [Esc]
-bindkey -e
-bindkey "\e\e" _sudo_cmdline
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
-bindkey '^[[H' beginning-of-line
-bindkey '^[[4~' end-of-line
-bindkey '^[[F' end-of-line
-
-_profiler "zsh keybinds"
-
-
-# =================== zsh options
-#
-setopt AUTOCD
-setopt IGNORE_EOF
-
-setopt EXTENDED_GLOB
-setopt GLOB_DOTS
-
-setopt AUTO_LIST
-setopt AUTO_MENU
-setopt AUTO_PARAM_SLASH
-setopt COMPLETE_IN_WORD
-setopt HASH_LIST_ALL
-
-setopt HIST_IGNORE_ALL_DUPS
-setopt HIST_IGNORE_DUPS
-setopt HIST_FIND_NO_DUPS
-setopt HIST_IGNORE_SPACE
-setopt HIST_NO_FUNCTIONS
-setopt HIST_NO_STORE
-setopt HIST_REDUCE_BLANKS
-setopt HIST_SAVE_NO_DUPS
-setopt SHARE_HISTORY
-
-setopt ALIASES
-
-_profiler "zsh options"
-
-
-# =================== autoload functions
-# https://unix.stackexchange.com/questions/33255/how-to-define-and-load-your-own-shell-function-in-zsh
-#
-# lazily loaded function per file
-# with cached compilations
-#
-# fpath=( "$ZDOTDIR"/funcs "${fpath[@]}" )
-# funcs=(
-#     # _auto_git_aliases
-# )
-# autoload -Uz ${funcs}
-#
-# _profiler "autoload funcs"
-
-
-# =================== zsh completions
-#
-# this section should come after autoload functions
-# to allow loading of shell completion funcs
-#
-# non alphanumeric chars that are part of a word
-# export WORDCHARS=${WORDCHARS//-}
-
-autoload -Uz url-quote-magic
-zle -N self-insert url-quote-magic
-
-zstyle ':completion::complete:*' gain-privileges 1
-zstyle ':completion:*' group-name ''
-zstyle ':completion:*' menu select
-zstyle ':completion:*' rehash true
-zstyle ':completion:*' list-colors "${(@s.:.)LS_COLORS}"
-zstyle ':completion:*:*:-command-:*:*' ignored-patterns '_*'
-zstyle ':completion:*' matcher-list '' \
-    '+m:{a-z}={A-Z}' '+m:{A-Z}={a-z}' \
-    'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-}={A-Z\_}' \
-    'r:|?=** m:{a-z\-}={A-Z\_}'
-
-autoload -Uz compinit
-compinit -d "$XDG_RUNTIME_DIR"/zcompdump
-
-local f=/opt/google-cloud-sdk/path.zsh.inc; [[ -f "${f}" ]] && source "${f}"
-local f=/opt/google-cloud-sdk/completion.zsh.inc; [[ -f "${f}" ]] && source "${f}"
-
-_profiler "zsh completion"
-
-
-# =================== dockerfuncs
-# https://github.com/jessfraz/dockerfiles
-#
-# run things in docker instead of natively
-#
-# source "$ZDOTDIR"/dockerfuncs
-#
-# _profiler "dockerfuncs"
-
-
-# =================== zsh prompt
-#
-_prompt
-
-_profiler "zsh prompt"
-
-
-# ==================== zsh aliases
-# suffix aliases
-# usage:
-#       runs files with these programs
-alias -s go='go run'
-alias -s py='python'; [[ -f /usr/bin/python3 ]] && alias -s py='python3'
-
-
-# go up
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
-alias .....='cd ../../../..'
-alias ......='cd ../../../../..'
-alias .......='cd ../../../../../..'
-
-# set default opts
-alias cp='cp -v'
-alias diff='diff --color=always'
-# alias go='gotip'
-alias grep='grep --color=auto'; [[ -f /usr/bin/rg ]]    && alias grep='rg -S -p'
-alias l='ls -lh --color=auto'; [[ -f /usr/bin/exa ]]    && alias l='exa -l --git --time-style iso'
-alias ll='ls -alh --color=auto'; [[ -f /usr/bin/exa ]]  && alias ll='exa -l -a --git --time-style iso'
-alias ln='ln -v'
-alias ls='ls --color'
-alias mv='mv -v'
-alias sudo='sudo -E'
-
-# short
-alias cdr='cd -P .'
-alias cr='google-chrome-unstable'
-alias diskspace="df -P -kHl"
-alias drun='docker run --rm -it -v $(pwd):/workspace -w /workspace'
-alias filespace='du -d 1 -h . 2>/dev/null | sort -h -r'
-alias g='git'
-
-[[ -f $XDG_CONFIG_HOME/git/config ]] && _auto_git_aliases
-
-alias h='htop'
-alias kubectl='command kubectl --cache-dir=/home/arccy/.cache/kube-http'
-alias p='yay'
-alias py='python3'
-alias py2='python2'
-alias s='ssh'
-alias sd='sudo systemctl'
-alias sdu='systemctl --user'
-alias v='vim'; [[ -f '/usr/bin/nvim' ]] && alias v='nvim'
-
-_profiler "zsh aliases"

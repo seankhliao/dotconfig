@@ -30,6 +30,7 @@ bindsym $mod+q                  kill
 # system management
 bindsym $mod+Shift+r            reload
 bindsym $mod+Shift+e            exit
+bindsym $mod+l                  exec swaylock
 
 # Layout
 bindsym $mod+h                  splith

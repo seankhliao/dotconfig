@@ -14,7 +14,6 @@ set $menu   bemenu-run
 output * background $XDG_CONFIG_HOME/sway/bg.jpg fill
 
 # Screenshot
-# bindsym $mod+p exec grim -g "$(slurp)" "$HOME/info/daenerys-$(date +'%Y-%m-%d-%H%M%S').png"
 bindsym Print                   exec grim -g "$(slurp)" "$HOME/data/screenshot/screen-$(date +'%Y-%m-%d-%H%M%S').png"
 bindsym $mod+Print              exec iwctl station wlan0 scan
 
@@ -148,6 +147,4 @@ input "1739:30382:DLL0704:01_06CB:76AE_Touchpad" {
     middle_emulation    enabled
 }
 
-# exec dunst
-
-# exec "systemctl --user import-environment; systemctl --user start sway-session.target"
+exec "systemctl --user import-environment; systemctl --user start sway-session.target"

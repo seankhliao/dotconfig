@@ -1,6 +1,7 @@
 android/
 ardour5/
 configstore/
+containers/
 dconf/
 dlv/
 docker/
@@ -15,6 +16,7 @@ hub/
 kube/
 menus/
 mimeapps.list
+neofetch/
 nvim/.netrwhist
 nvim/autoload
 nvim/plugged
@@ -38,3 +40,4 @@ Yubico/
 zsh/.zcompdump
 *.zwc
 VirtualBox/
+wireshark/

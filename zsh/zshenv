@@ -1,7 +1,7 @@
 # XDG dirs
 export XDG_CONFIG_HOME="$HOME"/.config
 export XDG_CACHE_HOME="$HOME"/.cache
-export XDG_DATA_HOME="$HOME"/.data
+export XDG_DATA_HOME="$HOME"/data/xdg-data
 
 # XDG RUNTIME
 export RXVT_SOCKET="$XDG_RUNTIME_DIR"/urxvtd
@@ -13,16 +13,13 @@ export LANG=en_US.UTF-8
 
 # preferences
 # source $XDG_CONFIG_HOME/SECRETS
-if [ -f "/usr/bin/nvim" ]; then
-    export EDITOR=nvim
-else
-    export EDITOR=vim
-fi
+export EDITOR=vim; [[ -f /usr/bin/nvim ]] && export EDITOR=nvim
+
 # export PAGER="nvim -R"
 export MANPAGER="nvim -c 'set ft=man' -"
 export BROWSER=google-chrome-unstable
 export TAG_SEARCH_PROG=rg
-export GMAIL_CREDENTIAL_FILE=$XDG_CONFIG_HOME/gmail/credentials.json
+# export GMAIL_CREDENTIAL_FILE=$XDG_CONFIG_HOME/gmail/credentials.json
 eval $(dircolors $XDG_CONFIG_HOME/dircolors/dircolors)
 
 # path
@@ -80,4 +77,4 @@ export LD_LIBRARY_PATH="$LD_LIBRARY_PATH":/opt/cuda/lib64
 export CUDA_HOME=/opt/cuda/
 
 # wayland
-export KITTY_ENABLE_WAYLAND=0
+export KITTY_ENABLE_WAYLAND=1

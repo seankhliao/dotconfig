@@ -13,91 +13,6 @@ local _time=$(date +%N)
 _profiler () { [[ $PROFILER -ne 0 ]] && echo "$1: $(( ($(date +%N) - ${_time}) / 1000000 ))ms" && _time=$(date +%N) }
 
 
-# ==================== zsh env
-#
-# XDG dirs
-export XDG_CONFIG_HOME="$HOME"/.config
-export XDG_CACHE_HOME="$HOME"/.cache
-export XDG_DATA_HOME="$HOME"/data/xdg-data
-
-# XDG RUNTIME
-export RXVT_SOCKET="$XDG_RUNTIME_DIR"/urxvtd
-export XAUTHORITY="$XDG_RUNTIME_DIR"/Xauthority
-
-# language
-export LC_ALL=en_US.UTF-8
-export LANG=en_US.UTF-8
-
-# preferences
-# source $XDG_CONFIG_HOME/SECRETS
-export EDITOR=vim; [[ -f /usr/bin/nvim ]] && export EDITOR=nvim
-
-# export PAGER="nvim -R"
-export MANPAGER="nvim -c 'set ft=man' -"
-export BROWSER=google-chrome-unstable
-export TAG_SEARCH_PROG=rg
-# export GMAIL_CREDENTIAL_FILE=$XDG_CONFIG_HOME/gmail/credentials.json
-eval $(dircolors $XDG_CONFIG_HOME/dircolors/dircolors)
-
-# path
-export GOPATH="$XDG_DATA_HOME"/go
-export PATH="$GOPATH"/bin:"$PATH"
-# export YARNPATH="$HOME"/.yarn/bin
-# export PATH=$YARNPATH:$PATH
-
-# XDG CACHE
-export __GL_SHADER_DISK_CACHE_PATH="$XDG_CACHE_HOME"/nv
-export CCACHE_DIR="$XDG_CACHE_HOME"/ccache
-export CUDA_CACHE_PATH="$XDG_CACHE_HOME"/nv
-export GEM_SPEC_CACHE="$XDG_CACHE_HOME"/gem
-export NUGET_PACKAGES="$XDG_CACHE_HOME"/NuGetPackages
-export PYTHON_EGG_CACHE="$XDG_CACHE_HOME"/python-eggs
-export RANDFILE="$XDG_CACHE_HOME"/rnd
-
-# XDG DATA
-export LESSHISTFILE=-
-export HISTFILE="$XDG_DATA_HOME"/zsh/history
-export HISTSIZE=999999999
-export GEM_HOME="$XDG_DATA_HOME"/gem
-export GNUPGHOME="$XDG_DATA_HOME"/gnupg
-export NODE_REPL_HISTORY="$XDG_DATA_HOME"/node_repl_history
-export PGPASSFILE="$XDG_DATA_HOME"/psql/pgpass
-export PSQL_HISTORY="$XDG_DATA_HOME"/psql/history
-export PYLINTHOME=$XDG_DATA_HOME/pylint
-export SAVEHIST=$HISTSIZE
-export SQLITE_HISTORY=$XDG_DATA_HOME/sqlite_history
-export TERMINFO="$XDG_DATA_HOME"/terminfo
-export TERMINFO_DIRS="$XDG_DATA_HOME"/terminfo:/usr/share/terminfo
-
-# XDG CONFIG
-export ANDROID_SDK_HOME="$XDG_CONFIG_HOME"/android
-export BOTO_PATH="$XDG_CONFIG_HOME"/boto
-export CARGO_HOME="$XDG_DATA_HOME"/cargo
-export CCACHE_CONFIGPATH="$XDG_CONFIG_HOME"/ccache.config
-export CURL_HOME="$XDG_CONFIG_HOME"/curl
-export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker
-export GTK2_RC_FILES="$XDG_CONFIG_HOME"/gtk-2.0/gtkrc
-export IPYTHONDIR="$XDG_CONFIG_HOME"/jupyter
-export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME"/jupyter
-export KUBECONFIG="$XDG_CONFIG_HOME"/kube/config
-export LESSKEY="$XDG_CONFIG_HOME"/lesskey
-export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME"/npmrc
-export PSQLRC="$XDG_CONFIG_HOME"/psqlrc
-export PYTHONSTARTUP="$XDG_CONFIG_HOME"/python/startup.py
-export SCREENRC="$XDG_CONFIG_HOME"/screenrc
-export VIMINIT=":source $XDG_CONFIG_HOME"/nvim/init.vim
-export WGETRC="$XDG_CONFIG_HOME"/wgetrc
-export ZDOTDIR="$XDG_CONFIG_HOME"/zsh
-
-# cuda
-export LD_LIBRARY_PATH="$LD_LIBRARY_PATH":/opt/cuda/lib64
-export CUDA_HOME=/opt/cuda/
-
-# wayland
-export KITTY_ENABLE_WAYLAND=1
-
-_profiler "zsh env"
-
 # ==================== zsh keybindings
 #
 function _sudo_cmdline() {
@@ -139,7 +54,6 @@ setopt COMPLETE_IN_WORD
 setopt HASH_LIST_ALL
 
 setopt HIST_IGNORE_ALL_DUPS
-setopt HIST_IGNORE_DUPS
 setopt HIST_FIND_NO_DUPS
 setopt HIST_IGNORE_SPACE
 setopt HIST_NO_FUNCTIONS
@@ -186,59 +100,46 @@ _profiler "zsh completion"
 
 # =================== zsh prompt
 #
+export PROMPT_EOL_MARK=''
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+prompt_opts=(subst percent)
+# borrowed from promptinit, sets the prompt options in case pure was not
+# initialized via promptinit.
+setopt noprompt{bang,cr,percent,subst} "prompt${^prompt_opts[@]}"
+
+zmodload zsh/datetime
+
 function _preexec() {
     typeset -g prompt_timestamp=$EPOCHSECONDS
 }
 function _precmd() {
     # https://github.com/sindresorhus/pretty-time-zsh
-    integer elapsed
-    (( elapsed = EPOCHSECONDS - ${prompt_timestamp:-$EPOCHSECONDS} ))
-    local human
+    integer elapsed=$(( EPOCHSECONDS - ${prompt_timestamp:-$EPOCHSECONDS} ))
     local days=$(( elapsed / 60 / 60 / 24 ))
     local hours=$(( elapsed / 60 / 60 % 24 ))
     local minutes=$(( elapsed / 60 % 60 ))
     local seconds=$(( elapsed % 60 ))
+    local human
     (( days > 0 )) && human+="${days}d "
     (( hours > 0 )) && human+="${hours}h "
     (( minutes > 0 )) && human+="${minutes}m "
     human+="${seconds}s"
 
-    local git_branch
-    git_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
-    # local go_mod
-    # go_mod=$(go list -f '{{ .Module }}' 2>/dev/null)
-    # go_mod=${go_mod%<nil>}
+    local git_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+    local newline=$'\n%{\r%}'
 
-    # date time
-    PROMPT="${prompt_newline}%F{green}%*%f "
-    # path
-    PROMPT+="%F{blue}%~%f "
-    # exec time
-    PROMPT+="%F{yellow}${human}%f"
-    PROMPT+="${prompt_newline}"
-    [[ -n "${STY}" ]] && PROMPT+="%F{242}${STY%.*}%f "
-    [[ -n "${VIRTUAL_ENV}" ]] && PROMPT+="%F{242}${VIRTUAL_ENV:t}%f "
-    # [[ -n ${go_mod} ]] && PROMPT+="%F{242}${go_mod}%f "
-    [[ -n "${git_branch}" ]] && PROMPT+="%F{242}${git_branch}%f "
-    PROMPT+="%(?.%F{magenta}.%F{red})"
+    # time path exectime
+    PROMPT="${newline}%F{green}%*%f %F{blue}%~%f %F{yellow}${human}%f${newline}%F{242}"
+    [[ -n "${STY}" ]] && PROMPT+="${STY%.*} "
+    [[ -n "${VIRTUAL_ENV}" ]] && PROMPT+="${VIRTUAL_ENV:t} "
+    [[ -n "${git_branch}" ]] && PROMPT+="${git_branch} "
+    PROMPT+="%f%(?.%F{magenta}.%F{red})"
     [[ -n "${SSH_CONNECTION}" ]] && PROMPT+="%n@%m"
     PROMPT+="» %f"
 }
-export PROMPT_EOL_MARK=''
-export VIRTUAL_ENV_DISABLE_PROMPT=1
 
-prompt_opts=(subst percent)
-# borrowed from promptinit, sets the prompt options in case pure was not
-# initialized via promptinit.
-setopt noprompt{bang,cr,percent,subst} "prompt${^prompt_opts[@]}"
-if [[ -z $prompt_newline ]]; then
-    typeset -g prompt_newline=$'\n%{\r%}'
-fi
-
-zmodload zsh/datetime
 
 autoload -Uz add-zsh-hook
-
 add-zsh-hook precmd  _precmd
 add-zsh-hook preexec _preexec
 
@@ -279,8 +180,8 @@ alias .......='cd ../../../../../..'
 # set default opts
 alias cp='cp -v'
 alias diff='diff --color=always'
-alias grep='grep --color=auto'; [[ -f /usr/bin/rg ]]    && alias grep='rg -S -p'
-alias l='ls -lh --color=auto'; [[ -f /usr/bin/exa ]]    && alias l='exa -l --git --time-style iso'
+alias grep='grep --color=auto';  [[ -f /usr/bin/rg ]]   && alias grep='rg -S -p'
+alias l='ls -lh --color=auto';   [[ -f /usr/bin/exa ]]  && alias l='exa -l --git --time-style iso'
 alias ll='ls -alh --color=auto'; [[ -f /usr/bin/exa ]]  && alias ll='exa -l -a --git --time-style iso'
 alias ln='ln -v'
 alias ls='ls --color'
@@ -288,11 +189,10 @@ alias mv='mv -v'
 alias sudo='sudo -E'
 
 # short
-alias cdr='cd -P .'
 alias cr='google-chrome-unstable'
-alias diskspace="df -P -kHl"
+alias ds="df -P -kHl"
 alias drun='docker run --rm -it -v $(pwd):/workspace -w /workspace'
-alias filespace='du -d 1 -h . 2>/dev/null | sort -h -r'
+alias fs='du -d 1 -h . 2>/dev/null | sort -h -r'
 alias g='git'
 alias h='htop'
 # alias kubectl='command kubectl --cache-dir=/home/arccy/.cache/kube-http'
@@ -309,6 +209,11 @@ _profiler "zsh aliases"
 
 # =================== zsh user funcs
 #
+function rrnm() {
+    rg "$1" --files-with-matches | xargs sed -i "s/$1/$2/g"
+    find -type f -name "$1".java -execdir mv {} "$2".java ';'
+    echo "$1    $2" >> replacements
+}
 function cicd () {
     gcloud builds log \
         --stream \

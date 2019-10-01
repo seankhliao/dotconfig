@@ -247,7 +247,8 @@ function md() {
     mkdir -p "$1" && cd "$1"
 }
 function mr() {
-    set -x
+    set -xo pipefail
+    [[ -z ${1// } ]] && echo "no repo name given" && return 1
     mkdir -p $1
     cd $1
     git init
@@ -260,6 +261,7 @@ function mr() {
     cat << EOF > .dockerignore
 .dockerignore
 .git
+.github
 .gitignore
 
 cloudbuild.yaml
@@ -267,43 +269,45 @@ Dockerfile
 LICENSE
 Makefile
 README.md
+testdata/
 EOF
 
 
 
-    cat << EOF | sed 's/REPONAME/'$1'/g' > .gitignore
-REPONAME
+    cat << EOF > .gitignore
+$1
 EOF
 
 
 
-    cat << EOF | sed 's/REPONAME/'$1'/g' > cloudbuild.yaml
+    cat << EOF > cloudbuild.yaml
 steps:
   - id: build
-    dir: $_IMG
     name: gcr.io/cloud-builders/docker:latest
     args:
       - build
-      - -t=gcr.io/$PROJECT_ID/$_IMG:$SHORT_SHA
-      - -t=gcr.io/$PROJECT_ID/$_IMG:latest
+      - -t=gcr.io/\$PROJECT_ID/\$_IMG:\$SHORT_SHA
+      - -t=gcr.io/\$PROJECT_ID/\$_IMG:latest
       - .
   - id: deploy
     name: gcr.io/cloud-builders/kubectl:latest
     entrypoint: sh
     args:
-      - -c
-      - >-
-        [ $BRANCH_NAME = "master" ] && kubectl set image deploy $_IMG '*=gcr.io/$PROJECT_ID/$_IMG:$SHORT_SHA
+      - set
+      - image
+      - deploy
+      - \$_IMG
+      - '*=gcr.io/\$PROJECT_ID/\$_IMG:\$SHORT_SHA'
     env:
-      - CLOUDSDK_COMPUTE_ZONE=$_ZONE
-      - CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER
+      - CLOUDSDK_COMPUTE_ZONE=\$_ZONE
+      - CLOUDSDK_CONTAINER_CLUSTER=\$_CLUSTER
 images:
-  - gcr.io/$PROJECT_ID/$_IMG:$SHORT_SHA
-  - gcr.io/$PROJECT_ID/$_IMG:latest
+  - gcr.io/\$PROJECT_ID/\$_IMG:\$SHORT_SHA
+  - gcr.io/\$PROJECT_ID/\$_IMG:latest
 substitutions:
   _ZONE: us-central1-a
-  _CLUSTER: cluster14
-  _IMG: REPONAME
+  _CLUSTER: cluster16
+  _IMG: $1
 EOF
 
 
@@ -311,25 +315,27 @@ EOF
     cat << EOF > Dockerfile
 FROM golang:alpine AS build
 
+ENV CGO_ENABLED=0
 WORKDIR /app
 RUN apk add --no-cache ca-certificates
 COPY . .
-RUN GO111MODULE=on CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -mod=vendor -o app
+RUN go build -mod=vendor -o /bin/app
+
 
 FROM scratch
 
 COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
-COPY --from=build /app/app /bin/
+COPY --from=build /bin/app /
 
-ENTRYPOINT ["/bin/app"]
+ENTRYPOINT ["/app"]
 EOF
 
 
 
-    cat << EOF | sed 's/YEAR/'$(date +%Y)'/' > LICENSE
+    cat << EOF > LICENSE
 MIT License
 
-Copyright (c) YEAR Sean Liao
+Copyright (c) $(date +%Y) Sean Liao
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -352,31 +358,56 @@ EOF
 
 
 
-    cat << EOF > Makefile
-.PHONY: build
-build:
-	go build -mod=vendor
+    cat << EOF > main.go
+package main
 
-.PHONY: test
-test:
-	go test -mod=vendor
+import (
+	"os"
 
-.PHONY: update
-update:
-	go get -u
-	go mod tidy
-	go mod vendor
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
+)
+
+func init() {
+	// log format, controlled by LOGFMT
+	switch os.Getenv("LOGFMT") {
+	case "json":
+		// use default
+		log.Info().Str("FMT", "json").Msg("log format")
+	default:
+		log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stdout})
+		log.Info().Str("FMT", "text").Msg("log format")
+	}
+
+	// log level, controlled by LOGLVL
+	level, err := zerolog.ParseLevel(os.Getenv("LOGLVL"))
+	if err != nil || level == zerolog.NoLevel {
+		level = zerolog.InfoLevel
+	}
+	log.Info().Str("LOGLVL", level.String()).Msg("log level")
+	zerolog.SetGlobalLevel(level)
+}
+
+func main() {
+	//
+}
 EOF
 
 
+    cat << EOF > README.md
+# $1
 
-    cat << EOF | sed 's/REPONAME/'$1'/g' > README.md
-# REPONAME
+A repo for $1
 
-[![License](https://img.shields.io/github/license/seankhliao/REPONAME.svg?style=for-the-badge&maxAge=31536000)](LICENSE)
-[![Build](https://badger.seankhliao.com/i/github_seankhliao_REPONAME)](https://badger.seankhliao.com/l/github_seankhliao_REPONAME)
+[![Godoc](http://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](https://godoc.org/github.com/seankliao/$1)
+[![License](https://img.shields.io/github/license/seankhliao/$1.svg?style=flat-square&maxAge=31536000)](LICENSE)
+![Version](https://img.shields.io/github/v/tag/seankhliao/com-seankhliao?sort=semver&style=flat-square)
+[![Build](https://badger.seankhliao.com/i/github_seankhliao_$1)](https://badger.seankhliao.com/l/github_seankhliao_$1)
 EOF
 }
+
+
+
 # https://github.com/aykamko/tag
 export TAG_CMD_FMT_STRING="$EDITOR {{.Filename }} +{{ .LineNumber }}"
 function t() {

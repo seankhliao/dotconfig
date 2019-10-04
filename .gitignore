@@ -38,6 +38,7 @@ whoozle.github.io/
 yarn/
 Yubico/
 zsh/.zcompdump
+zsh/_*
 *.zwc
 VirtualBox/
 wireshark/

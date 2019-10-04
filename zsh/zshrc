@@ -93,6 +93,7 @@ autoload -Uz compinit
 compinit -d "$XDG_RUNTIME_DIR"/zcompdump
 
 export PATH=$PATH:/opt/google-cloud-sdk/bin
+local f="${ZDOTDIR}"/_kubectl; [[ -f "${f}" ]] && source "${f}"
 local f=/opt/google-cloud-sdk/completion.zsh.inc; [[ -f "${f}" ]] && source "${f}"
 
 _profiler "zsh completion"
@@ -195,7 +196,7 @@ alias drun='docker run --rm -it -v $(pwd):/workspace -w /workspace'
 alias fs='du -d 1 -h . 2>/dev/null | sort -h -r'
 alias g='git'
 alias h='htop'
-# alias kubectl='command kubectl --cache-dir=/home/arccy/.cache/kube-http'
+alias kaf="kubectl apply -f"
 alias p='yay'
 alias py='python3'
 alias py2='python2'
@@ -209,20 +210,18 @@ _profiler "zsh aliases"
 
 # =================== zsh user funcs
 #
+function kad() {
+    [[ -z $1 ]] && echo "no kustomization dir given" && return 1
+    kubectl kustomize $1 | kubectl apply -f -
+}
 function rrnm() {
     rg "$1" --files-with-matches | xargs sed -i "s/$1/$2/g"
     find -type f -name "$1".java -execdir mv {} "$2".java ';'
     echo "$1    $2" >> replacements
 }
 function cicd () {
-    gcloud builds log \
-        --stream \
-        $(gcloud builds list \
-            --filter='source_provenance.resolved_repo_source.commit_sha="'$( \
-                git rev-parse HEAD \
-            )'"' \
-            --format='value(id)' \
-        )
+    gcloud builds log --stream $(gcloud builds list --filter=tags="$(git rev-parse HEAD)" --limit=1 --format='value(id)')
+    # gcloud builds log --stream $(gcloud builds list --filter=source_provenance.resolved_repo_source.commit_sha=$(git rev-parse HEAD) --format='value(id)')
 }
 function colortest () {
     for i in {0..255} ; do
@@ -260,11 +259,12 @@ function mr() {
 
     cat << EOF > .dockerignore
 .dockerignore
-.git
-.github
+.git/
+.github/
 .gitignore
 
 cloudbuild.yaml
+deploy/
 Dockerfile
 LICENSE
 Makefile
@@ -291,13 +291,12 @@ steps:
       - .
   - id: deploy
     name: gcr.io/cloud-builders/kubectl:latest
-    entrypoint: sh
     args:
       - set
       - image
       - deploy
       - \$_IMG
-      - '*=gcr.io/\$PROJECT_ID/\$_IMG:\$SHORT_SHA'
+      - "*=gcr.io/\$PROJECT_ID/\$_IMG:\$SHORT_SHA"
     env:
       - CLOUDSDK_COMPUTE_ZONE=\$_ZONE
       - CLOUDSDK_CONTAINER_CLUSTER=\$_CLUSTER
@@ -308,6 +307,8 @@ substitutions:
   _ZONE: us-central1-a
   _CLUSTER: cluster16
   _IMG: $1
+tags:
+  - \$COMMIT_SHA
 EOF
 
 
@@ -366,18 +367,17 @@ import (
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	"golang.org/x/crypto/ssh/terminal"
 )
 
 func init() {
 	// log format, controlled by LOGFMT
-	switch os.Getenv("LOGFMT") {
-	case "json":
-		// use default
-		log.Info().Str("FMT", "json").Msg("log format")
-	default:
-		log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stdout})
-		log.Info().Str("FMT", "text").Msg("log format")
+	logfmt := os.Getenv("LOGFMT")
+	if logfmt != "json" {
+		logfmt = "text"
+		log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stdout, NoColor: !terminal.IsTerminal(int(os.Stdout.Fd()))})
 	}
+	log.Info().Str("FMT", logfmt).Msg("log format")
 
 	// log level, controlled by LOGLVL
 	level, err := zerolog.ParseLevel(os.Getenv("LOGLVL"))

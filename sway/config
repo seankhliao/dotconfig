@@ -14,13 +14,13 @@ set $menu   bemenu-run
 output * background $XDG_CONFIG_HOME/sway/bg.jpg fill
 
 # Screenshot
-bindsym Print                   exec grim -g "$(slurp)" "$HOME/data/screenshot/screen-$(date +'%Y-%m-%d-%H%M%S').png"
-bindsym $mod+Print              exec iwctl station wlan0 scan
+bindsym Print                   exec grim -g "$(slurp)" "$HOME/data/screen/screen-$(date +'%Y-%m-%d-%H%M%S').png"
+# bindsym $mod+Print              exec iwctl station wlan0 scan
 
 # custom keys
 bindsym $mod+t                  exec google-chrome-unstable --disk-cache-dir=/tmp/cache
 bindsym $mod+Shift+t            exec google-chrome-stable --disk-cache-dir=/tmp/cache
-bindsym $mod+s                  exec spotify
+# bindsym $mod+s                  exec spotify
 
 # window management
 bindsym $mod+Return             exec $term
@@ -54,8 +54,8 @@ for_window [title="wl-clipboard"] floating enable
 bindsym XF86AudioRaiseVolume    exec amixer sset Master 5%+
 bindsym XF86AudioLowerVolume    exec amixer sset Master 5%-
 bindsym XF86AudioMute           exec amixer sset Master toggle
-bindsym XF86MonBrightnessUp     exec light -A 10
-bindsym XF86MonBrightnessDown   exec light -U 10
+bindsym XF86MonBrightnessUp     exec brightnessctl -d intel_backlight set +10%
+bindsym XF86MonBrightnessDown   exec brightnessctl -d intel_backlight set 10%-
 
 # media controls
 bindsym XF86AudioPlay           exec playerctl play-pause
@@ -148,4 +148,4 @@ input "1739:30382:DLL0704:01_06CB:76AE_Touchpad" {
     middle_emulation    enabled
 }
 
-exec "systemctl --user import-environment; systemctl --user start sway-session.target"
+# exec "systemctl --user import-environment; systemctl --user start sway-session.target"

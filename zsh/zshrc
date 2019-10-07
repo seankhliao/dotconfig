@@ -33,7 +33,6 @@ bindkey "\e\e" _sudo_cmdline
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
 bindkey '^[[H' beginning-of-line
-bindkey '^[[4~' end-of-line
 bindkey '^[[F' end-of-line
 
 _profiler "zsh keybinds"
@@ -243,8 +242,17 @@ function gsall() {
     done
 }
 function md() {
+    [[ -z ${1// } ]] && echo "no repository name gived" && return 1
     mkdir -p "$1" && cd "$1"
 }
+# https://github.com/aykamko/tag
+export TAG_CMD_FMT_STRING="$EDITOR {{.Filename }} +{{ .LineNumber }}"
+export TAG_SEARCH_PROG=rg
+function t() {
+    command tag -i "$@"
+    source ${TAG_ALIAS_FILE:-/tmp/tag_aliases} 2>/dev/null
+}
+
 function mr() {
     set -xo pipefail
     [[ -z ${1// } ]] && echo "no repo name given" && return 1
@@ -253,7 +261,7 @@ function mr() {
     git init
     git commit --allow-empty -m "root-commit"
     git remote add origin s:$1
-    go mod init seankhliao.com/$1
+    go mod init github.com/seankhliao/$1
 
 
 
@@ -370,25 +378,20 @@ import (
 	"golang.org/x/crypto/ssh/terminal"
 )
 
-func init() {
-	// log format, controlled by LOGFMT
+func initLog() {
 	logfmt := os.Getenv("LOGFMT")
 	if logfmt != "json" {
 		logfmt = "text"
 		log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stdout, NoColor: !terminal.IsTerminal(int(os.Stdout.Fd()))})
 	}
-	log.Info().Str("FMT", logfmt).Msg("log format")
 
-	// log level, controlled by LOGLVL
-	level, err := zerolog.ParseLevel(os.Getenv("LOGLVL"))
-	if err != nil || level == zerolog.NoLevel {
-		level = zerolog.InfoLevel
-	}
-	log.Info().Str("LOGLVL", level.String()).Msg("log level")
+	level, _ := zerolog.ParseLevel(os.Getenv("LOGLVL"))
+    log.Info().Str("FMT", logfmt).Str("LVL", level.String()).Msg("log initialized")
 	zerolog.SetGlobalLevel(level)
 }
 
 func main() {
+    initLog()
 	//
 }
 EOF
@@ -397,23 +400,16 @@ EOF
     cat << EOF > README.md
 # $1
 
-A repo for $1
-
 [![Godoc](http://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](https://godoc.org/github.com/seankhliao/$1)
 [![License](https://img.shields.io/github/license/seankhliao/$1.svg?style=flat-square)](LICENSE)
 ![Version](https://img.shields.io/github/v/tag/seankhliao/$1?sort=semver&style=flat-square)
 [![Build](https://badger.seankhliao.com/i/github_seankhliao_$1)](https://badger.seankhliao.com/l/github_seankhliao_$1)
+
+A repo for $1
 EOF
 }
 
 
-
-# https://github.com/aykamko/tag
-export TAG_CMD_FMT_STRING="$EDITOR {{.Filename }} +{{ .LineNumber }}"
-function t() {
-    command tag -i "$@"
-    source ${TAG_ALIAS_FILE:-/tmp/tag_aliases} 2>/dev/null
-}
 
 _profiler "zsh user funcs"
 

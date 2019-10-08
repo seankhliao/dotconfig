@@ -386,7 +386,10 @@ func initLog() {
 	}
 
 	level, _ := zerolog.ParseLevel(os.Getenv("LOGLVL"))
-    log.Info().Str("FMT", logfmt).Str("LVL", level.String()).Msg("log initialized")
+	if level == zerolog.NoLevel {
+		level = zerolog.InfoLevel
+	}
+	log.Info().Str("FMT", logfmt).Str("LVL", level.String()).Msg("log initialized")
 	zerolog.SetGlobalLevel(level)
 }
 

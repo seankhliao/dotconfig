@@ -237,6 +237,7 @@ function gsall() {
     for dir in ./*; do
         if [[ -d ${dir} ]] && [[ -d ${dir}/.git ]]; then
             echo "\n${bold}$dir${normal}"
+            git -C ${dir} log --oneline origin/master..HEAD
             git -C ${dir} status -s
         fi
     done

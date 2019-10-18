@@ -1,11 +1,10 @@
 [alias]
     a       = add
-    am      = commit --amend --reuse-message=HEAD
+    amend   = commit --amend --reuse-message=HEAD
 
     b       = checkout
     bprune  = fetch -a
     bd      = branch -D
-    bl      = branch -a
     bn      = checkout -b
     bm      = checkout master
 
@@ -27,15 +26,13 @@
 
     m       = merge
 
-    new     = !git init && git commit --allow-empty -m "root-commit" && git remote add origin s:$1 && :
-    newp    = !git new && git pu && :
-
     p       = push
     pu      = push -u origin HEAD
 
     s       = status
 
     t       = tag
+    td      = tag -d
     tl      = tag -l
 
 [color]

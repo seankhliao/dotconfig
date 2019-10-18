@@ -5,6 +5,7 @@ export XDG_DATA_HOME="$HOME"/data/xdg
 
 # XDG RUNTIME
 export XAUTHORITY="$XDG_RUNTIME_DIR"/Xauthority
+export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
 
 # language
 # export LC_ALL=en_US.UTF-8

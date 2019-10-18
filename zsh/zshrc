@@ -230,6 +230,10 @@ function colortest () {
         fi
     done
 }
+
+function gcamttt() {git commit -a -m "'$*'" && semver_next major}
+function gcamtt()  {git commit -a -m "'$*'" && semver_next minor}
+function gcamt()   {git commit -a -m "'$*'" && semver_next patch}
 function gsall() {
     local bold=$(tput bold)
     local normal=$(tput sgr0)
@@ -246,6 +250,70 @@ function md() {
     [[ -z ${1// } ]] && echo "no repository name gived" && return 1
     mkdir -p "$1" && cd "$1"
 }
+function semver_bump() {
+    local r="^v(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(\\-([0-9A-Za-z-]+(\\.[0-9A-Za-z-]+)*))?(\\+([0-9A-Za-z-]+(\\.[0-9A-Za-z-]+)*))?$"
+    if [[ "$1" =~ $r ]]; then
+        integer maj=${match[1]}
+        integer min=${match[2]}
+        integer pat=${match[3]}
+
+        case "$2" in
+            major)
+                echo "v$(( maj + 1 )).0.0"
+            ;;
+            minor)
+                echo "v${maj}.$(( min +1 )).0"
+            ;;
+            patch)
+                echo "v${maj}.${min}.$(( pat + 1 ))"
+            ;;
+            *)
+            echo "v${maj}.${min}.${pat}"
+        esac
+        return 0
+    fi
+    return 1
+}
+function _semver_gt() {
+    local r="^v(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(\\-([0-9A-Za-z-]+(\\.[0-9A-Za-z-]+)*))?(\\+([0-9A-Za-z-]+(\\.[0-9A-Za-z-]+)*))?$"
+    if [[ "$1" =~ $r ]]; then
+        local v1=(${match[1]} ${match[2]} ${match[3]})
+        if [[ "$2" =~ $r ]]; then
+            local v2=(${match[1]} ${match[2]} ${match[3]})
+
+            for i in 1 2 3; do
+                local vv1=${v1[$i]}
+                local vv2=${v2[$i]}
+                if (( vv1 > vv2 )); then
+                    echo "v${v1[1]}.${v1[2]}.${v1[3]}"
+                    return 0
+                elif (( vv1 < vv2 )); then
+                    echo "v${v2[1]}.${v2[2]}.${v2[3]}"
+                    return 0
+                fi
+            done
+            echo "v${v1[1]}.${v1[2]}.${v1[3]}"
+            return 0
+        fi
+    fi
+    return 1
+}
+
+function semver_next() {
+    IFS=$'\n' local tags=($(git tag -l))
+    if [ ${#tags[@]} -eq 0 ]; then
+        echo "no tags found"
+        return 1
+    fi
+    local max=$tags[1]
+    for t in $tags; do
+        max=$(_semver_gt $max $t)
+    done
+    local v=$(semver_bump $max $1)
+    git tag $v
+    echo $v
+}
+
 # https://github.com/aykamko/tag
 export TAG_CMD_FMT_STRING="$EDITOR {{.Filename }} +{{ .LineNumber }}"
 export TAG_SEARCH_PROG=rg

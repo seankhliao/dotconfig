@@ -205,6 +205,8 @@ alias s='ssh'
 alias sd='sudo systemctl'
 alias sdu='systemctl --user'
 alias v='vim'; [[ -f '/usr/bin/nvim' ]] && alias v='nvim'
+alias wg-up='sudo wg-quick up wg0'
+alias wg-down='sudo wg-quick down wg0'
 
 _profiler "zsh aliases"
 

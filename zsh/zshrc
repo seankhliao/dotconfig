@@ -94,9 +94,11 @@ autoload -Uz compinit
 compinit -d "$XDG_RUNTIME_DIR"/zcompdump
 
 export PATH=$PATH:/opt/google-cloud-sdk/bin
+
 local f="${ZDOTDIR}"/_kubectl; [[ -f "${f}" ]] && source "${f}"
+local f="${ZDOTDIR}"/_helm3; [[ -f "${f}" ]] && source "${f}"
+
 local f=/opt/google-cloud-sdk/completion.zsh.inc; [[ -f "${f}" ]] && source "${f}"
-[[ -f $ZDOTDIR/helm3-completion ]] && source $ZDOTDIR/helm3-completion
 
 _profiler "zsh completion"
 
@@ -111,6 +113,9 @@ prompt_opts=(subst percent)
 setopt noprompt{bang,cr,percent,subst} "prompt${^prompt_opts[@]}"
 
 zmodload zsh/datetime
+
+# completion
+zmodload zsh/zpty
 
 function _preexec() {
     typeset -g prompt_timestamp=$EPOCHSECONDS

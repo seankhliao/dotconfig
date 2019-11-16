@@ -5,6 +5,7 @@ containers/
 dconf/
 dlv/
 docker/
+freerdp/
 gcloud/
 gsutil/
 git/credentials
@@ -12,6 +13,7 @@ gmail/credentials.json
 GNS3/
 google-*
 gtk-*
+helm/
 hub/
 kube/
 menus/

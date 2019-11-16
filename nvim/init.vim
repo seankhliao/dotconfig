@@ -1,37 +1,47 @@
 scriptencoding utf-8
+filetype plugin indent on
 
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_warning_str = 'W'
+let g:ale_echo_msg_format = '[%linter%][%severity%] %s'
 let g:ale_fix_on_save = 1
 let g:ale_sign_column_always = 1
 let g:ale_sign_error = '✗✗'
 let g:ale_sign_warning = '⚠⚠'
 let g:ale_set_signs = 1
-
 let g:ale_fixers = {
     \ '*'              :['remove_trailing_lines', 'trim_whitespace'],
-    \ 'bash'           :['shfmt'],
-    \ 'c'              :['clang-format'],
-    \ 'cpp'            :['clang-format'],
     \ 'css'            :['prettier'],
-    \ 'go'             :['goimports'],
     \ 'html'           :['prettier'],
     \ 'javascript'     :['prettier'],
-    \ 'javascript.jsx' :['prettier'],
-    \ 'json'           :['prettier'],
-    \ 'less'           :['prettier'],
     \ 'markdown'       :['prettier'],
-    \ 'python'         :['yapf'],
-    \ 'scss'           :['prettier'],
-    \ 'sql'            :['sqlint'],
     \ 'typescript'     :['prettier'],
-    \ 'xml'            :['xmllint'],
     \ 'yaml'           :['prettier'],
     \}
+" 'json'           :['prettier'],
 
 let g:ale_html_prettier_options = '--print-width 120'
 let g:ale_javascript_prettier_options = '--print-width 120'
 
+let g:deoplete#enable_at_startup = 1
+let g:LanguageClient_loggingFile = expand('$XDG_DATA_HOME/nvim/languageclient.log')
+let g:LanguageClient_settingsPath = expand('$XDG_CONFIG_HOME/nvim/languageclient_settings.json')
 let g:LanguageClient_serverCommands = {
-    \ 'go'             :['gopls'],
+    \ 'c'               :['clangd'],
+    \ 'cpp'             :['clangd'],
+    \ 'css'             :['css-languageserver', '--stdio'],
+    \ 'Dockerfile'      :['docker-langserver', '--stdio'],
+    \ 'go'              :['gopls'],
+    \ 'html'            :['html-languageserver', '--stdio'],
+    \ 'javascript'      :['javascript-typescript-stdio'],
+    \ 'json'            :['json-languageserver', '--stdio'],
+    \ 'latex'           :['texlab'],
+    \ 'python'          :['mspyls'],
+    \ 'typescript'      :['javascript-typescript-stdio'],
+    \ 'yaml'            :['yaml-language-server', '--stdio'],
+    \ }
+let g:LanguageClient_rootMarkers = {
+    \ 'go'              :['go.mod'],
     \ }
 
 let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.ejs,*.js'
@@ -105,26 +115,27 @@ call plug#begin('$XDG_DATA_HOME/nvim/plugged')
     Plug 'tyru/caw.vim'         " comments
 
     " lint / fix ?
-    Plug 'w0rp/ale'
+    Plug 'dense-analysis/ale'
 
     " completion
     Plug 'sheerun/vim-polyglot'
     Plug 'alvan/vim-closetag' " xml tags
     Plug 'jiangmiao/auto-pairs'
 
-    " ncm2
-    Plug 'ncm2/ncm2'
-    Plug 'roxma/nvim-yarp'
-    Plug 'ncm2/ncm2-bufword'
-    Plug 'ncm2/ncm2-path'
-    Plug 'ncm2/ncm2-syntax' | Plug 'Shougo/neco-syntax'
+    " deoplete
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+    Plug 'Shougo/neco-syntax'
+    Plug 'deoplete-plugins/deoplete-zsh'
     Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh', }
 
 call plug#end()
 
 colorscheme fahrenheit
 
-autocmd BufEnter * call ncm2#enable_for_buffer()
+autocmd BufWritePre *.go :call LanguageClient#textDocument_formatting_sync()
+
+autocmd FileType json :set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
+autocmd BufWritePre *.json :normal ggVGgq
 
 autocmd VimEnter,Colorscheme * :hi IndentGuidesEven  guibg=#000000   ctermbg=0
 autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd   guibg=#262626   ctermbg=235

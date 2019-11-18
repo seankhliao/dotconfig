@@ -22,27 +22,31 @@ let g:ale_fixers = {
 
 let g:ale_html_prettier_options = '--print-width 120'
 let g:ale_javascript_prettier_options = '--print-width 120'
+let g:ale_completion_enabled = 1
+set omnifunc=ale#completion#OmniFunc
 
 let g:deoplete#enable_at_startup = 1
+
 let g:LanguageClient_loggingFile = expand('$XDG_DATA_HOME/nvim/languageclient.log')
 let g:LanguageClient_settingsPath = expand('$XDG_CONFIG_HOME/nvim/languageclient_settings.json')
 let g:LanguageClient_serverCommands = {
-    \ 'c'               :['clangd'],
-    \ 'cpp'             :['clangd'],
-    \ 'css'             :['css-languageserver', '--stdio'],
-    \ 'Dockerfile'      :['docker-langserver', '--stdio'],
-    \ 'go'              :['gopls'],
-    \ 'html'            :['html-languageserver', '--stdio'],
-    \ 'javascript'      :['javascript-typescript-stdio'],
-    \ 'json'            :['json-languageserver', '--stdio'],
-    \ 'latex'           :['texlab'],
-    \ 'python'          :['mspyls'],
-    \ 'typescript'      :['javascript-typescript-stdio'],
-    \ 'yaml'            :['yaml-language-server', '--stdio'],
-    \ }
+  \ 'c'               :['clangd'],
+  \ 'cpp'             :['clangd'],
+  \ 'css'             :['css-languageserver', '--stdio'],
+  \ 'Dockerfile'      :['docker-langserver', '--stdio'],
+  \ 'go'              :['gopls'],
+  \ 'html'            :['html-languageserver', '--stdio'],
+  \ 'javascript'      :['javascript-typescript-stdio'],
+  \ 'json'            :['json-languageserver', '--stdio'],
+  \ 'latex'           :['texlab'],
+  \ 'python'          :['mspyls'],
+  \ 'typescript'      :['javascript-typescript-stdio'],
+  \ }
+
+  "\ 'yaml'            :['yaml-language-server', '--stdio'],
 let g:LanguageClient_rootMarkers = {
-    \ 'go'              :['go.mod'],
-    \ }
+  \ 'go'              :['go.mod'],
+  \ }
 
 let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.ejs,*.js'
 
@@ -114,10 +118,8 @@ call plug#begin('$XDG_DATA_HOME/nvim/plugged')
     Plug 'lambdalisue/suda.vim' " sudo write
     Plug 'tyru/caw.vim'         " comments
 
-    " lint / fix ?
-    Plug 'dense-analysis/ale'
-
     " completion
+    Plug 'dense-analysis/ale'
     Plug 'sheerun/vim-polyglot'
     Plug 'alvan/vim-closetag' " xml tags
     Plug 'jiangmiao/auto-pairs'
@@ -131,6 +133,8 @@ call plug#begin('$XDG_DATA_HOME/nvim/plugged')
 call plug#end()
 
 colorscheme fahrenheit
+
+call deoplete#custom#option('sources', { '_': ['ale'], })
 
 autocmd BufWritePre *.go :call LanguageClient#textDocument_formatting_sync()
 

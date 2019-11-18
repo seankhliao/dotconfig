@@ -1,116 +1,95 @@
-# autostart
-# exec xrdb -merge "$XDG_CONFIG_HOME"/X11/xresources
-# exec xcalib -d :0 /usr/share/color/icc/xps13s.icc &
-# switch things here
-set $mod    Mod4
-set $left   Left
-set $down   Down
-set $up     Up
-set $right  Right
-set $term   kitty
-set $menu   bemenu-run
+set {
+    $mod    Mod4
+    $left   Left
+    $down   Down
+    $up     Up
+    $right  Right
+    $term   kitty -1
+    $menu   bemenu-run
+
+    $ws1 1:Alpha
+    $ws2 2:Beta
+    $ws3 3:Gamma
+    $ws4 4:Delta
+    $ws5 5:Zeta
+    $ws6 6:Eta
+    $ws7 7:Theta
+    $ws8 8:Iota
+    $ws9 9:Kappa
+    $ws10 10:Lambda
+}
 
 # background
 output * background $XDG_CONFIG_HOME/sway/bg.jpg fill
 
-# Screenshot
-bindsym Print                   exec grim -g "$(slurp)" "$HOME/data/screen/screen-$(date +'%Y-%m-%d-%H%M%S').png"
-# bindsym $mod+Print              exec iwctl station wlan0 scan
+bindsym {
+    # Screenshot
+    Print                   exec grim -g "$(slurp)" "$HOME/data/screen/$(date +'%Y-%m-%d-%H%M%S').png"
+    $mod+t                  exec google-chrome-unstable --disk-cache-dir=/tmp/cache
+    $mod+Shift+t            exec google-chrome-stable --disk-cache-dir=/tmp/cache
+    $mod+Return             exec $term
+    $mod+d                  exec $menu
 
-# custom keys
-bindsym $mod+t                  exec google-chrome-unstable --disk-cache-dir=/tmp/cache
-bindsym $mod+Shift+t            exec google-chrome-stable --disk-cache-dir=/tmp/cache
-# bindsym $mod+s                  exec spotify
+    XF86AudioRaiseVolume    exec amixer sset Master 5%+
+    XF86AudioLowerVolume    exec amixer sset Master 5%-
+    XF86AudioMute           exec amixer sset Master toggle
+    XF86MonBrightnessUp     exec brightnessctl -d intel_backlight set +10%
+    XF86MonBrightnessDown   exec brightnessctl -d intel_backlight set 10%-
+    XF86AudioPlay           exec playerctl play-pause
+    XF86AudioPrev           exec playerctl previous
+    XF86AudioNext           exec playerctl next
 
-# window management
-bindsym $mod+Return             exec $term
-bindsym $mod+d                  exec $menu
-bindsym $mod+q                  kill
+    $mod+q                  kill
+    $mod+h                  splith
+    $mod+v                  splitv
+    $mod+f                  fullscreen
+    $mod+Shift+space        floating toggle
+    $mod+space              focus mode_toggle
+    $mod+Shift+grave        move scratchpad
+    $mod+grave              scratchpad show
 
-# system management
-bindsym $mod+Shift+r            reload
-bindsym $mod+Shift+e            exit
-bindsym $mod+l                  exec swaylock
+    $mod+$left              focus left
+    $mod+$down              focus down
+    $mod+$up                focus up
+    $mod+$right             focus right
+    $mod+a                  focus parent
 
-# Layout
-bindsym $mod+h                  splith
-bindsym $mod+v                  splitv
+    $mod+Shift+$left        move left
+    $mod+Shift+$down        move down
+    $mod+Shift+$up          move up
+    $mod+Shift+$right       move right
 
-# Make fullscreen
-bindsym $mod+f                  fullscreen
+    $mod+Tab            workspace next
+    $mod+Shift+Tab      workspace prev
+    $mod+1              workspace $ws1
+    $mod+2              workspace $ws2
+    $mod+3              workspace $ws3
+    $mod+4              workspace $ws4
+    $mod+5              workspace $ws5
+    $mod+6              workspace $ws6
+    $mod+7              workspace $ws7
+    $mod+8              workspace $ws8
+    $mod+9              workspace $ws9
+    $mod+0              workspace $ws10
 
-# scratchpad
-bindsym $mod+Shift+grave        move scratchpad
-bindsym $mod+grave              scratchpad show
+    $mod+Shift+1 move container to workspace $ws1
+    $mod+Shift+2 move container to workspace $ws2
+    $mod+Shift+3 move container to workspace $ws3
+    $mod+Shift+4 move container to workspace $ws4
+    $mod+Shift+5 move container to workspace $ws5
+    $mod+Shift+6 move container to workspace $ws6
+    $mod+Shift+7 move container to workspace $ws7
+    $mod+Shift+8 move container to workspace $ws8
+    $mod+Shift+9 move container to workspace $ws9
+    $mod+Shift+0 move container to workspace $ws10
 
-# floating
-bindsym $mod+Shift+space        floating toggle
-bindsym $mod+space              focus mode_toggle
-# auto float (currently unsupported...
-# for_window [window_role="pop-up"] floating enable
-for_window [title="wl-clipboard"] floating enable
+    $mod+r mode "resize"
 
-# volume and backlight
-bindsym XF86AudioRaiseVolume    exec amixer sset Master 5%+
-bindsym XF86AudioLowerVolume    exec amixer sset Master 5%-
-bindsym XF86AudioMute           exec amixer sset Master toggle
-bindsym XF86MonBrightnessUp     exec brightnessctl -d intel_backlight set +10%
-bindsym XF86MonBrightnessDown   exec brightnessctl -d intel_backlight set 10%-
+    $mod+Shift+r            reload
+    $mod+Shift+e            exit
+    $mod+l                  exec swaylock
+}
 
-# media controls
-bindsym XF86AudioPlay           exec playerctl play-pause
-bindsym XF86AudioPrev           exec playerctl previous
-bindsym XF86AudioNext           exec playerctl next
-
-# Move your focus around
-bindsym $mod+$left              focus left
-bindsym $mod+$down              focus down
-bindsym $mod+$up                focus up
-bindsym $mod+$right             focus right
-bindsym $mod+a                  focus parent
-
-# _move_ the focused window with the same, but add Shift
-bindsym $mod+Shift+$left        move left
-bindsym $mod+Shift+$down        move down
-bindsym $mod+Shift+$up          move up
-bindsym $mod+Shift+$right       move right
-
-# named workspaces
-set $ws1 1:Alpha
-set $ws2 2:Beta
-set $ws3 3:Gamma
-set $ws4 4:Delta
-set $ws5 5:Zeta
-set $ws6 6:Eta
-set $ws7 7:Theta
-set $ws8 8:Iota
-set $ws9 9:Kappa
-set $ws10 10:Lambda
-# switch to workspace
-bindsym $mod+1 workspace $ws1
-bindsym $mod+2 workspace $ws2
-bindsym $mod+3 workspace $ws3
-bindsym $mod+4 workspace $ws4
-bindsym $mod+5 workspace $ws5
-bindsym $mod+6 workspace $ws6
-bindsym $mod+7 workspace $ws7
-bindsym $mod+8 workspace $ws8
-bindsym $mod+9 workspace $ws9
-bindsym $mod+0 workspace $ws10
-# move focused container to workspace
-bindsym $mod+Shift+1 move container to workspace $ws1
-bindsym $mod+Shift+2 move container to workspace $ws2
-bindsym $mod+Shift+3 move container to workspace $ws3
-bindsym $mod+Shift+4 move container to workspace $ws4
-bindsym $mod+Shift+5 move container to workspace $ws5
-bindsym $mod+Shift+6 move container to workspace $ws6
-bindsym $mod+Shift+7 move container to workspace $ws7
-bindsym $mod+Shift+8 move container to workspace $ws8
-bindsym $mod+Shift+9 move container to workspace $ws9
-bindsym $mod+Shift+0 move container to workspace $ws10
-# Cylcle workspaces
-bindsym $mod+Tab        workspace next
-bindsym $mod+Shift+Tab  workspace prev
 
 # resize
 mode "resize" {
@@ -118,20 +97,19 @@ mode "resize" {
     bindsym $down   resize shrink   height  10 px or 10 ppt
     bindsym $left   resize shrink   width   10 px or 10 ppt
     bindsym $right  resize grow     width   10 px or 10 ppt
-# return to default mode
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
-bindsym $mod+r mode "resize"
 
-#disable window titlebars entirely
-default_border pixel 1
 
 # gaps
-gaps inner          5
-gaps outer          0
+gaps {
+    inner 5
+    outer 0
+}
 smart_gaps          on
-hide_edge_borders   smart
+smart_borders       on
+default_border pixel 1
 
 # bar
 bar {
@@ -140,12 +118,13 @@ bar {
     workspace_buttons   yes
 }
 
-# Input configuration
-# get id with "swaymsg -t get_inputs"
+# floating
+# auto float (currently unsupported...
+# for_window [window_role="pop-up"] floating enable
+for_window [title="wl-clipboard"] floating enable
+
 input "1739:30382:DLL0704:01_06CB:76AE_Touchpad" {
     tap                 enabled
     natural_scroll      enabled
     middle_emulation    enabled
 }
-
-# exec "systemctl --user import-environment; systemctl --user start sway-session.target"

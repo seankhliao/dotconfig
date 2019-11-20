@@ -100,6 +100,8 @@ local f="${ZDOTDIR}"/_helm3; [[ -f "${f}" ]] && source "${f}"
 
 local f=/opt/google-cloud-sdk/completion.zsh.inc; [[ -f "${f}" ]] && source "${f}"
 
+local f=~/keys/zsh; [[ -f $f ]] && source $f
+
 _profiler "zsh completion"
 
 

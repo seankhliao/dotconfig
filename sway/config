@@ -4,7 +4,7 @@ set {
     $down   Down
     $up     Up
     $right  Right
-    $term   kitty -1
+    $term   kitty
     $menu   bemenu-run
 
     $ws1 1:Alpha

@@ -76,7 +76,9 @@ let g:LanguageClient_serverCommands = {
   \ 'typescript'      :['javascript-typescript-stdio'],
   \ }
 
-let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.ejs,*.js'
+let g:closetag_filetypes = 'html,javascript,markdown'
+let g:delimitMate_expand_cr = 2
+
 
 let g:indent_guides_auto_colors = 0
 let g:indent_guides_enable_on_vim_startup = 1
@@ -102,9 +104,8 @@ nnoremap ; :
 call plug#begin('$XDG_DATA_HOME/nvim/plugin')
     " Visual
     Plug 'fcpg/vim-fahrenheit'
-    Plug 'ap/vim-css-color'
     Plug 'mhinz/vim-signify'     " git gutter
-    " Plug 'itchyny/lightline.vim' " status line
+    Plug 'itchyny/lightline.vim' " status line
     Plug 'nathanaelkane/vim-indent-guides'
 
     " Interactive
@@ -115,7 +116,7 @@ call plug#begin('$XDG_DATA_HOME/nvim/plugin')
     Plug 'dense-analysis/ale'
     Plug 'sheerun/vim-polyglot'
     Plug 'alvan/vim-closetag' " xml tags
-    Plug 'jiangmiao/auto-pairs'
+    Plug 'raimondi/delimitMate'
 
     " ncm2
     Plug 'ncm2/ncm2'

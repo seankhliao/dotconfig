@@ -14,11 +14,11 @@ let g:ale_fixers = {
     \ 'css'            :['prettier'],
     \ 'html'           :['prettier'],
     \ 'javascript'     :['prettier'],
+    \ 'json'           :['prettier'],
     \ 'markdown'       :['prettier'],
     \ 'typescript'     :['prettier'],
     \ 'yaml'           :['prettier'],
     \}
-" 'json'           :['prettier'],
 
 let g:ale_html_prettier_options = '--print-width 120'
 let g:ale_javascript_prettier_options = '--print-width 120'
@@ -39,7 +39,7 @@ let g:LanguageClient_serverCommands = {
   \ 'javascript'      :['javascript-typescript-stdio'],
   \ 'json'            :['json-languageserver', '--stdio'],
   \ 'latex'           :['texlab'],
-  \ 'python'          :['mspyls'],
+  \ 'python'          :['pyls'],
   \ 'typescript'      :['javascript-typescript-stdio'],
   \ }
 
@@ -118,28 +118,43 @@ call plug#begin('$XDG_DATA_HOME/nvim/plugged')
     Plug 'lambdalisue/suda.vim' " sudo write
     Plug 'tyru/caw.vim'         " comments
 
+    Plug 'neovim/nvim-lsp'
+
     " completion
     Plug 'dense-analysis/ale'
     Plug 'sheerun/vim-polyglot'
     Plug 'alvan/vim-closetag' " xml tags
     Plug 'jiangmiao/auto-pairs'
 
-    " deoplete
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-    Plug 'Shougo/neco-syntax'
-    Plug 'deoplete-plugins/deoplete-zsh'
+    " ncm2
+    Plug 'ncm2/ncm2'
+    Plug 'roxma/nvim-yarp'
+    Plug 'ncm2/ncm2-bufword'
+    Plug 'ncm2/ncm2-path'
+    Plug 'ncm2/ncm2-syntax' | Plug 'Shougo/neco-syntax'
     Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh', }
+
+    " deoplete
+    " Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+    " Plug 'Shougo/neco-syntax'
+    " Plug 'deoplete-plugins/deoplete-zsh'
+    " Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh', }
 
 call plug#end()
 
 colorscheme fahrenheit
 
-call deoplete#custom#option('sources', { '_': ['ale'], })
+" call nvim_lsp#setup("pyls", {})
+" call nvim_lsp#setup("gopls", {})
 
-autocmd BufWritePre *.go :call LanguageClient#textDocument_formatting_sync()
+" call deoplete#custom#option('sources', { '_': ['ale'], })
 
-autocmd FileType json :set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
-autocmd BufWritePre *.json :normal ggVGgq
+" autocmd BufWritePre *.go :call LanguageClient#textDocument_formatting_sync()
+"
+" autocmd FileType json :set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
+" autocmd BufWritePre *.json :normal ggVGgq
+
+autocmd BufEnter * call ncm2#enable_for_buffer()
 
 autocmd VimEnter,Colorscheme * :hi IndentGuidesEven  guibg=#000000   ctermbg=0
 autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd   guibg=#262626   ctermbg=235

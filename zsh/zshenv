@@ -13,7 +13,11 @@ export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
 
 # preferences
 export EDITOR=vim; [[ -f /usr/bin/nvim ]] && export EDITOR=nvim
+
+# programs
 export GO111MODULE=on
+export TAG_CMD_FMT_STRING="$EDITOR {{.Filename }} +{{ .LineNumber }}"
+export TAG_SEARCH_PROG=rg
 
 # export PAGER="nvim -R"
 export MANPAGER="nvim -c 'set ft=man' -"
@@ -22,7 +26,7 @@ eval $(dircolors $XDG_CONFIG_HOME/dircolors/dircolors)
 
 # path
 export GOPATH="$XDG_DATA_HOME"/go
-export PATH="$GOPATH"/bin:"$PATH"
+export PATH="$GOPATH"/bin:"$PATH":/opt/google-cloud-sdk/bin
 
 # XDG CACHE
 export __GL_SHADER_DISK_CACHE_PATH="$XDG_CACHE_HOME"/nv

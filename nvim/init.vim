@@ -118,6 +118,8 @@ call plug#begin('$XDG_DATA_HOME/nvim/plugin')
     Plug 'alvan/vim-closetag' " xml tags
     Plug 'raimondi/delimitMate'
 
+    " Plug 'neovim/nvim-lsp'
+
     " ncm2
     Plug 'ncm2/ncm2'
     Plug 'roxma/nvim-yarp'
@@ -130,6 +132,11 @@ call plug#end()
 
 
 colorscheme fahrenheit
+
+" call nvim_lsp#setup("clangd", {})
+" call nvim_lsp#setup("gopls", {})
+" call nvim_lsp#setup("pyls", {})
+" call nvim_lsp#setup("texlab", {})
 
 autocmd BufEnter * call ncm2#enable_for_buffer()
 

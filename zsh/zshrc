@@ -37,15 +37,19 @@ zmodload zsh/datetime
 zmodload zsh/stat
 zmodload zsh/zpty
 
-zle -N edit-command-line
 zle -N self-insert url-quote-magic
 zle -N _sudo_cmdline
 zle -N history-substring-search-up
 zle -N history-substring-search-down
 
+function _sudo_cmdline() {
+    [[ -z $BUFFER ]] && zle up-history
+    LBUFFER="sudo $LBUFFER"
+    [[ $BUFFER == sudo\ * ]] && LBUFFER="${LBUFFER#sudo sudo }"
+}
+
 bindkey -e
 bindkey "\e\e" _sudo_cmdline
-bindkey "^e"   edit-command-line
 bindkey '^[[A' history-substring-search-up
 bindkey '\eOA' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
@@ -128,7 +132,7 @@ alias h='htop'
 alias p='yay'
 alias py='python3'
 alias py2='python2'
-alias s='ssh'
+alias s='TERM=xterm-256color ssh'
 alias sd='sudo systemctl'
 alias sdu='systemctl --user'
 alias v='vim'; [[ -f '/usr/bin/nvim' ]] && alias v='nvim'
@@ -213,12 +217,6 @@ function _colortest () {
             printf "\n";
         fi
     done
-}
-
-function _sudo_cmdline() {
-    [[ -z $BUFFER ]] && zle up-history
-    LBUFFER="sudo $LBUFFER"
-    [[ $BUFFER == sudo\ * ]] && LBUFFER="${LBUFFER#sudo }"
 }
 
 function _semver_gt() {

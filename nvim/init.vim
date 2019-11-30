@@ -63,18 +63,21 @@ let g:ale_fixers = {
 
 let g:LanguageClient_settingsPath = expand('$XDG_CONFIG_HOME/nvim/langclient.json')
 let g:LanguageClient_serverCommands = {
-  \ 'c'               :['clangd'],
-  \ 'cpp'             :['clangd'],
-  \ 'css'             :['css-languageserver', '--stdio'],
-  \ 'Dockerfile'      :['docker-langserver', '--stdio'],
-  \ 'go'              :['gopls'],
-  \ 'html'            :['html-languageserver', '--stdio'],
-  \ 'javascript'      :['javascript-typescript-stdio'],
-  \ 'json'            :['json-languageserver', '--stdio'],
-  \ 'latex'           :['texlab'],
-  \ 'python'          :['pyls'],
-  \ 'typescript'      :['javascript-typescript-stdio'],
-  \ }
+    \ 'c'               :['clangd'],
+    \ 'cpp'             :['clangd'],
+    \ 'css'             :['css-languageserver', '--stdio'],
+    \ 'Dockerfile'      :['docker-langserver', '--stdio'],
+    \ 'go'              :['gopls'],
+    \ 'html'            :['html-languageserver', '--stdio'],
+    \ 'javascript'      :['javascript-typescript-stdio'],
+    \ 'json'            :['json-languageserver', '--stdio'],
+    \ 'latex'           :['texlab'],
+    \ 'python'          :['pyls'],
+    \ 'typescript'      :['javascript-typescript-stdio'],
+    \ }
+let g:LanguageClient_rootMarkers = {
+    \ 'go'              :['go.mod'],
+    \ }
 
 let g:closetag_filetypes = 'html,javascript,markdown'
 let g:delimitMate_expand_cr = 2
@@ -137,6 +140,8 @@ colorscheme fahrenheit
 " call nvim_lsp#setup("gopls", {})
 " call nvim_lsp#setup("pyls", {})
 " call nvim_lsp#setup("texlab", {})
+"
+autocmd BufWritePre *.go call LanguageClient#textDocument_formatting_sync()
 
 autocmd BufEnter * call ncm2#enable_for_buffer()
 

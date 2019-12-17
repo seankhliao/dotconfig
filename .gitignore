@@ -15,6 +15,7 @@ google-*
 gtk-*
 helm/
 hub/
+jupyter/
 kube/
 menus/
 mimeapps.list

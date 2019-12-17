@@ -1,13 +1,10 @@
 #!/usr/bin/env zsh
 
 setopt AUTOCD
-
 setopt COMPLETE_IN_WORD
 setopt LIST_PACKED
-
 setopt EXTENDED_GLOB
 setopt GLOB_DOTS
-
 setopt EXTENDED_HISTORY
 setopt HIST_FCNTL_LOCK
 setopt HIST_IGNORE_ALL_DUPS
@@ -18,14 +15,13 @@ setopt HIST_NO_STORE
 setopt HIST_REDUCE_BLANKS
 setopt HIST_SAVE_NO_DUPS
 setopt SHARE_HISTORY
-
 setopt IGNORE_EOF
 setopt INTERACTIVE_COMMENTS
-
 setopt PIPE_FAIL
-
-prompt_opts=(subst percent)
-setopt noprompt{bang,cr,percent,subst} "prompt${^prompt_opts[@]}"
+setopt NO_PROMPT_BANG
+setopt NO_PROMPT_CR
+setopt PROMPT_SUBST
+setopt PROMPT_PERCENT
 
 autoload -Uz add-zsh-hook
 autoload -Uz compinit
@@ -56,7 +52,6 @@ bindkey '\eOB' history-substring-search-down
 bindkey '^[[H' beginning-of-line
 bindkey '^[[F' end-of-line
 
-
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' gain-privileges true
 zstyle ':completion:*' list-colors "${(@s.:.)LS_COLORS}"
@@ -68,16 +63,15 @@ zstyle ':completion:*' menu select
 zstyle ':completion:*' rehash true
 
 compinit -D
-# bashcompinit
 
 source ${ZDOTDIR}/prompt.zsh
 source ${ZDOTDIR}/zsh-autosuggestions.zsh
 source ${ZDOTDIR}/zsh-syntax-highlighting.zsh
 source ${ZDOTDIR}/zsh-history-substring-search.zsh
 
-local f="${ZDOTDIR}"/_kubectl; [[ -f "${f}" ]] && source "${f}"
-local f=/opt/google-cloud-sdk/completion.zsh.inc; [[ -f "${f}" ]] && source "${f}"
-local f=~/keys/zsh; [[ -f $f ]] && source $f
+source "${ZDOTDIR}"/_kubectl &>/dev/null || true
+source /opt/google-cloud-sdk/completion.zsh.inc &>/dev/null || true
+source ~/keys/zsh &>/dev/null || true
 
 export PROMPT_EOL_MARK=''
 export VIRTUAL_ENV_DISABLE_PROMPT=1
@@ -89,6 +83,7 @@ alias -s go='go run'
 alias -s py='python'; [[ -f /usr/bin/python3 ]] && alias -s py='python3'
 
 function _auto_git_aliases() {
+    [[ -f $XDG_CONFIG_HOME/git/config ]] || return
     local start_alias=false
     while read line; do
         if ! $start_alias; then
@@ -100,8 +95,7 @@ function _auto_git_aliases() {
         fi
     done < $XDG_CONFIG_HOME/git/config
 }
-[[ -f $XDG_CONFIG_HOME/git/config ]] && _auto_git_aliases
-
+_auto_git_aliases
 
 alias ..='cd ..'
 alias ...='cd ../..'
@@ -126,6 +120,7 @@ alias ds="df -P -kHl"
 alias drun='docker run --rm -it -v $(pwd):/workspace -w /workspace'
 alias fs='du -d 1 -h . 2>/dev/null | sort -h -r'
 alias g='git'
+alias go='go1.14beta1'
 alias h='htop'
 alias p='yay'
 alias py='python3'
@@ -136,8 +131,6 @@ alias sdu='systemctl --user'
 alias v='vim'; [[ -f '/usr/bin/nvim' ]] && alias v='nvim'
 alias wg-up='sudo wg-quick up wg0'
 alias wg-down='sudo wg-quick down wg0'
-
-
 
 function gcamttt() {git commit -a -m "'$*'" && semver_next major}
 function gcamtt()  {git commit -a -m "'$*'" && semver_next minor}
@@ -161,31 +154,6 @@ function md() {
     mkdir -p "$1" && cd "$1"
 }
 
-function semver_bump() {
-    local r="^v(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(\\-([0-9A-Za-z-]+(\\.[0-9A-Za-z-]+)*))?(\\+([0-9A-Za-z-]+(\\.[0-9A-Za-z-]+)*))?$"
-    if [[ "$1" =~ $r ]]; then
-        integer maj=${match[1]}
-        integer min=${match[2]}
-        integer pat=${match[3]}
-
-        case "$2" in
-            major)
-                echo "v$(( maj + 1 )).0.0"
-            ;;
-            minor)
-                echo "v${maj}.$(( min +1 )).0"
-            ;;
-            patch)
-                echo "v${maj}.${min}.$(( pat + 1 ))"
-            ;;
-            *)
-            echo "v${maj}.${min}.${pat}"
-        esac
-        return 0
-    fi
-    return 1
-}
-
 function semver_next() {
     IFS=$'\n' local tags=($(git tag -l))
     if [ ${#tags[@]} -eq 0 ]; then
@@ -196,7 +164,7 @@ function semver_next() {
     for t in $tags; do
         max=$(_semver_gt $max $t)
     done
-    local v=$(semver_bump $max $1)
+    local v=$(_semver_bump $max $1)
     git tag $v
     echo $v
 }
@@ -206,7 +174,160 @@ function t() {
     source ${TAG_ALIAS_FILE:-/tmp/tag_aliases} 2>/dev/null
 }
 
+function mr() {
+    set -xo pipefail
+    [[ -z ${1// } ]] && echo "no repo name given" && return 1
+    mkdir -p $1
+    cd $1
+    git init
+    git commit --allow-empty -m "root-commit"
+    git remote add origin s:$1
 
+    cat << EOF > .gitignore
+$1
+EOF
+
+    cat << EOF > README.md
+# $1
+
+A repo for $1
+
+[![License](https://img.shields.io/github/license/seankhliao/$1.svg?style=flat-square)](LICENSE)
+![Version](https://img.shields.io/github/v/tag/seankhliao/$1?sort=semver&style=flat-square)
+EOF
+
+    cat << EOF > LICENSE
+MIT License
+
+Copyright (c) $(date +%Y) Sean Liao
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+EOF
+}
+
+function mrgo() {
+    mr "$@"
+    go mod init github.com/seankhliao/$1
+
+    cat << EOF >> README.md
+[![Godoc](http://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](https://godoc.org/github.com/seankhliao/$1)
+EOF
+
+    cat << EOF > cloudbuild.yaml
+steps:
+  - id: build
+    name: gcr.io/cloud-builders/docker:latest
+    args:
+      - build
+      - -t=gcr.io/\$PROJECT_ID/\$_IMG:\$SHORT_SHA
+      - -t=gcr.io/\$PROJECT_ID/\$_IMG:latest
+      - .
+  - id: deploy
+    name: gcr.io/cloud-builders/kubectl:latest
+    args:
+      - set
+      - image
+      - deploy
+      - \$_IMG
+      - "*=gcr.io/\$PROJECT_ID/\$_IMG:\$SHORT_SHA"
+    env:
+      - CLOUDSDK_COMPUTE_ZONE=\$_ZONE
+      - CLOUDSDK_CONTAINER_CLUSTER=\$_CLUSTER
+images:
+  - gcr.io/\$PROJECT_ID/\$_IMG:\$SHORT_SHA
+  - gcr.io/\$PROJECT_ID/\$_IMG:latest
+substitutions:
+  _ZONE: us-central1-a
+  _CLUSTER: cluster16
+  _IMG: $1
+tags:
+  - \$COMMIT_SHA
+EOF
+
+    cat << EOF > Dockerfile
+FROM golang:alpine AS build
+
+ENV CGO_ENABLED=0
+WORKDIR /app
+RUN apk add --no-cache ca-certificates
+COPY . .
+RUN go build -mod=vendor -o /bin/app
+
+
+FROM scratch
+
+COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+COPY --from=build /bin/app /
+
+ENTRYPOINT ["/app"]
+EOF
+
+    cat << EOF > .dockerignore
+.dockerignore
+.git/
+.github/
+.gitignore
+
+cloudbuild.yaml
+deploy/
+Dockerfile
+LICENSE
+Makefile
+README.md
+testdata/
+EOF
+
+    cat << EOF > main.go
+package main
+
+func main() {
+        initLog()
+}
+EOF
+
+    cat << EOF > log.go
+package main
+
+import (
+	    "os"
+
+	    "github.com/rs/zerolog"
+	    "github.com/rs/zerolog/log"
+	    "golang.org/x/crypto/ssh/terminal"
+)
+
+func initLog() {
+	    logfmt := os.Getenv("LOGFMT")
+	    if logfmt != "json" {
+		    logfmt = "text"
+		    log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stdout, NoColor: !terminal.IsTerminal(int(os.Stdout.Fd()))})
+	    }
+
+	    level, _ := zerolog.ParseLevel(os.Getenv("LOGLVL"))
+	    if level == zerolog.NoLevel {
+		    level = zerolog.InfoLevel
+	    }
+	    // log.Info().Str("FMT", logfmt).Str("LVL", level.String()).Msg("log initialized")
+	    zerolog.SetGlobalLevel(level)
+}
+EOF
+}
 
 function _colortest () {
     for i in {0..255} ; do
@@ -242,161 +363,27 @@ function _semver_gt() {
     return 1
 }
 
+function _semver_bump() {
+    local r="^v(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(\\-([0-9A-Za-z-]+(\\.[0-9A-Za-z-]+)*))?(\\+([0-9A-Za-z-]+(\\.[0-9A-Za-z-]+)*))?$"
+    if [[ "$1" =~ $r ]]; then
+        integer maj=${match[1]}
+        integer min=${match[2]}
+        integer pat=${match[3]}
 
-function mr() {
-    set -xo pipefail
-    [[ -z ${1// } ]] && echo "no repo name given" && return 1
-    mkdir -p $1
-    cd $1
-    git init
-    git commit --allow-empty -m "root-commit"
-    git remote add origin s:$1
-    go mod init github.com/seankhliao/$1
-
-
-
-    cat << EOF > .dockerignore
-.dockerignore
-.git/
-.github/
-.gitignore
-
-cloudbuild.yaml
-deploy/
-Dockerfile
-LICENSE
-Makefile
-README.md
-testdata/
-EOF
-
-
-
-    cat << EOF > .gitignore
-$1
-EOF
-
-
-
-    cat << EOF > cloudbuild.yaml
-steps:
-  - id: build
-    name: gcr.io/cloud-builders/docker:latest
-    args:
-      - build
-      - -t=gcr.io/\$PROJECT_ID/\$_IMG:\$SHORT_SHA
-      - -t=gcr.io/\$PROJECT_ID/\$_IMG:latest
-      - .
-  - id: deploy
-    name: gcr.io/cloud-builders/kubectl:latest
-    args:
-      - set
-      - image
-      - deploy
-      - \$_IMG
-      - "*=gcr.io/\$PROJECT_ID/\$_IMG:\$SHORT_SHA"
-    env:
-      - CLOUDSDK_COMPUTE_ZONE=\$_ZONE
-      - CLOUDSDK_CONTAINER_CLUSTER=\$_CLUSTER
-images:
-  - gcr.io/\$PROJECT_ID/\$_IMG:\$SHORT_SHA
-  - gcr.io/\$PROJECT_ID/\$_IMG:latest
-substitutions:
-  _ZONE: us-central1-a
-  _CLUSTER: cluster16
-  _IMG: $1
-tags:
-  - \$COMMIT_SHA
-EOF
-
-
-
-    cat << EOF > Dockerfile
-FROM golang:alpine AS build
-
-ENV CGO_ENABLED=0
-WORKDIR /app
-RUN apk add --no-cache ca-certificates
-COPY . .
-RUN go build -mod=vendor -o /bin/app
-
-
-FROM scratch
-
-COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
-COPY --from=build /bin/app /
-
-ENTRYPOINT ["/app"]
-EOF
-
-
-
-    cat << EOF > LICENSE
-MIT License
-
-Copyright (c) $(date +%Y) Sean Liao
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-EOF
-
-
-
-    cat << EOF > main.go
-package main
-
-import (
-	    "os"
-
-	    "github.com/rs/zerolog"
-	    "github.com/rs/zerolog/log"
-	    "golang.org/x/crypto/ssh/terminal"
-)
-
-func initLog() {
-	    logfmt := os.Getenv("LOGFMT")
-	    if logfmt != "json" {
-		    logfmt = "text"
-		    log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stdout, NoColor: !terminal.IsTerminal(int(os.Stdout.Fd()))})
-	    }
-
-	    level, _ := zerolog.ParseLevel(os.Getenv("LOGLVL"))
-	    if level == zerolog.NoLevel {
-		    level = zerolog.InfoLevel
-	    }
-	    log.Info().Str("FMT", logfmt).Str("LVL", level.String()).Msg("log initialized")
-	    zerolog.SetGlobalLevel(level)
-}
-
-func main() {
-        initLog()
-}
-EOF
-
-
-    cat << EOF > README.md
-# $1
-
-[![Godoc](http://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](https://godoc.org/github.com/seankhliao/$1)
-[![License](https://img.shields.io/github/license/seankhliao/$1.svg?style=flat-square)](LICENSE)
-![Version](https://img.shields.io/github/v/tag/seankhliao/$1?sort=semver&style=flat-square)
-[![Build](https://badger.seankhliao.com/i/github_seankhliao_$1)](https://badger.seankhliao.com/l/github_seankhliao_$1)
-
-A repo for $1
-EOF
+        case "$2" in
+            major)
+                echo "v$(( maj + 1 )).0.0"
+            ;;
+            minor)
+                echo "v${maj}.$(( min +1 )).0"
+            ;;
+            patch)
+                echo "v${maj}.${min}.$(( pat + 1 ))"
+            ;;
+            *)
+            echo "v${maj}.${min}.${pat}"
+        esac
+        return 0
+    fi
+    return 1
 }

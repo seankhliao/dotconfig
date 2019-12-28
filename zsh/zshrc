@@ -132,9 +132,9 @@ alias v='vim'; [[ -f '/usr/bin/nvim' ]] && alias v='nvim'
 alias wg-up='sudo wg-quick up wg0'
 alias wg-down='sudo wg-quick down wg0'
 
-function gcamttt() {git commit -a -m "'$*'" && semver_next major}
-function gcamtt()  {git commit -a -m "'$*'" && semver_next minor}
-function gcamt()   {git commit -a -m "'$*'" && semver_next patch}
+function gcamttt() {git commit -a -m "$*" && semver_next major}
+function gcamtt()  {git commit -a -m "$*" && semver_next minor}
+function gcamt()   {git commit -a -m "$*" && semver_next patch}
 
 function gsall() {
     local bold=$(tput bold)
@@ -155,6 +155,10 @@ function md() {
 }
 
 function semver_next() {
+    if [[ "$1" != "major" ]] && [[ "$1" != "minor" ]] && [[ "$1" != "patch" ]]; then
+        echo "please specify one of: major|minor|patch"
+        return 1
+    fi
     IFS=$'\n' local tags=($(git tag -l))
     if [ ${#tags[@]} -eq 0 ]; then
         echo "no tags found"

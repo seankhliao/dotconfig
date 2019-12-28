@@ -12,17 +12,17 @@ export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
 # export LANG=en_US.UTF-8
 
 # preferences
+# export PAGER="nvim -R"
 export EDITOR=vim; [[ -f /usr/bin/nvim ]] && export EDITOR=nvim
+export MANPAGER="nvim -c 'set ft=man' -"
+export BROWSER=google-chrome-unstable
+eval $(dircolors $XDG_CONFIG_HOME/dircolors/dircolors)
 
 # programs
 export GO111MODULE=on
 export TAG_CMD_FMT_STRING="$EDITOR {{.Filename }} +{{ .LineNumber }}"
 export TAG_SEARCH_PROG=rg
-
-# export PAGER="nvim -R"
-export MANPAGER="nvim -c 'set ft=man' -"
-export BROWSER=google-chrome-unstable
-eval $(dircolors $XDG_CONFIG_HOME/dircolors/dircolors)
+export CLOUDSDK_PYTHON=python3
 
 # path
 export GOPATH="$XDG_DATA_HOME"/go

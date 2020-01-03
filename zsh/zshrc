@@ -106,7 +106,8 @@ alias .......='cd ../../../../../..'
 
 alias cp='cp -v'
 alias diff='diff --color=always'
-alias grep='grep --color=auto';  [[ -f /usr/bin/rg ]]   && alias grep='rg -S -p'
+alias grep='grep --color=auto';  [[ -f /usr/bin/rg ]]   && alias grep='rg -N -S -p'
+alias gr='grep --color=auto';    [[ -f /usr/bin/rg ]]   && alias gr='rg -S -p'
 alias l='ls -lh --color=auto';   [[ -f /usr/bin/exa ]]  && alias l='exa -l --git --time-style iso'
 alias ll='ls -alh --color=auto'; [[ -f /usr/bin/exa ]]  && alias ll='exa -l -a --git --time-style iso'
 alias ln='ln -v'
@@ -132,9 +133,21 @@ alias v='vim'; [[ -f '/usr/bin/nvim' ]] && alias v='nvim'
 alias wg-up='sudo wg-quick up wg0'
 alias wg-down='sudo wg-quick down wg0'
 
-function gcamttt() {git commit -a -m "$*" && semver_next major}
-function gcamtt()  {git commit -a -m "$*" && semver_next minor}
-function gcamt()   {git commit -a -m "$*" && semver_next patch}
+function gcamp_patch(){
+    git commit -a -m "${*}"
+    local vers=$(_semver_next patch)
+    git push && git push origin "${vers}"
+}
+function gcamp_minor(){
+    git commit -a -m "${*}"
+    local vers=$(_semver_next minor)
+    git push && git push origin "${vers}"
+}
+function gcamp_major(){
+    git commit -a -m "${*}"
+    local vers=$(_semver_next major)
+    git push && git push origin "${vers}"
+}
 
 function gsall() {
     local bold=$(tput bold)
@@ -152,25 +165,6 @@ function gsall() {
 function md() {
     [[ -z ${1// } ]] && echo "no directory name gived" && return 1
     mkdir -p "$1" && cd "$1"
-}
-
-function semver_next() {
-    if [[ "$1" != "major" ]] && [[ "$1" != "minor" ]] && [[ "$1" != "patch" ]]; then
-        echo "please specify one of: major|minor|patch"
-        return 1
-    fi
-    IFS=$'\n' local tags=($(git tag -l))
-    if [ ${#tags[@]} -eq 0 ]; then
-        echo "no tags found"
-        return 1
-    fi
-    local max=$tags[1]
-    for t in $tags; do
-        max=$(_semver_gt $max $t)
-    done
-    local v=$(_semver_bump $max $1)
-    git tag $v
-    echo $v
 }
 
 function t() {
@@ -340,6 +334,25 @@ function _colortest () {
             printf "\n";
         fi
     done
+}
+
+function _semver_next() {
+    if [[ "$1" != "major" ]] && [[ "$1" != "minor" ]] && [[ "$1" != "patch" ]]; then
+        echo "please specify one of: major|minor|patch"
+        return 1
+    fi
+    IFS=$'\n' local tags=($(git tag -l))
+    if [ ${#tags[@]} -eq 0 ]; then
+        git tag v0.0.1
+        return
+    fi
+    local max=$tags[1]
+    for t in $tags; do
+        max=$(_semver_gt $max $t)
+    done
+    local v=$(_semver_bump $max $1)
+    git tag $v
+    echo $v
 }
 
 function _semver_gt() {

@@ -17,6 +17,7 @@ helm/
 hub/
 jupyter/
 kube/
+matplotlib/
 menus/
 mimeapps.list
 neofetch/

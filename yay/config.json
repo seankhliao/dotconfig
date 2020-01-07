@@ -19,7 +19,7 @@
   "gpgflags": "",
   "mflags": "",
   "sortby": "votes",
-  "gitflags": "--depth=1",
+  "gitflags": "",
   "removemake": "n",
   "requestsplitn": 150,
   "sortmode": 0,

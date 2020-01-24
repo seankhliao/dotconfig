@@ -19,7 +19,7 @@ export BROWSER=google-chrome-unstable
 eval $(dircolors $XDG_CONFIG_HOME/dircolors/dircolors)
 
 # programs
-export GO111MODULE=on
+# export GO111MODULE=on
 export TAG_CMD_FMT_STRING="$EDITOR {{.Filename }} +{{ .LineNumber }}"
 export TAG_SEARCH_PROG=rg
 export CLOUDSDK_PYTHON=python3

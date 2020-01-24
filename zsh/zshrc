@@ -131,8 +131,9 @@ alias s='ssh'
 alias sd='sudo systemctl'
 alias sdu='systemctl --user'
 alias v='vim'; [[ -f '/usr/bin/nvim' ]] && alias v='nvim'
-alias wg-up='sudo wg-quick up wg0'
-alias wg-down='sudo wg-quick down wg0'
+alias vbare='vim -u NONE'; [[ -f '/usr/bin/nvim' ]] && alias vbare='nvim -u NONE'
+alias wgup='sudo wg-quick up wg0'
+alias wgdown='sudo wg-quick down wg0'
 
 function gcamp_patch(){
     git commit -a -m "${*}"
@@ -327,6 +328,67 @@ func initLog() {
 	    zerolog.SetGlobalLevel(level)
 }
 EOF
+}
+
+function testrepo() {
+    set -xo pipefail
+    local vers=$(( $(cat ${XDG_CONFIG_HOME}/testrepo-version)+1))
+    local repo=testrepo-${vers}
+    mkdir ${HOME}/${repo}
+    cd ${HOME}/${repo}
+    echo ${vers} > ${XDG_CONFIG_HOME}/testrepo-version
+    git init
+    git commit --allow-empty -m "root-commit"
+    git remote add origin s:${repo}
+    go mod init github.com/seankhliao/${repo}
+    cat << EOF > main.go
+package main
+
+func main() {
+
+}
+EOF
+}
+
+function blog() {
+    local filename="$*"
+    cat << EOF >  ${filename// /-}.md
+--- title
+$(echo $filename | cut -c 12-)
+--- description
+TODO: describe me
+--- main
+EOF
+}
+
+function encrypt() {
+  # local pubkey="ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKnAmz4u5/51kPPsebDCiYTXvuftUORh/TJ4pvN3NvQa"
+  local pubkey=age14mg08panez45c6lj2cut2l8nqja0k5vm2vxmv5zvc4ufqgptgy2qcjfmuu
+  for f in "$@"; do
+    age -r ${pubkey} -o ${f}.age ${f}
+  done
+}
+
+function decrypt() {
+  # local privkey=$HOME/.ssh/id_ed25519
+  local privkey=$HOME/keys/age.key
+  for f in "$@"; do
+    age -d -i ${privkey} -o ${f} ${f%%.age}
+  done
+}
+
+function sign() {
+  local privkey=$HOME/.ssh/id_ed25519
+  for f in "$@"; do
+    ssh-keygen -Y sign -f ${privkey} -n signed@seankhliao.com ${f}
+  done
+}
+
+function verify() {
+  local accepted=$HOME/keys/ssh-sign-accepted
+  for f in "$@"; do
+    ssh-keygen -Y verify -n signed@seankhliao.com -f ${accepted} -I arccy@eevee -s ${f}.sig < ${f}
+  done
 }
 
 function _colortest () {

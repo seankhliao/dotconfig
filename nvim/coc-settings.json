@@ -1,0 +1,38 @@
+{
+  "languageserver": {
+    "bash": {
+      "command": "bash-language-server",
+      "args": ["start"],
+      "filetypes": ["sh"],
+      "ignoredRootPaths": ["~"]
+    },
+    "clangd": {
+      "command": "clangd",
+      "args": ["--background-index"],
+      "rootPatterns": ["compile_flags.txt", "compile_commands.json", ".vim/", ".git/", ".hg/"],
+      "filetypes": ["c", "cpp", "objc", "objcpp"]
+    },
+    "dockerfile": {
+      "command": "docker-langserver",
+      "filetypes": ["Dockerfile"],
+      "args": ["--stdio"],
+      "initializationOptions": {
+        "deprecatedMaintainer": "warning",
+        "directiveCasing": "error",
+        "emptyContinuationLine": "error"
+      }
+    },
+    "golang": {
+      "command": "gopls",
+      "rootPatterns": ["go.mod"],
+      "filetypes": ["go"],
+      "initializationOptions": {
+        "usePlaceholders": true,
+        "staticcheck": true,
+        "completeUnimported": true,
+        "deepCompletion": true,
+        "go-diff": true
+      }
+    }
+  }
+}

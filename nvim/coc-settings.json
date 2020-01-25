@@ -1,4 +1,6 @@
 {
+  "coc.preferences.formatOnSaveFiletypes": ["css", "html", "javascript", "json", "markdown", "yaml"],
+  "prettier.printWidth": 120,
   "languageserver": {
     "bash": {
       "command": "bash-language-server",
@@ -30,8 +32,7 @@
         "usePlaceholders": true,
         "staticcheck": true,
         "completeUnimported": true,
-        "deepCompletion": true,
-        "go-diff": true
+        "deepCompletion": true
       }
     }
   }

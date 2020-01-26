@@ -1,0 +1,30 @@
+
+
+
+
+
+            mappings:
+                gd      goto definition
+                gt      goto type
+                rn      rename
+                K       show documentation
+
+            visual:
+                ~           switch case
+
+            movement:
+                (with punc)     B    E W
+0           ^                   b    e w               g_  $
+            The quick brown fox ju|mps over the lazy dog
+
+            buffers / windows:
+                :close
+                :e file     open in buffer
+                :bn         buffer next
+                :bp         buffer prev
+                :bd         buffer delete
+                :sp         open in buffer and split
+                Ctrl+ws     split up / down
+                Ctrl+wv     split left / right
+                Ctrl+wq     quit
+                Ctrl+ww     cycle window

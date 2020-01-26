@@ -83,9 +83,16 @@ augroup Coc
     autocmd!
     autocmd CursorHold  *       silent call CocActionAsync('highlight')
     autocmd BufWritePre *.go    :call CocAction('runCommand', 'editor.action.organizeImport')
-    autocmd BufWritePre *       :%s/\s\+$//e
-    autocmd BufWritePre *       :v/\_s*\S/d
+    autocmd BufWritePre *       silent :%s/\s\+$//e
+    autocmd BufWritePre *       silent :v/\_s*\S/d
 augroup END
+
+if argc() == 0
+    augroup StartScreen
+        autocmd!
+        autocmd VimEnter * call Splash()
+    augroup END
+endif
 
 
 
@@ -125,4 +132,27 @@ function! s:show_documentation()
     else
         call CocAction('doHover')
     endif
+endfunction
+
+function! Splash()
+    enew
+    setlocal
+        \ bufhidden=wipe
+        \ buftype=nofile
+        \ nobuflisted
+        \ nocursorcolumn
+        \ nocursorline
+        \ nolist
+        \ nonumber
+        \ noswapfile
+        \ norelativenumber
+        \ filetype=help
+
+    exec ":r ~/.config/nvim/splash.txt"
+    setlocal
+       \ nomodifiable
+       \ nomodified
+    nnoremap <buffer><silent> e :enew<CR>
+    nnoremap <buffer><silent> i :enew <bar> startinsert<CR>
+    nnoremap <buffer><silent> o :enew <bar> startinsert<CR>
 endfunction

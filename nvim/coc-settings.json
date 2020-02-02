@@ -29,10 +29,8 @@
       "rootPatterns": ["go.mod"],
       "filetypes": ["go"],
       "initializationOptions": {
-        "usePlaceholders": true,
         "staticcheck": true,
-        "completeUnimported": true,
-        "deepCompletion": true
+        "experimentalDisabledAnalyses":["ST1000"]
       }
     }
   }

@@ -1,7 +1,7 @@
 
-
-
-
+                        B    E W
+0   ^                   b    e w               g_   $
+    The quick brown fox ju|mps over the lazy dog
 
             mappings:
                 gd      goto definition
@@ -11,11 +11,6 @@
 
             visual:
                 ~           switch case
-
-            movement:
-                (with punc)     B    E W
-0           ^                   b    e w               g_  $
-            The quick brown fox ju|mps over the lazy dog
 
             buffers / windows:
                 :close
@@ -28,3 +23,4 @@
                 Ctrl+wv     split left / right
                 Ctrl+wq     quit
                 Ctrl+ww     cycle window
+                Ctrl+\n     escape terminal

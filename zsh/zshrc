@@ -384,6 +384,13 @@ function sign() {
   done
 }
 
+function update() {
+    yay -Syu
+    sudo gcloud components update
+    nvim +PlugUpdate +q +CocUpdateSync +q
+    gotip download
+}
+
 function verify() {
   local accepted=$HOME/keys/ssh-sign-accepted
   for f in "$@"; do

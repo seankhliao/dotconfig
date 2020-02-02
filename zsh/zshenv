@@ -26,7 +26,8 @@ export CLOUDSDK_PYTHON=python3
 
 # path
 export GOPATH="$XDG_DATA_HOME"/go
-export PATH="$GOPATH"/bin:"$PATH":/opt/google-cloud-sdk/bin
+[[ $PATH =~ $GOPATH/bin ]] || export PATH=$GOPATH/bin:$PATH
+[[ $PATH =~ /opt/google-cloud-sdk/bin ]] || export PATH=$PATH:/opt/google-cloud-sdk/bin
 
 # XDG CACHE
 export __GL_SHADER_DISK_CACHE_PATH="$XDG_CACHE_HOME"/nv

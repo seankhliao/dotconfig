@@ -42,7 +42,8 @@ set wildmode=longest,list:longest,full
 
 let g:closetag_filetypes = 'html,javascript,markdown'
 
-let g:delimitMate_expand_cr = 2
+let g:delimitMate_expand_cr = 1
+let g:delimitMate_expand_space = 1
 
 let g:indent_guides_enable_on_vim_startup = 1
 
@@ -83,16 +84,17 @@ augroup Coc
     autocmd!
     autocmd CursorHold  *       silent call CocActionAsync('highlight')
     autocmd BufWritePre *.go    :call CocAction('runCommand', 'editor.action.organizeImport')
+    autocmd BufWritePre *       :call CocAction('format')
     autocmd BufWritePre *       silent :%s/\s\+$//e
     autocmd BufWritePre *       silent :v/\_s*\S/d
 augroup END
 
-if argc() == 0
-    augroup StartScreen
-        autocmd!
-        autocmd VimEnter * call Splash()
-    augroup END
-endif
+" if argc() == 0
+"     augroup StartScreen
+"         autocmd!
+"         autocmd VimEnter * call Splash()
+"     augroup END
+" endif
 
 
 
@@ -105,7 +107,6 @@ inoreabbrev retrun      return
 
 inoremap <silent><expr> <TAB>       pumvisible() ? "\<C-n>" :  <SID>check_back_space() ? "\<TAB>" : coc#refresh()
 inoremap <expr>         <S-TAB>     pumvisible() ? "\<C-p>" : "\<C-h>"
-inoremap <expr>         <cr>        pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 nnoremap                ;           :
 nnoremap <silent>       sd          :call <SID>show_documentation()<CR>

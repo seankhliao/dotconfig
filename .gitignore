@@ -46,4 +46,5 @@ zsh/.zcompdump
 zsh/_*
 *.zwc
 VirtualBox/
+weechat/
 wireshark/

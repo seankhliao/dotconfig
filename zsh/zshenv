@@ -16,7 +16,6 @@ export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
 export EDITOR=vim; [[ -f /usr/bin/nvim ]] && export EDITOR=nvim
 export MANPAGER="nvim -c 'set ft=man' -"
 export BROWSER=google-chrome-unstable
-eval $(dircolors $XDG_CONFIG_HOME/dircolors/dircolors)
 
 # programs
 # export GO111MODULE=on
@@ -68,5 +67,6 @@ export PSQLRC="$XDG_CONFIG_HOME"/psqlrc
 export PYTHONSTARTUP="$XDG_CONFIG_HOME"/python/startup.py
 export SCREENRC="$XDG_CONFIG_HOME"/screenrc
 export VIMINIT=":source $XDG_CONFIG_HOME"/nvim/init.vim
+export WEECHAT_HOME=$XDG_CONFIG_HOME/weechat
 export WGETRC="$XDG_CONFIG_HOME"/wgetrc
 export ZDOTDIR="$XDG_CONFIG_HOME"/zsh

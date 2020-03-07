@@ -67,7 +67,8 @@ call plug#begin('$XDG_DATA_HOME/nvim/plugin')
     " completion
     Plug 'sheerun/vim-polyglot'
     Plug 'alvan/vim-closetag' " xml tags
-    Plug 'raimondi/delimitMate'
+    " Plug 'raimondi/delimitMate'
+    Plug 'jiangmiao/auto-pairs'
 
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
@@ -82,7 +83,7 @@ colorscheme fahrenheit
 
 augroup Coc
     autocmd!
-    autocmd CursorHold  *       silent call CocActionAsync('highlight')
+    " autocmd CursorHold  *       silent call CocActionAsync('highlight')
     autocmd BufWritePre *.go    :call CocAction('runCommand', 'editor.action.organizeImport')
     autocmd BufWritePre *       :call CocAction('format')
     autocmd BufWritePre *       silent :%s/\s\+$//e
@@ -109,7 +110,7 @@ inoremap <silent><expr> <TAB>       pumvisible() ? "\<C-n>" :  <SID>check_back_s
 inoremap <expr>         <S-TAB>     pumvisible() ? "\<C-p>" : "\<C-h>"
 
 nnoremap                ;           :
-nnoremap <silent>       sd          :call <SID>show_documentation()<CR>
+" nnoremap <silent>       sd          :call <SID>show_documentation()<CR>
 nmap     <silent>       gd          <Plug>(coc-definition)
 nmap     <silent>       gt          <Plug>(coc-type-definition)
 nmap                    rn          <Plug>(coc-rename)
@@ -127,33 +128,33 @@ function! s:check_back_space() abort
     return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-function! s:show_documentation()
-    if (index(['vim','help'], &filetype) >= 0)
-        execute 'h '.expand('<cword>')
-    else
-        call CocAction('doHover')
-    endif
-endfunction
+" function! s:show_documentation()
+"     if (index(['vim','help'], &filetype) >= 0)
+"         execute 'h '.expand('<cword>')
+"     else
+"         call CocAction('doHover')
+"     endif
+" endfunction
 
-function! Splash()
-    enew
-    setlocal
-        \ bufhidden=wipe
-        \ buftype=nofile
-        \ nobuflisted
-        \ nocursorcolumn
-        \ nocursorline
-        \ nolist
-        \ nonumber
-        \ noswapfile
-        \ norelativenumber
-        \ filetype=help
-
-    exec ":r ~/.config/nvim/splash.txt"
-    setlocal
-       \ nomodifiable
-       \ nomodified
-    nnoremap <buffer><silent> e :enew<CR>
-    nnoremap <buffer><silent> i :enew <bar> startinsert<CR>
-    nnoremap <buffer><silent> o :enew <bar> startinsert<CR>
-endfunction
+" function! Splash()
+"     enew
+"     setlocal
+"        \ bufhidden=wipe
+"        \ buftype=nofile
+"        \ nobuflisted
+"        \ nocursorcolumn
+"        \ nocursorline
+"        \ nolist
+"        \ nonumber
+"        \ noswapfile
+"        \ norelativenumber
+"        \ filetype=help
+"
+"     exec ":r ~/.config/nvim/splash.txt"
+"     setlocal
+"       \ nomodifiable
+"       \ nomodified
+"     nnoremap <buffer><silent> e :enew<CR>
+"     nnoremap <buffer><silent> i :enew <bar> startinsert<CR>
+"     nnoremap <buffer><silent> o :enew <bar> startinsert<CR>
+" endfunction

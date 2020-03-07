@@ -1,5 +1,6 @@
 android/
 ardour5/
+boto/
 coc/
 configstore/
 containers/
@@ -30,12 +31,14 @@ pulse/
 qBittorrent/
 QtProject.conf
 rclone/
+remmina/
 Riot/
 SECRETS
 Slack/
 spotify/
 systemd/user/*.wants/
 TabNine/
+testrepo-version
 Trolltech.conf
 vlc/
 wgetrc

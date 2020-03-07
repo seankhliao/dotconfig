@@ -54,6 +54,7 @@ export SQLITE_HISTORY=$XDG_DATA_HOME/sqlite_history
 # XDG CONFIG
 export ANDROID_SDK_HOME="$XDG_CONFIG_HOME"/android
 export BOTO_PATH="$XDG_CONFIG_HOME"/boto
+export BOTO_CONFIG="$XDG_CONFIG_HOME"/boto/config
 export CCACHE_CONFIGPATH="$XDG_CONFIG_HOME"/ccache.config
 export CURL_HOME="$XDG_CONFIG_HOME"/curl
 export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker

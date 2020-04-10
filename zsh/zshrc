@@ -1,5 +1,7 @@
 #!/usr/bin/env zsh
 
+mkdir -p $XDG_DATA_HOME/zsh
+
 eval $(dircolors $XDG_CONFIG_HOME/dircolors)
 
 setopt AUTOCD
@@ -81,9 +83,6 @@ export VIRTUAL_ENV_DISABLE_PROMPT=1
 add-zsh-hook precmd  _precmd
 add-zsh-hook preexec _preexec
 
-alias -s go='go run'
-alias -s py='python'; [[ -f /usr/bin/python3 ]] && alias -s py='python3'
-
 function _auto_git_aliases() {
     [[ -f $XDG_CONFIG_HOME/git/config ]] || return
     local start_alias=false
@@ -98,6 +97,9 @@ function _auto_git_aliases() {
     done < $XDG_CONFIG_HOME/git/config
 }
 _auto_git_aliases
+
+alias -s go='go run'
+alias -s py='python'; [[ -f /usr/bin/python3 ]] && alias -s py='python3'
 
 alias ..='cd ..'
 alias ...='cd ../..'
@@ -118,7 +120,6 @@ alias mv='mv -v'
 alias sudo='sudo -E'
 
 alias cicd='gcloud builds log --stream $(gcloud builds list --filter=tags="$(git rev-parse HEAD)" --limit=1 --format="value(id)")'
-alias cr='google-chrome-unstable'
 alias ds="df -P -kHl"
 alias drun='docker run --rm -it -v $(pwd):/workspace -w /workspace'
 alias fs='du -d 1 -h . 2>/dev/null | sort -h -r'
@@ -134,8 +135,6 @@ alias sdu='systemctl --user'
 alias sne='ssh sne'
 alias v='vim'; [[ -f '/usr/bin/nvim' ]] && alias v='nvim'
 alias vbare='vim -u NONE'; [[ -f '/usr/bin/nvim' ]] && alias vbare='nvim -u NONE'
-alias wgup='sudo wg-quick up wg0'
-alias wgdown='sudo wg-quick down wg0'
 
 function gcamp_patch(){
     git commit -a -m "${*}"
@@ -178,24 +177,25 @@ function t() {
 
 function mr() {
     set -xo pipefail
-    [[ -z ${1// } ]] && echo "no repo name given" && return 1
-    mkdir -p $1
-    cd $1
+    local repo=${1// }
+    [[ -z ${repo} ]] && echo "no repo name given" && return 1
+    mkdir -p ${repo}
+    cd ${repo}
     git init
     git commit --allow-empty -m "root-commit"
-    git remote add origin s:$1
+    git remote add origin s:${repo}
 
     cat << EOF > .gitignore
-$1
+${repo}
 EOF
 
     cat << EOF > README.md
-# $1
+# ${repo}
 
-A repo for $1
+A repo for ${repo}
 
-[![License](https://img.shields.io/github/license/seankhliao/$1.svg?style=flat-square)](LICENSE)
-![Version](https://img.shields.io/github/v/tag/seankhliao/$1?sort=semver&style=flat-square)
+[![License](https://img.shields.io/github/license/seankhliao/${repo}.svg?style=flat-square)](LICENSE)
+![Version](https://img.shields.io/github/v/tag/seankhliao/${repo}?sort=semver&style=flat-square)
 EOF
 
     cat << EOF > LICENSE
@@ -224,61 +224,14 @@ EOF
 }
 
 function mrgo() {
-    [[ -z ${1// } ]] && echo "no repo name given" && return 1
-    mr "$@"
-    go mod init github.com/seankhliao/$1
+    set -xo pipefail
+    local repo=${1// }
+    [[ -z ${repo} ]] && echo "no repo name given" && return 1
+    mr ${repo}
+    go mod init go.seankhliao.com/${repo}
 
     cat << EOF >> README.md
-[![Godoc](http://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](https://godoc.org/github.com/seankhliao/$1)
-EOF
-
-    cat << EOF > cloudbuild.yaml
-steps:
-  - id: build
-    name: gcr.io/cloud-builders/docker:latest
-    args:
-      - build
-      - -t=gcr.io/\$PROJECT_ID/\$_IMG:\$SHORT_SHA
-      - -t=gcr.io/\$PROJECT_ID/\$_IMG:latest
-      - .
-  - id: deploy
-    name: gcr.io/cloud-builders/kubectl:latest
-    args:
-      - set
-      - image
-      - deploy
-      - \$_IMG
-      - "*=gcr.io/\$PROJECT_ID/\$_IMG:\$SHORT_SHA"
-    env:
-      - CLOUDSDK_COMPUTE_ZONE=\$_ZONE
-      - CLOUDSDK_CONTAINER_CLUSTER=\$_CLUSTER
-images:
-  - gcr.io/\$PROJECT_ID/\$_IMG:\$SHORT_SHA
-  - gcr.io/\$PROJECT_ID/\$_IMG:latest
-substitutions:
-  _ZONE: us-central1-a
-  _CLUSTER: cluster16
-  _IMG: $1
-tags:
-  - \$COMMIT_SHA
-EOF
-
-    cat << EOF > Dockerfile
-FROM golang:alpine AS build
-
-ENV CGO_ENABLED=0
-WORKDIR /app
-RUN apk add --no-cache ca-certificates
-COPY . .
-RUN go build -mod=vendor -o /bin/app
-
-
-FROM scratch
-
-COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
-COPY --from=build /bin/app /
-
-ENTRYPOINT ["/app"]
+[![pkg.go.dev](http://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](https://pkg.go.dev/go.seankhliao.com/${repo})
 EOF
 
     cat << EOF > .dockerignore
@@ -287,47 +240,17 @@ EOF
 .github/
 .gitignore
 
-cloudbuild.yaml
-deploy/
 Dockerfile
 LICENSE
 Makefile
 README.md
-testdata/
 EOF
 
     cat << EOF > main.go
 package main
 
 func main() {
-        initLog()
-}
-EOF
 
-    cat << EOF > log.go
-package main
-
-import (
-	    "os"
-
-	    "github.com/rs/zerolog"
-	    "github.com/rs/zerolog/log"
-	    "golang.org/x/crypto/ssh/terminal"
-)
-
-func initLog() {
-	    logfmt := os.Getenv("LOGFMT")
-	    if logfmt != "json" {
-		    logfmt = "text"
-		    log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stdout, NoColor: !terminal.IsTerminal(int(os.Stdout.Fd()))})
-	    }
-
-	    level, _ := zerolog.ParseLevel(os.Getenv("LOGLVL"))
-	    if level == zerolog.NoLevel {
-		    level = zerolog.InfoLevel
-	    }
-	    // log.Info().Str("FMT", logfmt).Str("LVL", level.String()).Msg("log initialized")
-	    zerolog.SetGlobalLevel(level)
 }
 EOF
 }
@@ -342,24 +265,13 @@ function testrepo() {
     git init
     git commit --allow-empty -m "root-commit"
     git remote add origin s:${repo}
-    go mod init github.com/seankhliao/${repo}
+    go mod init go.seankhliao.com/${repo}
     cat << EOF > main.go
 package main
 
 func main() {
 
 }
-EOF
-}
-
-function blog() {
-    local filename="$*"
-    cat << EOF >  ${filename// /-}.md
---- title
-$(echo $filename | cut -c 12-)
---- description
-TODO: describe me
---- main
 EOF
 }
 
@@ -384,12 +296,6 @@ function sign() {
   for f in "$@"; do
     ssh-keygen -Y sign -f ${privkey} -n signed@seankhliao.com ${f}
   done
-}
-
-function update() {
-    yay -Syu
-    sudo gcloud components update
-    nvim +PlugUpdate +q +CocUpdateSync +q
 }
 
 function verify() {

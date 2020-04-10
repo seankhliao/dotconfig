@@ -9,19 +9,19 @@ export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
 
 # language
 # export LC_ALL=en_US.UTF-8
-# export LANG=en_US.UTF-8
+export LC_ALL=C
+export LANG=en_US.UTF-8
 
 # preferences
-# export PAGER="nvim -R"
+export BROWSER=google-chrome-unstable
 export EDITOR=vim; [[ -f /usr/bin/nvim ]] && export EDITOR=nvim
 export MANPAGER="nvim -c 'set ft=man' -"
-export BROWSER=google-chrome-unstable
 
 # programs
-# export GO111MODULE=on
+export CLOUDSDK_PYTHON=python3
 export TAG_CMD_FMT_STRING="$EDITOR {{.Filename }} +{{ .LineNumber }}"
 export TAG_SEARCH_PROG=rg
-export CLOUDSDK_PYTHON=python3
+export VIRTUAL_ENV_DISABLE_PROMPT=1
 
 # path
 export GOPATH="$XDG_DATA_HOME"/go

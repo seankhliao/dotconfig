@@ -8,6 +8,7 @@ set background=dark
 set backupdir=$XDG_DATA_HOME/nvim/backup
 set breakindent
 set clipboard=unnamedplus
+set commentstring=#\ %s
 set completeopt=menuone,noinsert,noselect,preview
 set confirm
 set copyindent
@@ -84,8 +85,8 @@ colorscheme fahrenheit
 augroup Coc
     autocmd!
     " autocmd CursorHold  *       silent call CocActionAsync('highlight')
-    autocmd BufWritePre *.go    :call CocAction('runCommand', 'editor.action.organizeImport')
-    autocmd BufWritePre *       :call CocAction('format')
+    autocmd BufWritePre *.go    silent call CocAction('runCommand', 'editor.action.organizeImport')
+    autocmd BufWritePre *       silent call CocAction('format')
     autocmd BufWritePre *       silent :%s/\s\+$//e
     autocmd BufWritePre *       silent :v/\_s*\S/d
 augroup END
@@ -111,10 +112,11 @@ inoremap <expr>         <S-TAB>     pumvisible() ? "\<C-p>" : "\<C-h>"
 
 nnoremap                ;           :
 " nnoremap <silent>       sd          :call <SID>show_documentation()<CR>
-nmap     <silent>       gd          <Plug>(coc-definition)
-nmap     <silent>       gt          <Plug>(coc-type-definition)
+nmap   <silent>         gd          <Plug>(coc-definition)
+nmap   <silent>         gt          <Plug>(coc-type-definition)
 nmap                    rn          <Plug>(coc-rename)
-
+nmap   <silent>         <TAB>       <Plug>(coc-diagnostic-next)
+nmap   <silent>         <S-TAB>     <Plug>(coc-diagnostic-prev)
 
 
 command! -nargs=0 Format    :call CocAction('format')

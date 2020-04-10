@@ -1,10 +1,12 @@
+# this is a comment
 set {
     $mod    Mod4
     $left   Left
     $down   Down
     $up     Up
     $right  Right
-    $term   kitty
+    # $term   kitty
+    $term   alacritty
     $menu   bemenu-run
 
     $ws1 1:Alpha
@@ -122,6 +124,7 @@ bar {
 # auto float (currently unsupported...
 # for_window [window_role="pop-up"] floating enable
 for_window [title="wl-clipboard"] floating enable
+for_window [class="Vncviewer"] fullscreen enable
 
 input "1739:30382:DLL0704:01_06CB:76AE_Touchpad" {
     tap                 enabled

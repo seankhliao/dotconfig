@@ -58,6 +58,7 @@
 	page = nvim -R
 
 [diff]
+    algorithm = histogram
 	renames = copies
 
 [fetch]

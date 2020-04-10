@@ -1,18 +1,15 @@
 {
   "coc.preferences.formatOnSaveFiletypes": ["css", "html", "javascript", "json", "markdown", "yaml"],
   "prettier.printWidth": 120,
+  "markdownlint.config": {
+    "line_length": false
+  },
   "languageserver": {
     "bash": {
       "command": "bash-language-server",
       "args": ["start"],
       "filetypes": ["sh"],
       "ignoredRootPaths": ["~"]
-    },
-    "clangd": {
-      "command": "clangd",
-      "args": ["--background-index"],
-      "rootPatterns": ["compile_flags.txt", "compile_commands.json", ".vim/", ".git/", ".hg/"],
-      "filetypes": ["c", "cpp", "objc", "objcpp"]
     },
     "dockerfile": {
       "command": "docker-langserver",
@@ -30,8 +27,11 @@
       "filetypes": ["go"],
       "initializationOptions": {
         "staticcheck": true,
-        "experimentalDisabledAnalyses":["ST1000"]
+        "experimentalDisabledAnalyses": ["ST1000"]
       }
     }
+  },
+  "yaml.schemas": {
+    "kubernetes": "/home/arccy/kluster/*.yaml"
   }
 }

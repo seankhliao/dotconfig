@@ -15,7 +15,6 @@ only tested for whatever I'm currently using
 - Arch Linux?
 - Sway WM?
 - neovim?
-- kitty?
 - zsh?
 
 #### Install

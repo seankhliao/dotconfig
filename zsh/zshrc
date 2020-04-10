@@ -110,8 +110,7 @@ alias .......='cd ../../../../../..'
 
 alias cp='cp -v'
 alias diff='diff --color=always'
-alias grep='grep --color=auto';  [[ -f /usr/bin/rg ]]   && alias grep='rg -N -S -p'
-alias gr='grep --color=auto';    [[ -f /usr/bin/rg ]]   && alias gr='rg -S -p'
+alias grep='grep --color=auto';  [[ -f /usr/bin/rg ]]   && alias grep='rg -S'
 alias l='ls -lh --color=auto';   [[ -f /usr/bin/exa ]]  && alias l='exa -l --git --time-style iso'
 alias ll='ls -alh --color=auto'; [[ -f /usr/bin/exa ]]  && alias ll='exa -l -a --git --time-style iso'
 alias ln='ln -v'
@@ -124,11 +123,11 @@ alias ds="df -P -kHl"
 alias drun='docker run --rm -it -v $(pwd):/workspace -w /workspace'
 alias fs='du -d 1 -h . 2>/dev/null | sort -h -r'
 alias g='git'
-# (( $+commands[gotip] )) && alias go='gotip'
 alias h='htop'
 alias p='yay'
 alias py='python3'
 alias py2='python2'
+alias rg='rg -N -S -p'
 alias s='ssh'
 alias sd='sudo systemctl'
 alias sdu='systemctl --user'
@@ -276,16 +275,20 @@ EOF
 }
 
 function encrypt() {
-  # local pubkey="ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKnAmz4u5/51kPPsebDCiYTXvuftUORh/TJ4pvN3NvQa"
-  local pubkey=age14mg08panez45c6lj2cut2l8nqja0k5vm2vxmv5zvc4ufqgptgy2qcjfmuu
+  local agekey="-r 'age14mg08panez45c6lj2cut2l8nqja0k5vm2vxmv5zvc4ufqgptgy2qcjfmuu'"
+  local eevee="-r 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKnAmz4u5/51kPPsebDCiYTXvuftUORh/TJ4pvN3NvQa'"
+  local nevers="-r 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHw7tTL1rv9DxawryvO1Vo0jUyTMD45LmayodyFG0Hby'"
+  local reims="-r 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIArhepNcdNBA7s1kPJio5gISU3Dru7u88FnlzUjrmtF/'"
+
   for f in "$@"; do
-    age -r ${pubkey} -o ${f}.age ${f}
+    age ${agekey} ${eevee} ${nevers} ${reims} -o ${f}.age ${f}
   done
 }
 
 function decrypt() {
-  # local privkey=$HOME/.ssh/id_ed25519
-  local privkey=$HOME/keys/age.key
+  local privkey=$HOME/.ssh/id_ed25519
+  [[ -f $HOME/.ssh/age.key ]] privkey=$HOME/.ssh/age.key
+
   for f in "$@"; do
     age -d -i ${privkey} -o ${f} ${f%%.age}
   done
@@ -294,14 +297,14 @@ function decrypt() {
 function sign() {
   local privkey=$HOME/.ssh/id_ed25519
   for f in "$@"; do
-    ssh-keygen -Y sign -f ${privkey} -n signed@seankhliao.com ${f}
+    ssh-keygen -Y sign -f ${privkey} -n signed ${f}
   done
 }
 
 function verify() {
-  local accepted=$HOME/keys/ssh-sign-accepted
+  local accepted=$HOME/.ssh/known_signers
   for f in "$@"; do
-    ssh-keygen -Y verify -n signed@seankhliao.com -f ${accepted} -I arccy@eevee -s ${f}.sig < ${f}
+    ssh-keygen -Y verify -n signed -f ${accepted} -I arccy@eevee -s ${f}.sig < ${f}
   done
 }
 

@@ -9,6 +9,7 @@ dlv/
 docker/
 freerdp/
 gcloud/
+gconf/
 git/credentials
 gmail/credentials.json
 GNS3/

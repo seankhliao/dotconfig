@@ -10,6 +10,12 @@ only tested for whatever I'm currently using
 
 ## Usage
 
+ignore local changes
+
+```
+git update-index --assume-unchanged <files>
+```
+
 #### Prerequisites
 
 - Arch Linux?

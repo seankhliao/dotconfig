@@ -1,3 +1,5 @@
+[advice]
+	addIgnoredFile = false
 [alias]
     a       = add
     amend   = commit --amend --reuse-message=HEAD

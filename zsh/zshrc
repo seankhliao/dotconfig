@@ -173,7 +173,6 @@ function t() {
 }
 
 function mr() {
-    set -xo pipefail
     local repo=${1// }
     [[ -z ${repo} ]] && echo "no repo name given" && return 1
     mkdir -p ${repo}
@@ -221,7 +220,6 @@ EOF
 }
 
 function mrgo() {
-    set -xo pipefail
     local repo=${1// }
     [[ -z ${repo} ]] && echo "no repo name given" && return 1
     mr ${repo}
@@ -229,6 +227,11 @@ function mrgo() {
 
     cat << EOF >> README.md
 [![pkg.go.dev](http://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](https://pkg.go.dev/go.seankhliao.com/${repo})
+
+\`\`\`go
+import "go.seankhliao.com/${repo}"
+\`\`\`
+
 EOF
 
     cat << EOF > .dockerignore

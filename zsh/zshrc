@@ -75,13 +75,13 @@ zstyle ':vcs_info:git:*' formats '%b'
 
 compinit -d $XDG_CACHE_HOME/zcompdump
 
+source "${ZDOTDIR}"/_kubectl &>/dev/null || true
+source /opt/google-cloud-sdk/completion.zsh.inc &>/dev/null || true
+
 source ${ZDOTDIR}/prompt.zsh
 source ${ZDOTDIR}/zsh-autosuggestions.zsh
 source ${ZDOTDIR}/zsh-syntax-highlighting.zsh
 source ${ZDOTDIR}/zsh-history-substring-search.zsh
-
-source "${ZDOTDIR}"/_kubectl &>/dev/null || true
-source /opt/google-cloud-sdk/completion.zsh.inc &>/dev/null || true
 
 # anonymous function
 function {

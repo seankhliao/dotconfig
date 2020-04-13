@@ -1,5 +1,5 @@
 # -------------------------------------------------------------------------------------------------
-# Copyright (c) 2010-2016 zsh-syntax-highlighting contributors
+# Copyright (c) 2010-2020 zsh-syntax-highlighting contributors
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -29,8 +29,8 @@
 
 # First of all, ensure predictable parsing.
 typeset zsh_highlight__aliases="$(builtin alias -Lm '[^+]*')"
-# In zsh <= 5.2, `alias -L` emits aliases that begin with a plus sign ('alias -- +foo=42')
-# them without a '--' guard, so they don't round trip.
+# In zsh <= 5.2, aliases that begin with a plus sign ('alias -- +foo=42')
+# are emitted by `alias -L` without a '--' guard, so they don't round trip.
 #
 # Hence, we exclude them from unaliasing:
 builtin unalias -m '[^+]*'
@@ -39,8 +39,8 @@ builtin unalias -m '[^+]*'
 0=${(%):-%N}
 if true; then
   # $0 is reliable
-  # typeset -g ZSH_HIGHLIGHT_VERSION=$(<"${0:A:h}"/.version)
-  # typeset -g ZSH_HIGHLIGHT_REVISION=$(<"${0:A:h}"/.revision-hash)
+  typeset -g ZSH_HIGHLIGHT_VERSION=$(<"${0:A:h}"/.version)
+  typeset -g ZSH_HIGHLIGHT_REVISION=$(<"${0:A:h}"/.revision-hash)
   if [[ $ZSH_HIGHLIGHT_REVISION == \$Format:* ]]; then
     # When running from a source tree without 'make install', $ZSH_HIGHLIGHT_REVISION
     # would be set to '$Format:%H$' literally.  That's an invalid value, and obtaining
@@ -73,6 +73,8 @@ _zsh_highlight()
 {
   # Store the previous command return code to restore it whatever happens.
   local ret=$?
+  # Make it read-only.  Can't combine this with the previous line when POSIX_BUILTINS may be set.
+  typeset -r ret
 
   # Remove all highlighting in isearch, so that only the underlining done by zsh itself remains.
   # For details see FAQ entry 'Why does syntax highlighting not work while searching history?'.
@@ -86,16 +88,20 @@ _zsh_highlight()
   # Before we 'emulate -L', save the user's options
   local -A zsyh_user_options
   if zmodload -e zsh/parameter; then
-    zsyh_user_options=("${(@kv)options}")
+    zsyh_user_options=("${(kv)options[@]}")
   else
     local canonical_options onoff option raw_options
     raw_options=(${(f)"$(emulate -R zsh; set -o)"})
     canonical_options=(${${${(M)raw_options:#*off}%% *}#no} ${${(M)raw_options:#*on}%% *})
-    for option in $canonical_options; do
+    for option in "${canonical_options[@]}"; do
       [[ -o $option ]]
-      # This variable cannot be eliminated c.f. workers/42101.
-      onoff=${${=:-off on}[2-$?]}
-      zsyh_user_options+=($option $onoff)
+      case $? in
+        (0) zsyh_user_options+=($option on);;
+        (1) zsyh_user_options+=($option off);;
+        (*) # Can't happen, surely?
+            echo "zsh-syntax-highlighting: warning: '[[ -o $option ]]' returned $?"
+            ;;
+      esac
     done
   fi
   typeset -r zsyh_user_options
@@ -161,12 +167,12 @@ _zsh_highlight()
       (( REGION_ACTIVE )) || return
       integer min max
       if (( MARK > CURSOR )) ; then
-	min=$CURSOR max=$MARK
+        min=$CURSOR max=$MARK
       else
-	min=$MARK max=$CURSOR
+        min=$MARK max=$CURSOR
       fi
       if (( REGION_ACTIVE == 1 )); then
-	[[ $KEYMAP = vicmd ]] && (( max++ ))
+        [[ $KEYMAP = vicmd ]] && (( max++ ))
       elif (( REGION_ACTIVE == 2 )); then
         local needle=$'\n'
         # CURSOR and MARK are 0 indexed between letters like region_highlight
@@ -287,7 +293,7 @@ _zsh_highlight_add_highlight()
 # $1 is name of widget to call
 _zsh_highlight_call_widget()
 {
-  builtin zle "$@" &&
+  builtin zle "$@" && 
   _zsh_highlight
 }
 
@@ -336,7 +342,7 @@ _zsh_highlight_bind_widgets()
               zle -N $cur_widget _zsh_highlight_widget_$prefix-$cur_widget;;
 
       # Completion widget: override and rebind old one with prefix "orig-".
-      completion:*) zle -C $prefix-$cur_widget ${${(s.:.)widgets[$cur_widget]}[2,3]}
+      completion:*) zle -C $prefix-$cur_widget ${${(s.:.)widgets[$cur_widget]}[2,3]} 
                     eval "_zsh_highlight_widget_${(q)prefix}-${(q)cur_widget}() { _zsh_highlight_call_widget ${(q)prefix}-${(q)cur_widget} -- \"\$@\" }"
                     zle -N $cur_widget _zsh_highlight_widget_$prefix-$cur_widget;;
 
@@ -345,7 +351,7 @@ _zsh_highlight_bind_widgets()
                zle -N $cur_widget _zsh_highlight_widget_$prefix-$cur_widget;;
 
       # Incomplete or nonexistent widget: Bind to z-sy-h directly.
-      *)
+      *) 
          if [[ $cur_widget == zle-* ]] && (( ! ${+widgets[$cur_widget]} )); then
            _zsh_highlight_widget_${cur_widget}() { :; _zsh_highlight }
            zle -N $cur_widget _zsh_highlight_widget_$cur_widget

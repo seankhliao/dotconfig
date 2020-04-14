@@ -9,7 +9,7 @@ function _preexec() {
 function _precmd() {
     integer elapsed=$(( EPOCHSECONDS - ${prompt_timestamp:-$EPOCHSECONDS} ))
     local human="$(( elapsed / 3600 )):${(l:2::0:)$(( elapsed / 60 % 60 ))}:${(l:2::0:)$(( elapsed % 60 ))}"
-    # vcs_info
+    vcs_info
     local newline=$'\n%{\r%}'
 
     PROMPT="${newline}%F{green}%*%f %F{blue}%~%f %F{yellow}${human}%f${newline}"

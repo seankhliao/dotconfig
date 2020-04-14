@@ -62,13 +62,13 @@ bindkey '^[[F' end-of-line
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' gain-privileges true
 zstyle ':completion:*' list-colors "${(@s.:.)LS_COLORS}"
+zstyle ':completion:*' menu select
+zstyle ':completion:*' rehash true
+zstyle ':completion:*' use-cache true
 zstyle ':completion:*' matcher-list '' \
     '+m:{a-z}={A-Z}' '+m:{A-Z}={a-z}' \
     'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-}={A-Z\_}' \
     'r:|?=** m:{a-z\-}={A-Z\_}'
-zstyle ':completion:*' menu select
-zstyle ':completion:*' rehash true
-zstyle ':completion:*' use-cache true
 
 zstyle ':vcs_info:*' enable git
 zstyle ':vcs_info:git:*' formats '%b'

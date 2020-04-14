@@ -9,12 +9,13 @@ function _preexec() {
 function _precmd() {
     integer elapsed=$(( EPOCHSECONDS - ${prompt_timestamp:-$EPOCHSECONDS} ))
     local human="$(( elapsed / 3600 )):${(l:2::0:)$(( elapsed / 60 % 60 ))}:${(l:2::0:)$(( elapsed % 60 ))}"
-    vcs_info
+    # vcs_info
     local newline=$'\n%{\r%}'
 
     PROMPT="${newline}%F{green}%*%f %F{blue}%~%f %F{yellow}${human}%f${newline}"
-    PROMPT+="%F{242}${STY:+${STY} }${VIRTUAL_ENV:+${VIRTUAL_ENV} }${vcs_info_msg_0_:+${vcs_info_msg_0_} }%f"
-    PROMPT+="%(?.%F{magenta}.%F{red})${SSH_CONNECTION+%n@%m}»%f "
+    PROMPT+="%F{242}${STY:+screen-}${VIRTUAL_ENV:+venv-}${vcs_info_msg_0_:+${vcs_info_msg_0_} }%f"
+    PROMPT+="%(?.%F{magenta}.%F{red})${SSH_CONNECTION+%n@%m}>%f "
+    # "»" character causes bugs
 }
 
 add-zsh-hook precmd  _precmd

@@ -39,8 +39,8 @@ builtin unalias -m '[^+]*'
 0=${(%):-%N}
 if true; then
   # $0 is reliable
-  typeset -g ZSH_HIGHLIGHT_VERSION=$(<"${0:A:h}"/.version)
-  typeset -g ZSH_HIGHLIGHT_REVISION=$(<"${0:A:h}"/.revision-hash)
+  # typeset -g ZSH_HIGHLIGHT_VERSION=$(<"${0:A:h}"/.version)
+  # typeset -g ZSH_HIGHLIGHT_REVISION=$(<"${0:A:h}"/.revision-hash)
   if [[ $ZSH_HIGHLIGHT_REVISION == \$Format:* ]]; then
     # When running from a source tree without 'make install', $ZSH_HIGHLIGHT_REVISION
     # would be set to '$Format:%H$' literally.  That's an invalid value, and obtaining
@@ -293,7 +293,7 @@ _zsh_highlight_add_highlight()
 # $1 is name of widget to call
 _zsh_highlight_call_widget()
 {
-  builtin zle "$@" && 
+  builtin zle "$@" &&
   _zsh_highlight
 }
 
@@ -342,7 +342,7 @@ _zsh_highlight_bind_widgets()
               zle -N $cur_widget _zsh_highlight_widget_$prefix-$cur_widget;;
 
       # Completion widget: override and rebind old one with prefix "orig-".
-      completion:*) zle -C $prefix-$cur_widget ${${(s.:.)widgets[$cur_widget]}[2,3]} 
+      completion:*) zle -C $prefix-$cur_widget ${${(s.:.)widgets[$cur_widget]}[2,3]}
                     eval "_zsh_highlight_widget_${(q)prefix}-${(q)cur_widget}() { _zsh_highlight_call_widget ${(q)prefix}-${(q)cur_widget} -- \"\$@\" }"
                     zle -N $cur_widget _zsh_highlight_widget_$prefix-$cur_widget;;
 
@@ -351,7 +351,7 @@ _zsh_highlight_bind_widgets()
                zle -N $cur_widget _zsh_highlight_widget_$prefix-$cur_widget;;
 
       # Incomplete or nonexistent widget: Bind to z-sy-h directly.
-      *) 
+      *)
          if [[ $cur_widget == zle-* ]] && (( ! ${+widgets[$cur_widget]} )); then
            _zsh_highlight_widget_${cur_widget}() { :; _zsh_highlight }
            zle -N $cur_widget _zsh_highlight_widget_$cur_widget

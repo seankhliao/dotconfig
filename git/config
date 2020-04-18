@@ -14,7 +14,7 @@
 
     cam     = !git commit -a -m "\""$*"\"" && :
     camp    = !git commit -a -m "\""$*"\"" && git push && :
-    cm      = commit -m
+    cm      = !git commit  -m "\""$*"\"" && :
 
     d       = diff
     dh      = diff HEAD

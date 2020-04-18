@@ -64,7 +64,7 @@ zstyle ':completion:*' gain-privileges true
 zstyle ':completion:*' list-colors "${(@s.:.)LS_COLORS}"
 zstyle ':completion:*' menu select
 zstyle ':completion:*' rehash true
-zstyle ':completion:*' use-cache true
+# zstyle ':completion:*' use-cache true
 zstyle ':completion:*' matcher-list '' \
     '+m:{a-z}={A-Z}' '+m:{A-Z}={a-z}' \
     'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-}={A-Z\_}' \
@@ -74,7 +74,9 @@ zstyle ':vcs_info:*' enable git
 zstyle ':vcs_info:git:*' formats '%b'
 
 compinit -d $XDG_CACHE_HOME/zcompdump
+bashcompinit
 
+complete -o nospace -C /home/arccy/data/xdg/go/bin/kustomize kustomize
 source "${ZDOTDIR}"/_kubectl &>/dev/null || true
 source /opt/google-cloud-sdk/completion.zsh.inc &>/dev/null || true
 

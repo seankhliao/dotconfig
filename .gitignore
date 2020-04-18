@@ -34,6 +34,7 @@ nvim/autoload
 nvim/.netrwhist
 nvim/plugged
 Outline Manager/
+pavucontrol.ini
 pulse/
 qBittorrent/
 QtProject.conf

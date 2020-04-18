@@ -89,6 +89,7 @@ augroup Coc
     autocmd BufWritePre *       silent call CocAction('format')
     autocmd BufWritePre *       silent :%s/\s\+$//e
     autocmd BufWritePre *       silent :v/\_s*\S/d
+    autocmd BufWritePre *       silent :nohlsearch
 augroup END
 
 " if argc() == 0

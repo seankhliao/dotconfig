@@ -7,7 +7,8 @@ set {
     $right  Right
     # $term   kitty
     $term   alacritty
-    $menu   bemenu-run
+    # $menu   bemenu-run
+    $menu   wofi
 
     $ws1 1:Alpha
     $ws2 2:Beta

@@ -1,0 +1,54 @@
+window {
+  /* margin: 5px;           */
+  /* border: 2px solid red; */
+  /* background-color: red; */
+  font-size: 24px;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+#input {
+  color: #a9a7c1;
+  /* margin: 5px; */
+  /* border: 2px solid blue; */
+  border: none;
+  background-color: #1e1f20;
+}
+
+#inner-box {
+  /* margin: 5px;              */
+  /* border: 2px solid yellow; */
+  /* background-color: yellow; */
+}
+
+#outer-box {
+  /* margin: 5px;             */
+  /* border: 2px solid green; */
+  /* background-color: green; */
+}
+
+#scroll {
+  /* margin: 5px;              */
+  /* border: 2px solid orange; */
+  /* background-color: orange; */
+  background-color: #1e1f20;
+}
+
+#entry {
+  border: none;
+}
+#entry:selected {
+  border: none;
+  background-color: #232a32;
+}
+
+#text {
+  color: #a9a7c1;
+  /* margin: 5px;            */
+  /* border: 2px solid cyan; */
+  /* background-color: cyan; */
+}
+
+#selected {
+  border: none;
+  background-color: #232a32;
+}

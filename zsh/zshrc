@@ -159,11 +159,14 @@ function gsall() {
     local bold=$(tput bold)
     local normal=$(tput sgr0)
 
+
     for dir in ./*; do
         if [[ -d ${dir} ]] && [[ -d ${dir}/.git ]]; then
-            echo "\n${bold}$dir${normal}"
-            git -C ${dir} log --oneline origin/master..HEAD
-            git -C ${dir} status -s
+            if ! git -C ${dir} diff-index --quiet HEAD ; then
+                echo "\n${bold}$dir${normal}"
+                git -C ${dir} log --oneline origin/master..HEAD
+                git -C ${dir} status -s
+            fi
         fi
     done
 }

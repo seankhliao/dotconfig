@@ -125,7 +125,7 @@ bar {
 # for_window [window_role="pop-up"] floating enable
 for_window [title="wl-clipboard"] floating enable
 for_window [class="Vncviewer"] fullscreen enable
-for_window [title="OpenCPN 5.0.0"] fullscreen enable
+# for_window [title="OpenCPN 5.0.0"] fullscreen enable
 
 input "1739:30382:DLL0704:01_06CB:76AE_Touchpad" {
     tap                 enabled

@@ -8,7 +8,6 @@
     bprune  = fetch -a
     bd      = branch -D
     bn      = checkout -b
-    bm      = checkout master
 
     c       = clone --recursive
 
@@ -19,14 +18,15 @@
     d       = diff
     dh      = diff HEAD
 
-    discard   = clean -dfx
+    # discard   = clean -dfx
 
     l       = pull --rebase --autostash
 
     lo      = log --all --graph --format='%C(auto)%h%d %s %C( bold black)%cr %C(blue)<%an>'
     los     = log --all --graph --simplify-by-decoration --format='%C(auto)%h%d %s %C( bold black)%cr %C(blue)<%an>'
 
-    m       = merge
+    # squashm = !git merge --squash $1 && git commit && :
+    squashm = !git rebase -i master $1 && git checkout master && git merge --ff-only $1 && :
 
     p       = push
     pu      = push -u origin HEAD
@@ -35,7 +35,7 @@
 
     t       = tag
     td      = tag -d
-    tl      = tag -l
+    # tl      = tag -l
 
 [color]
     ui = auto
@@ -57,14 +57,21 @@
 	untracked = red
 
 [core]
-	page = nvim -R
+    # or set $GIT_PAGER
+	pager = nvim -R
 
 [diff]
     algorithm = histogram
-	renames = copies
+	# renames = copies
 
 [fetch]
+    parallel = 0
     prune = true
+    pruneTags = true
+
+[rebase]
+    autoStash = true
+    abbreviateCommands = true
 
 [tag]
 	sort = version:refname

@@ -20,7 +20,7 @@
 
     # discard   = clean -dfx
 
-    l       = pull --rebase --autostash
+    l       = pull
 
     lo      = log --all --graph --format='%C(auto)%h%d %s %C( bold black)%cr %C(blue)<%an>'
     los     = log --all --graph --simplify-by-decoration --format='%C(auto)%h%d %s %C( bold black)%cr %C(blue)<%an>'
@@ -58,10 +58,11 @@
 
 [core]
     # or set $GIT_PAGER
-	pager = nvim -R
+	page = nvim -R
 
 [diff]
     algorithm = histogram
+	external = $XDG_CONFIG_HOME/git/diff.sh
 	# renames = copies
 
 [fetch]
@@ -89,3 +90,5 @@
 [user]
     email = seankhliao@gmail.com
     name = Sean Liao
+[pager]
+	diff = false

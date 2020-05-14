@@ -121,7 +121,7 @@ alias diff='diff --color=always'
 alias ln='ln -v'
 alias ls='ls --color'
 alias mv='mv -v'
-alias sudo='sudo -E'
+# alias sudo='sudo -E'
 
 # alias cicd='gcloud builds log --stream $(gcloud builds list --filter=tags="$(git rev-parse HEAD)" --limit=1 --format="value(id)")'
 alias cils='tkn -n build pr list'

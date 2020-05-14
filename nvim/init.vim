@@ -64,6 +64,7 @@ call plug#begin('$XDG_DATA_HOME/nvim/plugin')
     " Interactive
     Plug 'lambdalisue/suda.vim' " sudo write
     Plug 'tyru/caw.vim'         " comments
+    Plug 'fcpg/vim-osc52'       " ssh clipboard
 
     " completion
     Plug 'sheerun/vim-polyglot'

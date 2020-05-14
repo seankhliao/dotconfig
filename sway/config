@@ -22,6 +22,8 @@ set {
     $ws10 10:Lambda
 }
 
+font IBM Plex Mono 11
+
 # background
 output * background $XDG_CONFIG_HOME/sway/bg.jpg fill
 

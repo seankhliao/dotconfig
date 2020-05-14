@@ -20,7 +20,7 @@
 
     # discard   = clean -dfx
 
-    l       = pull
+    l       = pull --rebase --autostash
 
     lo      = log --all --graph --format='%C(auto)%h%d %s %C( bold black)%cr %C(blue)<%an>'
     los     = log --all --graph --simplify-by-decoration --format='%C(auto)%h%d %s %C( bold black)%cr %C(blue)<%an>'

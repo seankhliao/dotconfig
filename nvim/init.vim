@@ -59,7 +59,7 @@ call plug#begin('$XDG_DATA_HOME/nvim/plugin')
     Plug 'nathanaelkane/vim-indent-guides'
 
     " Interactive
-    Plug 'lambdalisue/suda.vim' " sudo write
+    " Plug 'lambdalisue/suda.vim' " sudo write
     Plug 'tyru/caw.vim'         " comments
 
     " completion
@@ -100,7 +100,8 @@ augroup END
 " keymaps, abbrevs: (*nore*: no recursive)
 cnoreabbrev cr          !google-chrome-unstable % 2>/dev/null
 cnoreabbrev WQ          wq
-cnoreabbrev W           w suda://%
+" cnoreabbrev W           w suda://%
+cnoreabbrev W           execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
 
 inoremap <silent><expr> <TAB>       pumvisible() ? "\<C-n>" :  <SID>check_back_space() ? "\<TAB>" : coc#refresh()
 inoremap <expr>         <S-TAB>     pumvisible() ? "\<C-p>" : "\<C-h>"

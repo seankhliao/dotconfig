@@ -104,8 +104,8 @@ alias -s go='go run'
 (( $+commands[python3] )) && alias -s py='python3' || alias -s py='python';
 
 (( $+commands[rg] )) && alias grep='rg -S' || alias grep='grep --color=auto'
-(( $+commands[exa] )) && alias l='exa -l --git --time-style iso' || alias l='ls -lh --color=auto';
-(( $+commands[exa] )) && alias ll='exa -l -a --git --time-style iso' || alias ll='ls -alh --color=auto';
+(( $+commands[exa] )) && alias l='exa -l --git --time-style iso --group-directories-first' || alias l='ls -lh --color=auto';
+(( $+commands[exa] )) && alias ll='exa -l -a --git --time-style iso --group-directories-first' || alias ll='ls -alh --color=auto';
 (( $+commands[nvim] )) && alias v='nvim' || alias v='vim'
 (( $+commands[nvim] )) && alias vbare='nvim -u NONE' || alias v='vim -u NONE'
 
@@ -138,8 +138,8 @@ alias py='python3'
 alias py2='python2'
 alias rg='rg -N -S -p'
 alias s='ssh'
-alias sd='sudo systemctl'
-alias sdu='systemctl --user'
+alias sc='sudo systemctl'
+alias scu='systemctl --user'
 alias sne='ssh sne'
 
 function gcamp_patch(){

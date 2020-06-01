@@ -34,6 +34,7 @@ bindsym {
     $mod+Shift+t            exec google-chrome-stable --disk-cache-dir=/tmp/cache
     $mod+Return             exec $term
     $mod+d                  exec $menu
+    $mod+c                  exec makoctl dismiss
 
     XF86AudioRaiseVolume    exec amixer sset Master 5%+
     XF86AudioLowerVolume    exec amixer sset Master 5%-

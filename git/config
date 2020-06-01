@@ -92,3 +92,5 @@
     name = Sean Liao
 [pager]
 	diff = false
+[http]
+	cookiefile = /home/arccy/.config/git/cookies

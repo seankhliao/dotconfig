@@ -4,9 +4,9 @@ general {
         interval = 1
 }
 
-order += "ethernet wg6"
-order += "ethernet wg4"
-order += "ethernet wg0"
+# order += "ethernet wg6"
+# order += "ethernet wg4"
+# order += "ethernet wg0"
 order += "ethernet _first_"
 order += "wireless _first_"
 order += "disk /"

@@ -2,6 +2,7 @@ android/
 ardour5/
 binwalk/
 boto/
+chromium/
 coc/
 configstore/
 containers/
@@ -12,6 +13,7 @@ freerdp/
 gcloud/
 gconf/
 git/credentials
+git/cookies
 gmail/credentials.json
 GNS3/
 gnuais/
@@ -22,6 +24,7 @@ gsutil/
 gtk-*
 helm/
 hub/
+java/
 jupyter/
 keybase/
 Keybase/

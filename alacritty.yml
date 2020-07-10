@@ -393,7 +393,7 @@ mouse:
     #   - (Linux/BSD) xdg-open
     #   - (Windows) explorer
     launcher:
-      program: google-chrome-unstable
+      program: google-chrome-stable
     #  args: []
     # URL modifiers
     #

@@ -30,15 +30,16 @@ output * background $XDG_CONFIG_HOME/sway/bg.jpg fill
 bindsym {
     # Screenshot
     Print                   exec grim -g "$(slurp)" "$HOME/data/screen/$(date +'%Y-%m-%d-%H%M%S').png"
-    $mod+t                  exec google-chrome-unstable --disk-cache-dir=/tmp/cache
-    $mod+Shift+t            exec google-chrome-stable --disk-cache-dir=/tmp/cache
+    $mod+t                  exec google-chrome-stable
     $mod+Return             exec $term
     $mod+d                  exec $menu
+    $mod+s                  exec spotify
+    $mod+w                  exec alacritty -t weechat -e weechat
     $mod+c                  exec makoctl dismiss
 
-    XF86AudioRaiseVolume    exec amixer sset Master 5%+
-    XF86AudioLowerVolume    exec amixer sset Master 5%-
-    XF86AudioMute           exec amixer sset Master toggle
+    XF86AudioRaiseVolume    exec pulsemixer --change-volume +5
+    XF86AudioLowerVolume    exec pulsemixer --change-volume -5
+    XF86AudioMute           exec pulsemixer --toggle-mute
     XF86MonBrightnessUp     exec brightnessctl -d intel_backlight set +10%
     XF86MonBrightnessDown   exec brightnessctl -d intel_backlight set 10%-
     XF86AudioPlay           exec playerctl play-pause
@@ -129,6 +130,8 @@ bar {
 # for_window [window_role="pop-up"] floating enable
 for_window [title="wl-clipboard"] floating enable
 for_window [class="Vncviewer"] fullscreen enable
+assign [class="Spotify"] workspace $ws9
+assign [title="weechat"] workspace $ws10
 # for_window [title="OpenCPN 5.0.0"] fullscreen enable
 
 input "1739:30382:DLL0704:01_06CB:76AE_Touchpad" {

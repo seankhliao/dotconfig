@@ -1,5 +1,6 @@
 [advice]
 	addIgnoredFile = false
+
 [alias]
     a       = add
     amend   = commit --amend --reuse-message=HEAD
@@ -26,7 +27,7 @@
     los     = log --all --graph --simplify-by-decoration --format='%C(auto)%h%d %s %C( bold black)%cr %C(blue)<%an>'
 
     # squashm = !git merge --squash $1 && git commit && :
-    squashm = !git rebase -i master $1 && git checkout master && git merge --ff-only $1 && :
+    # squashm = !git rebase -i master $1 && git checkout master && git merge --ff-only $1 && :
 
     p       = push
     pu      = push -u origin HEAD
@@ -34,7 +35,7 @@
     s       = status
 
     t       = tag
-    td      = tag -d
+    # td      = tag -d
     # tl      = tag -l
 
 [color]
@@ -58,12 +59,11 @@
 
 [core]
     # or set $GIT_PAGER
-	page = nvim -R
+	# page = nvim -R
 
 [diff]
     algorithm = histogram
-	external = $XDG_CONFIG_HOME/git/diff.sh
-	# renames = copies
+	# external = $XDG_CONFIG_HOME/git/diff.sh
 
 [fetch]
     parallel = 0
@@ -90,7 +90,9 @@
 [user]
     email = seankhliao@gmail.com
     name = Sean Liao
+
 [pager]
-	diff = false
+	# diff = false
+
 [http]
 	cookiefile = /home/arccy/.config/git/cookies

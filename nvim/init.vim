@@ -95,37 +95,16 @@ augroup Coc
     autocmd BufWritePre *       silent :nohlsearch
 augroup END
 
-
-
-" keymaps, abbrevs: (*nore*: no recursive)
-cnoreabbrev cr          !google-chrome-unstable % 2>/dev/null
 cnoreabbrev WQ          wq
 " cnoreabbrev W           w suda://%
 cnoreabbrev W           execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
-
-inoremap <silent><expr> <TAB>       pumvisible() ? "\<C-n>" :  <SID>check_back_space() ? "\<TAB>" : coc#refresh()
-inoremap <expr>         <S-TAB>     pumvisible() ? "\<C-p>" : "\<C-h>"
-
-nnoremap                ;           :
-
 nmap   <silent>         gd          <Plug>(coc-definition)
 nmap   <silent>         gt          <Plug>(coc-type-definition)
 nmap                    rn          <Plug>(coc-rename)
 nmap   <silent>         <TAB>       <Plug>(coc-diagnostic-next)
-nmap   <silent>         <S-TAB>     <Plug>(coc-diagnostic-prev)
-
 
 command! -nargs=0 Format    :call CocAction('format')
 command! -nargs=0 Import    :call CocAction('runCommand', 'editor.action.organizeImport')
-
-
-
-" coc
-function! s:check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
 " uncomment for osc 52 (ssh clipboard)
 " also add bash script to somewhere in $PATH
 "
@@ -192,3 +171,12 @@ endfunction
 " }
 "
 " main "$@"
+let g:clipboard = {
+      \ 'name': 'myClipboard',
+      \     'copy': {
+      \         '+': 'clipboard-provider copy',
+      \     },
+      \     'paste': {
+      \         '+': 'clipboard-provider paste',
+      \     },
+      \ }

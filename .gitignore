@@ -59,5 +59,6 @@ wireshark/
 yarn/
 Yubico/
 zsh/_*
+zsh/.zcompcache
 zsh/.zcompdump
 *.zwc

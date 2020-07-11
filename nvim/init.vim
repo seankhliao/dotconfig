@@ -190,12 +190,3 @@ endfunction
 " }
 "
 " main "$@"
-let g:clipboard = {
-      \ 'name': 'myClipboard',
-      \     'copy': {
-      \         '+': 'clipboard-provider copy',
-      \     },
-      \     'paste': {
-      \         '+': 'clipboard-provider paste',
-      \     },
-      \ }

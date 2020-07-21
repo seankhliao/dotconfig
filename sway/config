@@ -33,9 +33,8 @@ bindsym {
     $mod+t                  exec google-chrome-stable
     $mod+Return             exec $term
     $mod+d                  exec $menu
-    $mod+s                  exec spotify
-    $mod+w                  exec alacritty -t weechat -e weechat
     $mod+c                  exec makoctl dismiss
+    $mod+i                  exec alacritty -t irc -e gcloud compute ssh arch -- -t screen -r weechat
 
     XF86AudioRaiseVolume    exec pulsemixer --change-volume +5
     XF86AudioLowerVolume    exec pulsemixer --change-volume -5
@@ -131,7 +130,7 @@ bar {
 for_window [title="wl-clipboard"] floating enable
 for_window [class="Vncviewer"] fullscreen enable
 assign [class="Spotify"] workspace $ws9
-assign [title="weechat"] workspace $ws10
+assign [title="irc"] workspace $ws10
 # for_window [title="OpenCPN 5.0.0"] fullscreen enable
 
 input "1739:30382:DLL0704:01_06CB:76AE_Touchpad" {

@@ -34,7 +34,8 @@ bindsym {
     $mod+Return             exec $term
     $mod+d                  exec $menu
     $mod+c                  exec makoctl dismiss
-    $mod+i                  exec alacritty -t irc -e gcloud compute ssh arch -- -t screen -r weechat
+    $mod+i                  exec alacritty -t irc -e weechat
+    # $mod+i                  exec alacritty -t irc -e ssh arch -t screen -r weechat
 
     XF86AudioRaiseVolume    exec pulsemixer --change-volume +5
     XF86AudioLowerVolume    exec pulsemixer --change-volume -5

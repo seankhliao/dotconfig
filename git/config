@@ -70,6 +70,9 @@
     prune = true
     pruneTags = true
 
+[pull]
+    rebase = true
+
 [rebase]
     autoStash = true
     abbreviateCommands = true

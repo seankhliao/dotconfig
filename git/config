@@ -70,6 +70,9 @@
     prune = true
     pruneTags = true
 
+[init]
+    defaultBranch = main
+
 [pull]
     rebase = true
 
@@ -99,3 +102,5 @@
 
 [http]
 	cookiefile = /home/arccy/.config/git/cookies
+[credential "https://source.developers.google.com"]
+	helper = gcloud.sh

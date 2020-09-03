@@ -101,13 +101,12 @@ function {
 }
 
 alias -s go='go run'
-(( $+commands[python3] )) && alias -s py='python3' || alias -s py='python';
-
-(( $+commands[rg] )) && alias grep='rg -S' || alias grep='grep --color=auto'
-(( $+commands[exa] )) && alias l='exa -l --git --time-style iso --group-directories-first' || alias l='ls -lh --color=auto';
-(( $+commands[exa] )) && alias ll='exa -l -a --git --time-style iso --group-directories-first' || alias ll='ls -alh --color=auto';
-(( $+commands[nvim] )) && alias v='nvim' || alias v='vim'
-(( $+commands[nvim] )) && alias vbare='nvim -u NONE' || alias v='vim -u NONE'
+(( $+commands[python3] )) && alias -s py='python3'                                                  || alias -s py='python';
+(( $+commands[rg] ))      && alias grep='rg -S'                                                     || alias grep='grep --color=auto'
+(( $+commands[exa] ))     && alias l='exa -l --git --time-style iso --group-directories-first'      || alias l='ls -lh --color=auto';
+(( $+commands[exa] ))     && alias ll='exa -l -a --git --time-style iso --group-directories-first'  || alias ll='ls -alh --color=auto';
+(( $+commands[nvim] ))    && alias v='nvim'                                                         || alias v='vim'
+(( $+commands[nvim] ))    && alias vbare='nvim -u NONE'                                             || alias v='vim -u NONE'
 
 alias ..='cd ..'
 alias ...='cd ../..'
@@ -123,16 +122,11 @@ alias ls='ls --color'
 alias mv='mv -v'
 # alias sudo='sudo -E'
 
-# alias cicd='gcloud builds log --stream $(gcloud builds list --filter=tags="$(git rev-parse HEAD)" --limit=1 --format="value(id)")'
-alias cils='tkn -n build pr list'
-alias cilogs='tkn -n build pr logs -f'
+# alias bt='sudo systemctl start bluetooth && bluetoothctl power on && bluetoothctl connect CC:98:8B:F5:00:14'
+# alias btoff='bluetoothctl power off'
 alias cr='google-chrome-unstable'
-# alias ds="df -P -kHl"
-alias drun='docker run --rm -it -v $(pwd):/workspace -w /workspace'
-# alias fs='du -d 1 -h . 2>/dev/null | sort -h -r'
 alias g='git'
 alias h='htop'
-alias kapply='kustomize build | kubectl apply -f -'
 alias p='yay'
 alias py='python3'
 alias py2='python2'
@@ -140,7 +134,6 @@ alias rg='rg -N -S -p'
 alias s='ssh'
 alias sc='sudo systemctl'
 alias scu='systemctl --user'
-alias sne='ssh sne'
 
 function gcamp_patch(){
     git commit -a -m "${*}"

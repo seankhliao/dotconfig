@@ -1,0 +1,5 @@
+#!/bin/sh
+
+sudo systemctl start bluetooth
+bluetoothctl power on
+bluetoothctl connect CC:98:8B:F5:00:14

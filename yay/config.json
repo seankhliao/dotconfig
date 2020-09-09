@@ -12,8 +12,8 @@
   "rebuild": "no",
   "batchinstall": true,
   "answerclean": "no",
-  "answerdiff": "N",
-  "answeredit": "",
+  "answerdiff": "no",
+  "answeredit": "no",
   "answerupgrade": "",
   "gitbin": "git",
   "gpgbin": "gpg",
@@ -41,4 +41,3 @@
   "combinedupgrade": true,
   "useask": false
 }
-

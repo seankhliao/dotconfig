@@ -2,6 +2,7 @@ android/
 ardour5/
 binwalk/
 boto/
+chrome-custom/
 chromium/
 coc/
 configstore/
@@ -36,6 +37,7 @@ neofetch/
 nvim/autoload
 nvim/.netrwhist
 nvim/plugged
+nvim/pack
 Outline Manager/
 pavucontrol.ini
 pulse/

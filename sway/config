@@ -31,6 +31,8 @@ bindsym {
     # Screenshot
     Print                   exec grim -g "$(slurp)" "$HOME/data/screen/$(date +'%Y-%m-%d-%H%M%S').png"
     $mod+t                  exec google-chrome-stable
+    $mod+n                  exec google-chrome-stable --incognito
+    $mod+Shift+t            exec google-chrome-stable --user-data-dir="$HOME/.config/chrome-custom"
     $mod+Return             exec $term
     $mod+d                  exec $menu
     $mod+c                  exec makoctl dismiss

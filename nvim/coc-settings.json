@@ -1,5 +1,6 @@
 {
   "coc.preferences.formatOnSaveFiletypes": ["css", "html", "javascript", "json", "markdown", "yaml"],
+  "pairs.enableCharacters": ["(", "[", "{", "'", "\"", "`"],
   "prettier.printWidth": 120,
   "markdownlint.config": {
     "line_length": false
@@ -23,12 +24,17 @@
     },
     "golang": {
       "command": "gopls",
+      "args": ["serve"],
       "rootPatterns": ["go.mod"],
       "filetypes": ["go"],
       "initializationOptions": {
         "staticcheck": true,
         "experimentalDisabledAnalyses": ["ST1000"]
       }
+    },
+    "lua": {
+      "command": "lua-language-server",
+      "filetypes": ["lua"]
     }
   },
   "yaml.schemas": {

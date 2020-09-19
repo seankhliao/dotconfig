@@ -76,9 +76,10 @@ zstyle ':vcs_info:git:*' formats '%b'
 compinit -d $XDG_CACHE_HOME/zcompdump
 bashcompinit
 
-complete -o nospace -C /home/arccy/data/xdg/go/bin/kustomize kustomize
+complete -o nospace -C /usr/bin/kustomize kustomize
 complete -o nospace -C /usr/bin/terraform terraform
 source "${ZDOTDIR}"/_kubectl &>/dev/null || true
+source "${ZDOTDIR}"/_gh &>/dev/null || true
 source /opt/google-cloud-sdk/completion.zsh.inc &>/dev/null || true
 
 source ${ZDOTDIR}/prompt.zsh
@@ -125,7 +126,7 @@ alias mv='mv -v'
 
 # alias bt='sudo systemctl start bluetooth && bluetoothctl power on && bluetoothctl connect CC:98:8B:F5:00:14'
 # alias btoff='bluetoothctl power off'
-alias cr='google-chrome-unstable'
+alias cr='google-chrome-stable'
 alias g='git'
 alias h='htop'
 alias p='yay'
@@ -135,6 +136,7 @@ alias rg='rg -N -S -p'
 alias s='ssh'
 alias sc='sudo systemctl'
 alias scu='systemctl --user'
+alias tf='terraform'
 
 function gcamp_patch(){
     git commit -a -m "${*}"
@@ -155,9 +157,9 @@ function gsall() {
 
     for dir in ./*; do
         if [[ -d ${dir} ]] && [[ -d ${dir}/.git ]]; then
-            if ! git -C ${dir} diff-index --quiet HEAD || ! git -C ${dir} diff-index --quiet origin/master; then
+            if ! git -C ${dir} diff-index --quiet HEAD || ! git -C ${dir} diff-index --quiet origin/main; then
                 echo "\n${bold}$dir${normal}"
-                git -C ${dir} log --oneline origin/master..HEAD
+                git -C ${dir} log --oneline origin/main..HEAD
                 git -C ${dir} status -s
             fi
         fi

@@ -13,6 +13,7 @@ docker/
 freerdp/
 gcloud/
 gconf/
+gh/
 git/credentials
 git/cookies
 gmail/credentials.json

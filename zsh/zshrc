@@ -85,7 +85,13 @@ source ${ZDOTDIR}/_kubectl &>/dev/null || true
 source /opt/google-cloud-sdk/completion.zsh.inc &>/dev/null || true
 
 source ${ZDOTDIR}/prompt.zsh
+
+# inline suggestion
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=7'
+export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=40
+export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=1
 source ${ZDOTDIR}/zsh-autosuggestions.zsh
+
 source ${ZDOTDIR}/zsh-syntax-highlighting.zsh
 source ${ZDOTDIR}/zsh-history-substring-search.zsh
 

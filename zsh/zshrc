@@ -93,6 +93,7 @@ export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=1
 source ${ZDOTDIR}/zsh-autosuggestions.zsh
 
 source ${ZDOTDIR}/zsh-syntax-highlighting.zsh
+
 source ${ZDOTDIR}/zsh-history-substring-search.zsh
 
 # anonymous function

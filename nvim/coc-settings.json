@@ -1,5 +1,5 @@
 {
-  "coc.preferences.formatOnSaveFiletypes": ["css", "html", "javascript", "json", "markdown", "yaml"],
+  "coc.preferences.formatOnSaveFiletypes": ["css", "go", "html", "javascript", "json", "markdown", "terraform", "yaml"],
   "pairs.enableCharacters": ["(", "[", "{", "'", "\"", "`"],
   "prettier.printWidth": 120,
   "markdownlint.config": {
@@ -9,7 +9,7 @@
     "bash": {
       "command": "bash-language-server",
       "args": ["start"],
-      "filetypes": ["sh"],
+      "filetypes": ["sh", "bash"],
       "ignoredRootPaths": ["~"]
     },
     "dockerfile": {
@@ -17,7 +17,6 @@
       "filetypes": ["Dockerfile"],
       "args": ["--stdio"],
       "initializationOptions": {
-        "deprecatedMaintainer": "warning",
         "directiveCasing": "error",
         "emptyContinuationLine": "error"
       }
@@ -26,10 +25,13 @@
       "command": "gopls",
       "args": ["serve"],
       "rootPatterns": ["go.mod"],
-      "filetypes": ["go"],
+      "filetypes": ["go", "gomod"],
       "initializationOptions": {
+        "linksInHover": false,
         "staticcheck": true,
-        "experimentalDisabledAnalyses": ["ST1000"]
+        "analyses": {
+          "ST1000": false
+        }
       }
     },
     "lua": {
@@ -37,7 +39,13 @@
       "filetypes": ["lua"]
     }
   },
-  "yaml.schemas": {
-    "kubernetes": "/home/arccy/kluster/*.yaml"
+  "yaml": {
+    "schemas": {
+      "https://json.schemastore.org/kustomization": ["kustomization.yaml"],
+      "https://json.schemastore.org/github-workflow": [".github/workflows/*.yaml"],
+      "https://json.schemastore.org/prometheus": ["prometheus.yml"],
+      "https://json.schemastore.org/traefik-v2": ["traefik.yaml"],
+      "kubernetes": ["*.k8s.yaml"]
+    }
   }
 }

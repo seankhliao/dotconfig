@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/bin/zsh
 
 mkdir -p $XDG_DATA_HOME/zsh
 
@@ -64,7 +64,7 @@ zstyle ':completion:*' gain-privileges true
 zstyle ':completion:*' list-colors "${(@s.:.)LS_COLORS}"
 zstyle ':completion:*' menu select
 zstyle ':completion:*' rehash true
-# zstyle ':completion:*' use-cache true
+zstyle ':completion:*' use-cache true
 zstyle ':completion:*' matcher-list '' \
     '+m:{a-z}={A-Z}' '+m:{A-Z}={a-z}' \
     'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-}={A-Z\_}' \
@@ -78,8 +78,10 @@ bashcompinit
 
 complete -o nospace -C /usr/bin/kustomize kustomize
 complete -o nospace -C /usr/bin/terraform terraform
-source "${ZDOTDIR}"/_kubectl &>/dev/null || true
-source "${ZDOTDIR}"/_gh &>/dev/null || true
+# (( $+commands[skaffold] )) && source <(skaffold completion zsh)
+# (( $+commands[kubectl] )) && source <(kubectl completion zsh)
+# (( $+commands[gh] )) && source <(gh completion --shell zsh)
+source ${ZDOTDIR}/_kubectl &>/dev/null || true
 source /opt/google-cloud-sdk/completion.zsh.inc &>/dev/null || true
 
 source ${ZDOTDIR}/prompt.zsh
@@ -103,7 +105,7 @@ function {
 }
 
 alias -s go='go run'
-(( $+commands[python3] )) && alias -s py='python3'                                                  || alias -s py='python';
+alias -s py='python'
 (( $+commands[rg] ))      && alias grep='rg -S'                                                     || alias grep='grep --color=auto'
 (( $+commands[exa] ))     && alias l='exa -l --git --time-style iso --group-directories-first'      || alias l='ls -lh --color=auto';
 (( $+commands[exa] ))     && alias ll='exa -l -a --git --time-style iso --group-directories-first'  || alias ll='ls -alh --color=auto';
@@ -124,31 +126,34 @@ alias ls='ls --color'
 alias mv='mv -v'
 # alias sudo='sudo -E'
 
-# alias bt='sudo systemctl start bluetooth && bluetoothctl power on && bluetoothctl connect CC:98:8B:F5:00:14'
-# alias btoff='bluetoothctl power off'
 alias cr='google-chrome-stable'
 alias g='git'
+alias goupdate='rm $XDG_DATA_HOME/go/bin/go && gotip download && ln -s $XDG_DATA_HOME/go/bin/gotip $XDG_DATA_HOME/go/bin/go'
 alias h='htop'
+alias k='kubectl'
 alias p='yay'
 alias py='python3'
-alias py2='python2'
 alias rg='rg -N -S -p'
 alias s='ssh'
 alias sc='sudo systemctl'
 alias scu='systemctl --user'
 alias tf='terraform'
 
+function vsk(){
+    nvim $(sk)
+}
+
 function gcamp_patch(){
-    git commit -a -m "${*}"
-    git push && git push origin "$(_semver_next patch)"
+    _check_tidy && \
+    git commit -a -m "${*}" && \
+    git push && \
+    git push origin "$(_semver_next patch)"
 }
 function gcamp_minor(){
-    git commit -a -m "${*}"
-    git push && git push origin "$(_semver_next minor)"
-}
-function gcamp_major(){
-    git commit -a -m "${*}"
-    git push && git push origin "$(_semver_next major)"
+    _check_tidy && \
+    git commit -a -m "${*}" && \
+    git push && \
+    git push origin "$(_semver_next minor)"
 }
 
 function gsall() {
@@ -195,7 +200,6 @@ EOF
 A repo for ${repo}
 
 [![License](https://img.shields.io/github/license/seankhliao/${repo}.svg?style=flat-square)](LICENSE)
-![Version](https://img.shields.io/github/v/tag/seankhliao/${repo}?sort=semver&style=flat-square)
 EOF
 
     cat << EOF > LICENSE
@@ -229,8 +233,13 @@ function mrgo() {
     mr ${repo}
     go mod init go.seankhliao.com/${repo}
 
-    cat << EOF >> README.md
+    cat << EOF > README.md
+# ${repo}
+
+A repo for ${repo}
 [![pkg.go.dev](http://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](https://pkg.go.dev/go.seankhliao.com/${repo})
+![Version](https://img.shields.io/github/v/tag/seankhliao/${repo}?sort=semver&style=flat-square)
+[![License](https://img.shields.io/github/license/seankhliao/${repo}.svg?style=flat-square)](LICENSE)
 
 \`\`\`go
 import "go.seankhliao.com/${repo}"
@@ -244,18 +253,58 @@ EOF
 .github/
 .gitignore
 
+cloudbuild.yaml
 Dockerfile
+k8s/
 LICENSE
 Makefile
 README.md
 EOF
 
-    cat << EOF > main.go
-package main
+    cat << EOF > Dockerfile
+FROM golang:alpine AS build
 
-func main() {
+WORKDIR /workspace
+COPY . .
+RUN CGO_ENABLED=0 go build -trimpath -ldflags='-s -w' -o /bin/${repo}
 
-}
+
+FROM scratch
+
+COPY --from=build /bin/${repo} /bin/
+
+ENTRYPOINT [ "/bin/${repo}" ]
+EOF
+
+    cat << EOF > cloudbuild.yaml
+substitutions:
+  _IMG: stream
+  _REG: us.gcr.io
+tags:
+  - \$\SHORT_SHA
+  - \$\COMMIT_SHA
+steps:
+  - id: build-push
+    name: gcr.io/kaniko-project/executor:latest
+    args:
+      - -c=.
+      - -f=Dockerfile
+      - -d=\$_REG/\$PROJECT_ID/\$_IMG:latest
+      - -d=\$_REG/\$PROJECT_ID/\$_IMG:\$SHORT_SHA
+      - --reproducible
+      - --single-snapshot
+  - id: deploy
+    name: gcr.io/cloud-builders/kubectl:latest
+    entrypoint: /bin/sh
+    args:
+      - -c
+      - |
+        set -ex; \
+        sed -i 's/# newTag: IMAGE_TAG/newTag: "\$SHORT_SHA"/' k8s/kustomization.yaml && \
+        /builder/kubectl.bash apply -k k8s
+    env:
+      - CLOUDSDK_COMPUTE_ZONE=us-central1-c
+      - CLOUDSDK_CONTAINER_CLUSTER=cluster23
 EOF
 }
 
@@ -270,47 +319,16 @@ function testrepo() {
     git commit --allow-empty -m "root-commit"
     git remote add origin s:${repo}
     go mod init go.seankhliao.com/${repo}
-    cat << EOF > main.go
-package main
-
-func main() {
-
-}
-EOF
 }
 
-function encrypt() {
-  local agekey='age14mg08panez45c6lj2cut2l8nqja0k5vm2vxmv5zvc4ufqgptgy2qcjfmuu'
-  local eevee='ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKnAmz4u5/51kPPsebDCiYTXvuftUORh/TJ4pvN3NvQa'
-  local nevers='ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHw7tTL1rv9DxawryvO1Vo0jUyTMD45LmayodyFG0Hby'
-  local reims='ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIArhepNcdNBA7s1kPJio5gISU3Dru7u88FnlzUjrmtF/'
-
-  for f in "$@"; do
-    age -r ${agekey} -r ${eevee} -r ${nevers} -r ${reims} -o ${f}.age ${f}
-  done
+function _check_tidy() {
+    local currentdir=$(pwd)
+    cd $(git rev-parse --show-toplevel)
+    [[ ! -f go.mod ]] || go mod tidy
+    [[ ! -d vendor ]] || go mod vendor
+    cd "${currentdir}"
 }
 
-function decrypt() {
-  [[ -f $HOME/.ssh/age.key ]] && key=$HOME/.ssh/age.key || key=$HOME/.ssh/id_ed25519
-
-  for f in "$@"; do
-    age -d -i ${key} -o ${f%%.age} ${f}
-  done
-}
-
-function sign() {
-  [[ -f $HOME/.ssh/id_ecdsa_sk ]] && key=$HOME/.ssh/id_ecdsa_sk || key=$HOME/.ssh/id_ed25519
-  for f in "$@"; do
-    ssh-keygen -Y sign -n signed -f ${key} ${f}
-  done
-}
-
-function verify() {
-  local accepted=$HOME/.ssh/known_signers
-  for f in "$@"; do
-    ssh-keygen -Y verify -n signed -f ${accepted} -I arccy@eevee -s ${f%%.sig}.sig < ${f%%.sig}
-  done
-}
 
 function _colortest () {
     for i in {0..255} ; do

@@ -70,6 +70,11 @@
     prune = true
     pruneTags = true
 
+[filter "ageencrypt"]
+	clean = age -r age14mg08panez45c6lj2cut2l8nqja0k5vm2vxmv5zvc4ufqgptgy2qcjfmuu -a -
+	smudge = age -d -i ~/.ssh/age.key -
+	required = true
+
 [init]
     defaultBranch = main
 
@@ -104,3 +109,5 @@
 	cookiefile = /home/arccy/.config/git/cookies
 [credential "https://source.developers.google.com"]
 	helper = gcloud.sh
+[url "arccy@34.72.69.170:"]
+	insteadOf = https://34.72.69.170/

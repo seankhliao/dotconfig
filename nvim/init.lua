@@ -2,9 +2,15 @@ vim.api.nvim_command('filetype plugin indent on')
 vim.api.nvim_command('syntax enable')
 
 
-local data_dir = os.getenv('XDG_DATA_HOME') or '.local/share'
+-- local data_dir = os.getenv('XDG_DATA_HOME') or os.getenv('HOME') .. '/.local/share'
+local cache_dir = os.getenv('XDG_CACHE_HOME') or os.getenv('HOME') .. '/.cache'
+local backup_dir = cache_dir .. '/nvim/backup'
+local undo_dir = cache_dir .. '/nvim/undo'
+os.execute('mkdir -p ' .. backup_dir)
+os.execute('mkdir -p ' .. undo_dir)
+
 vim.o.background        = 'dark'
-vim.o.backupdir         = data_dir .. '/nvim/backup'
+vim.o.backupdir         = backup_dir
 vim.o.clipboard         = 'unnamedplus'
 vim.o.completeopt       = 'menuone,noinsert,noselect,preview'
 vim.o.confirm           = true
@@ -20,7 +26,7 @@ vim.o.sidescrolloff     = 4
 vim.o.smartcase         = true
 vim.o.smarttab          = true
 vim.o.termguicolors     = true
-vim.o.undodir           = data_dir .. '/nvim/undo'
+vim.o.undodir           = undo_dir
 vim.o.updatetime        = 300
 vim.o.wildignorecase    = true
 vim.o.wildmode          = 'longest,list:longest,full'
@@ -86,11 +92,12 @@ function packinit()
     vim.fn['minpac#add']('mhinz/vim-signify')
     vim.fn['minpac#add']('itchyny/lightline.vim')
     vim.fn['minpac#add']('tyru/caw.vim')
-    vim.fn['minpac#add']('sheerun/vim-polyglot')
+    -- vim.fn['minpac#add']('sheerun/vim-polyglot')
     vim.fn['minpac#add']('neoclide/coc.nvim', {branch = 'release'})
     -- vim.fn['minpac#add']('neovim/nvim-lspconfig')
     -- vim.fn['minpac#add']('nvim-lua/completion-nvim')
 end
+
 function packupdate()
     packinit()
     vim.fn['minpac#update']()
@@ -124,7 +131,6 @@ vim.api.nvim_exec([[
 augroup Clean
     autocmd!
     autocmd BufWritePre *.go    silent :call CocAction('organizeImport')
-    autocmd BufWritePre *.go    silent :call CocAction('format')
     autocmd BufWritePre *       silent :%s/\s\+$//e
     autocmd BufWritePre *       silent :v/\_s*\S/d
     autocmd BufWritePre *       silent :nohlsearch

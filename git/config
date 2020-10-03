@@ -109,5 +109,3 @@
 	cookiefile = /home/arccy/.config/git/cookies
 [credential "https://source.developers.google.com"]
 	helper = gcloud.sh
-[url "arccy@34.72.69.170:"]
-	insteadOf = https://34.72.69.170/

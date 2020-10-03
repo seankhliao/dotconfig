@@ -99,12 +99,12 @@ alias g='git'
 compdef g=git
 alias h='htop'
 alias k='kubectl'
-compdef k=kubectl
+(( $+commands[kubectl] )) && compdef k=kubectl
 alias rg='rg -N -S -p'
 alias s='ssh'
 compdef s=ssh
 alias tf='terraform'
-compdef tf=terraform
+(( $+commands[terraform] )) && compdef tf=terraform
 alias v='${EDITOR}'
 alias vbare='${EDITOR} -u NONE}'
 

@@ -1,4 +1,4 @@
-compinit -d $XDG_CACHE_HOME/zcompdump
+compinit -d ${XDG_CACHE_HOME:-$HOME}/.zcompdump
 bashcompinit
 
 complete -o nospace -C /usr/bin/kustomize kustomize

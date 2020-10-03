@@ -3,7 +3,8 @@
   "pairs.enableCharacters": ["(", "[", "{", "'", "\"", "`"],
   "prettier.printWidth": 120,
   "markdownlint.config": {
-    "line_length": false
+    "line_length": false,
+    "no-bare-urls": false
   },
   "languageserver": {
     "bash": {

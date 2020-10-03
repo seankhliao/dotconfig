@@ -125,6 +125,14 @@ zmodload zsh/datetime
 zmodload zsh/stat
 # zmodload zsh/zprof
 zmodload zsh/zpty
+compinit -d ${XDG_CACHE_HOME:-$HOME}/.zcompdump
+bashcompinit
+
+complete -o nospace -C /usr/bin/kustomize kustomize
+complete -o nospace -C /usr/bin/terraform terraform
+
+[[ -d /opt/google-cloud-sdk/bin ]] && export PATH="${PATH}:/opt/google-cloud-sdk/bin"
+[[ -f /opt/google-cloud-sdk/completion.zsh.inc ]] && source /opt/google-cloud-sdk/completion.zsh.inc
 zle -N self-insert url-quote-magic
 zle -N _sudo_cmdline
 zle -N history-substring-search-up
@@ -181,10 +189,15 @@ alias cp='cp -v'
 alias ln='ln -v'
 alias mv='mv -v'
 alias g='git'
+compdef g=git
 alias h='htop'
 alias k='kubectl'
+compdef k=kubectl
 alias rg='rg -N -S -p'
 alias s='ssh'
+compdef s=ssh
+alias tf='terraform'
+compdef tf=terraform
 alias v='${EDITOR}'
 alias vbare='${EDITOR} -u NONE}'
 
@@ -195,6 +208,7 @@ case "${OSTYPE}" in
         alias goupdate='rm $XDG_DATA_HOME/go/bin/go && gotip download && ln -s $XDG_DATA_HOME/go/bin/gotip $XDG_DATA_HOME/go/bin/go'
         alias p='yay'
         alias sc='sudo systemctl'
+        compdef sc=systemctl
         alias scu='systemctl --user'
     ;;
 esac
@@ -502,14 +516,6 @@ function _precmd() {
 
 add-zsh-hook precmd  _precmd
 add-zsh-hook preexec _preexec
-compinit -d $XDG_CACHE_HOME/zcompdump
-bashcompinit
-
-complete -o nospace -C /usr/bin/kustomize kustomize
-complete -o nospace -C /usr/bin/terraform terraform
-
-[[ -d /opt/google-cloud-sdk/bin ]] && export PATH="${PATH}:/opt/google-cloud-sdk/bin"
-[[ -f /opt/google-cloud-sdk/completion.zsh.inc ]] && source /opt/google-cloud-sdk/completion.zsh.inc
 # Fish-like fast/unobtrusive autosuggestions for zsh.
 # https://github.com/zsh-users/zsh-autosuggestions
 # v0.6.4

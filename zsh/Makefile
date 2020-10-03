@@ -3,17 +3,17 @@ all: clean .zshrc-merged
 .zshrc-merged: zshenv .zshrc
 	cat zshenv .zshrc > .zshrc-merged
 
-.zshrc: setopt.zsh load.zsh zle.zsh alias.zsh function.zsh function_repo.zsh function_semver.zsh prompt.zsh completion.zsh zsh-syntax-highlighting.zsh remote
+.zshrc: setopt.zsh load.zsh completion.zsh zle.zsh alias.zsh function.zsh function_repo.zsh function_semver.zsh prompt.zsh zsh-syntax-highlighting.zsh remote
 	@cat \
 		setopt.zsh \
 		load.zsh \
+		completion.zsh \
 		zle.zsh \
 		alias.zsh \
 		function.zsh \
 		function_repo.zsh \
 		function_semver.zsh \
 		prompt.zsh \
-		completion.zsh \
 		zsh-autosuggestions.zsh \
 		zsh-syntax-highlighting.zsh \
 		zsh-history-substring-search.zsh \

@@ -106,7 +106,7 @@ compdef s=ssh
 alias tf='terraform'
 (( $+commands[terraform] )) && compdef tf=terraform
 alias v='${EDITOR}'
-alias vbare='${EDITOR} -u NONE}'
+alias vbare='${EDITOR} -u NONE'
 
 case "${OSTYPE}" in
     linux*)

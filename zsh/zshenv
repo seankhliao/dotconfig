@@ -4,7 +4,7 @@ export LANG=en_US.UTF-8
 
 # preferences
 export BROWSER=google-chrome-stable
-export EDITOR=vim; (( $+commands[nvim])) && export EDITOR=nvim
+export EDITOR=vim; (( $+commands[nvim] )) && export EDITOR=nvim
 export MANPAGER="nvim -c 'set ft=man' -"
 
 # programs

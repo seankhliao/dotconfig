@@ -6,10 +6,13 @@ alias -s py='python'
     || alias grep='grep --color=auto'
 (( $+commands[exa] )) \
     && alias l='exa -l --git --time-style iso --group-directories-first' \
-    || alias l='ls -lh --color=auto';
+    || alias l='ls -lh';
 (( $+commands[exa] )) \
     && alias ll='exa -l -a --git --time-style iso --group-directories-first' \
-    || alias ll='ls -alh --color=auto';
+    || alias ll='ls -alh';
+(( $+commands[exa] )) \
+    && alias ls='exa --group-directories-first' \
+    || alias ll='ls -h';
 
 alias ..='cd ..'
 alias ...='cd ../..'

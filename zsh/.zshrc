@@ -39,10 +39,12 @@ complete -o nospace -C /usr/bin/kustomize kustomize
 complete -o nospace -C /usr/bin/terraform terraform
 
 [[ -d /opt/google-cloud-sdk/bin ]] && export PATH="${PATH}:/opt/google-cloud-sdk/bin"
-[[ -d $HOME/google-cloud-sdk/bin ]] && export PATH="${PATH}:$HOME/google-cloud-sdk/bin"
+[[ -d ${XDG_DATA_HOME}/google-cloud-sdk/bin ]] && \
+    export "${PATH}:${XDG_DATA_HOME}/google-cloud-sdk/bin"
 [[ -f /opt/google-cloud-sdk/completion.zsh.inc ]] && source /opt/google-cloud-sdk/completion.zsh.inc
-[[ -f $HOME/google-cloud-sdk/completion.zsh.inc ]] && source $HOME/google-cloud-sdk/completion.zsh.inc
-[[ -f $HOME/._kubectl ]] && source $HOME/._kubectl
+[[ -f ${XDG_DATA_HOME}/google-cloud-sdk/completion.zsh.inc ]] && \
+    source ${XDG_DATA_HOME}/google-cloud-sdk/completion.zsh.inc
+[[ -f ${ZDOTDIR}/_kubectl ]] && source ${ZDOTDIR}/_kubectl
 zle -N self-insert url-quote-magic
 zle -N _sudo_cmdline
 zle -N history-substring-search-up

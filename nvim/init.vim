@@ -6,9 +6,9 @@ else
     filetype plugin indent on
     syntax enable
 
-    let cache_dir = $XDG_CACHE_DIR
-    let backup_dir = cache_dir + "/nvim/backup"
-    let undo_dir = cache_dir + "/nvim/undo"
+    let cache_dir = $XDG_CACHE_HOME
+    let backup_dir = cache_dir . "/nvim/backup"
+    let undo_dir = cache_dir . "/nvim/undo"
     call system('mkdir -p ' . backup_dir)
     call system('mkdir -p ' . undo_dir)
 

@@ -22,15 +22,11 @@ alias cp='cp -v'
 alias ln='ln -v'
 alias mv='mv -v'
 alias g='git'
-compdef g=git
 alias h='htop'
 alias k='kubectl'
-(( $+commands[kubectl] )) && compdef k=kubectl
 alias rg='rg -N -S -p'
 alias s='ssh'
-compdef s=ssh
 alias tf='terraform'
-(( $+commands[terraform] )) && compdef tf=terraform
 alias v='${EDITOR}'
 alias vbare='${EDITOR} -u NONE'
 
@@ -41,7 +37,6 @@ case "${OSTYPE}" in
         alias goupdate='rm $XDG_DATA_HOME/go/bin/go && gotip download && ln -s $XDG_DATA_HOME/go/bin/gotip $XDG_DATA_HOME/go/bin/go'
         alias p='yay'
         alias sc='sudo systemctl'
-        compdef sc=systemctl
         alias scu='systemctl --user'
     ;;
 esac

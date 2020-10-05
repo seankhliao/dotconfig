@@ -1,4 +1,5 @@
 setopt AUTOCD
+setopt COMPLETE_ALIASES
 setopt COMPLETE_IN_WORD
 setopt LIST_PACKED
 setopt EXTENDED_GLOB

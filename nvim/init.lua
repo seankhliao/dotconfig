@@ -2,8 +2,7 @@ vim.api.nvim_command('filetype plugin indent on')
 vim.api.nvim_command('syntax enable')
 
 
--- local data_dir = os.getenv('XDG_DATA_HOME') or os.getenv('HOME') .. '/.local/share'
-local cache_dir = os.getenv('XDG_CACHE_HOME') or os.getenv('HOME') .. '/.cache'
+local cache_dir = os.getenv('XDG_CACHE_HOME')
 local backup_dir = cache_dir .. '/nvim/backup'
 local undo_dir = cache_dir .. '/nvim/undo'
 os.execute('mkdir -p ' .. backup_dir)

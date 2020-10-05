@@ -3,7 +3,6 @@
 
 [alias]
     a       = add
-    amend   = commit --amend --reuse-message=HEAD
 
     b       = checkout
     bprune  = fetch -a
@@ -19,15 +18,10 @@
     d       = diff
     dh      = diff HEAD
 
-    # discard   = clean -dfx
-
     l       = pull --rebase --autostash
 
     lo      = log --all --graph --format='%C(auto)%h%d %s %C( bold black)%cr %C(blue)<%an>'
     los     = log --all --graph --simplify-by-decoration --format='%C(auto)%h%d %s %C( bold black)%cr %C(blue)<%an>'
-
-    # squashm = !git merge --squash $1 && git commit && :
-    # squashm = !git rebase -i master $1 && git checkout master && git merge --ff-only $1 && :
 
     p       = push
     pu      = push -u origin HEAD
@@ -35,8 +29,6 @@
     s       = status
 
     t       = tag
-    # td      = tag -d
-    # tl      = tag -l
 
 [color]
     ui = auto
@@ -57,13 +49,8 @@
 	changed = yellow
 	untracked = red
 
-[core]
-    # or set $GIT_PAGER
-	# page = nvim -R
-
 [diff]
     algorithm = histogram
-	# external = $XDG_CONFIG_HOME/git/diff.sh
 
 [fetch]
     parallel = 0
@@ -102,10 +89,8 @@
     email = seankhliao@gmail.com
     name = Sean Liao
 
-[pager]
-	# diff = false
-
 [http]
-	cookiefile = /home/arccy/.config/git/cookies
+	cookiefile = /home/arccy/.ccookies
+
 [credential "https://source.developers.google.com"]
 	helper = gcloud.sh

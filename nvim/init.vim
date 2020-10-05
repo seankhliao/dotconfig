@@ -9,8 +9,8 @@ else
     let cache_dir = $XDG_CACHE_DIR
     let backup_dir = cache_dir + "/nvim/backup"
     let undo_dir = cache_dir + "/nvim/undo"
-    call system('mkdir -p ' + backup_dir)
-    call system('mkdir -p ' + undo_dir)
+    call system('mkdir -p ' . backup_dir)
+    call system('mkdir -p ' . undo_dir)
 
     set background=dark
     let &backupdir=backup_dir
@@ -26,7 +26,7 @@ else
     set sidescrolloff=4
     set smartcase
     set smarttab
-    set termguicolors=true
+    set termguicolors
     let &undodir=undo_dir
     set updatetime=300
     set wildignorecase
@@ -38,7 +38,7 @@ else
 
     set autoindent
     set autoread
-    set commentstring='#\\ %s'
+    set commentstring="#\\ %s"
     set copyindent
     set expandtab
     set grepprg=rg
@@ -100,4 +100,4 @@ else
         autocmd BufWritePre *       silent :v/\_s*\S/d
         autocmd BufWritePre *       silent :nohlsearch
     augroup END
-end
+endif

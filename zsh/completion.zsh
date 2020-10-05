@@ -8,4 +8,4 @@ complete -o nospace -C /usr/bin/terraform terraform
 [[ -d $HOME/google-cloud-sdk/bin ]] && export PATH="${PATH}:$HOME/google-cloud-sdk/bin"
 [[ -f /opt/google-cloud-sdk/completion.zsh.inc ]] && source /opt/google-cloud-sdk/completion.zsh.inc
 [[ -f $HOME/google-cloud-sdk/completion.zsh.inc ]] && source $HOME/google-cloud-sdk/completion.zsh.inc
-[[ -f $HOME/_kubectl ]] && source $HOME/_kubectl
+[[ -f $HOME/._kubectl ]] && source $HOME/._kubectl

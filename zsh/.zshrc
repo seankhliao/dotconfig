@@ -265,12 +265,14 @@ EOF
 FROM golang:alpine AS build
 
 WORKDIR /workspace
+RUN apk add --update --no-cache ca-certificates
 COPY . .
 RUN CGO_ENABLED=0 go build -trimpath -ldflags='-s -w' -o /bin/${repo}
 
 
 FROM scratch
 
+COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 COPY --from=build /bin/${repo} /bin/
 
 ENTRYPOINT [ "/bin/${repo}" ]
@@ -278,33 +280,110 @@ EOF
 
     cat << EOF > cloudbuild.yaml
 substitutions:
-  _IMG: stream
-  _REG: us.gcr.io
+  _IMG: ${repo}
+  _REG: reg.seankhliao.com
+
 tags:
-  - \$\SHORT_SHA
-  - \$\COMMIT_SHA
+  - \$SHORT_SHA
+  - \$COMMIT_SHA
 steps:
+  - id: test
+    name: golang:alpine
+    entrypoint: go
+    args:
+      - test
+      - ./...
+    env:
+      - CGO_ENABLED=0
+
+  - id: login
+    waitFor:
+      - "-"
+    name: gcr.io/cloud-builders/gcloud:latest
+    entrypoint: bash
+    args:
+      - -c
+      - >
+        gcloud secrets versions access latest
+        --secret=docker-registry-creds
+        --format='get(payload.data)'
+        | tr '_-' '/+'
+        | base64 -d > /kaniko/.docker/config.json
+        &&
+        gcloud secrets versions access latest
+        --secret=cluster-kubectl-creds
+        --format='get(payload.data)'
+        | tr '_-' '/+'
+        | base64 -d > /kube/config
+        &&
+        gcloud secrets versions access latest
+        --secret=github-personal-repo-token
+        --format='get(payload.data)'
+        | tr '_-' '/+'
+        | base64 -d > /github/token
+    volumes:
+      - name: registry-creds
+        path: /kaniko/.docker
+      - name: cluster-creds
+        path: /kube
+      - name: github-creds
+        path: /github
+
   - id: build-push
+    waitFor:
+      - "login"
     name: gcr.io/kaniko-project/executor:latest
     args:
       - -c=.
       - -f=Dockerfile
-      - -d=\$_REG/\$PROJECT_ID/\$_IMG:latest
-      - -d=\$_REG/\$PROJECT_ID/\$_IMG:\$SHORT_SHA
+      - -d=\$_REG/\$_IMG:latest
+      - -d=\$_REG/\$_IMG:\$SHORT_SHA
       - --reproducible
       - --single-snapshot
+      - --cache=true
+      - --use-new-run
+    volumes:
+      - name: registry-creds
+        path: /kaniko/.docker
+
   - id: deploy
     name: gcr.io/cloud-builders/kubectl:latest
     entrypoint: /bin/sh
     args:
       - -c
-      - |
-        set -ex; \
-        sed -i 's/# newTag: IMAGE_TAG/newTag: "\$SHORT_SHA"/' k8s/kustomization.yaml && \
-        /builder/kubectl.bash apply -k k8s
+      - >
+        set -ex;
+        cd k8s &&
+        sed -i 's/# newTag: IMAGE_TAG/newTag: "\$SHORT_SHA"/' kustomization.yaml &&
+        kubectl.1.18 kustomize | tee /deployed/\$_IMG.yaml | kubectl.1.18 apply -f -
     env:
-      - CLOUDSDK_COMPUTE_ZONE=us-central1-c
-      - CLOUDSDK_CONTAINER_CLUSTER=cluster23
+      - KUBECONFIG=/kube/config
+    volumes:
+      - name: cluster-creds
+        path: /kube
+      - name: deployed
+        path: /deployed
+
+  - id: save-deployment
+    name: gcr.io/cloud-builders/gcloud:latest
+    entrypoint: bash
+    args:
+      - -c
+      - >
+        set -ex;
+        export GITHUB_TOKEN=\$\$(cat /github/token) &&
+        git clone https://x-access-token:\$\$GITHUB_TOKEN@github.com/seankhliao/kluster &&
+        cd kluster/apps &&
+        cp /deployed/\$_IMG.yaml \$_IMG.k8s.yaml &&
+        git add \$_IMG.k8s.yaml &&
+        git config user.email $(gcloud auth list --filter=status:ACTIVE --format='value(account)') &&
+        git commit -m "update \$_IMG deployment to \$SHORT_SHA" &&
+        git push
+    volumes:
+      - name: github-creds
+        path: /github
+      - name: deployed
+        path: /deployed
 EOF
 }
 function gcamp_patch(){

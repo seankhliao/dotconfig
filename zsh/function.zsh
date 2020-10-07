@@ -8,9 +8,9 @@ function gsall() {
 
     for dir in ./*; do
         if [[ -d ${dir} ]] && [[ -d ${dir}/.git ]]; then
-            if ! git -C ${dir} diff-index --quiet HEAD || ! git -C ${dir} diff-index --quiet origin/main; then
+            if ! git -C ${dir} diff-index --quiet HEAD || ! git -C ${dir} diff-index --quiet origin/HEAD; then
                 echo "\n${bold}$dir${normal}"
-                git -C ${dir} log --oneline origin/main..HEAD
+                git -C ${dir} log --oneline origin/HEAD..HEAD
                 git -C ${dir} status -s
             fi
         fi

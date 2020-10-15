@@ -23,6 +23,6 @@ function md() {
 }
 
 function t() {
-    command tag -i "$@"
-    source ${TAG_ALIAS_FILE:-/tmp/tag_aliases} 2>/dev/null
+    command t -i "$@"
+    source /tmp/t_aliases 2>/dev/null
 }

@@ -11,8 +11,8 @@ export MANPAGER="nvim -c 'set ft=man' -"
 export GO111MODULE=on
 export CLOUDSDK_PYTHON=python3
 export DOCKER_BUILDKIT=1
-export TAG_CMD_FMT_STRING="${EDITOR} {{.Filename }} +{{ .LineNumber }}"
-export TAG_SEARCH_PROG=rg
+# export TAG_CMD_FMT_STRING="${EDITOR} {{.Filename }} +{{ .LineNumber }}"
+# export TAG_SEARCH_PROG=rg
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 #
 # zsh

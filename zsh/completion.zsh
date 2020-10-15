@@ -1,8 +1,8 @@
-compinit -d ${XDG_CACHE_HOME:-$HOME}/.zcompdump
+compinit -d ${XDG_CACHE_HOME}/.zcompdump
 bashcompinit
 
-complete -o nospace -C /usr/bin/kustomize kustomize
-complete -o nospace -C /usr/bin/terraform terraform
+complete -o nospace -C kustomize kustomize
+complete -o nospace -C terraform terraform
 
 [[ -d /opt/google-cloud-sdk/bin ]] && export PATH="${PATH}:/opt/google-cloud-sdk/bin"
 [[ -d ${XDG_DATA_HOME}/google-cloud-sdk/bin ]] && \

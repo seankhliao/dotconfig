@@ -1,9 +1,6 @@
 alias -s go='go run'
 alias -s py='python'
 
-(( $+commands[rg] )) \
-    && alias grep='rg -S' \
-    || alias grep='grep --color=auto'
 (( $+commands[exa] )) \
     && alias l='exa -l --git --time-style iso --group-directories-first' \
     || alias l='ls -lh';

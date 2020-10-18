@@ -91,7 +91,7 @@ function packinit()
     vim.fn['minpac#add']('mhinz/vim-signify')
     vim.fn['minpac#add']('itchyny/lightline.vim')
     vim.fn['minpac#add']('tyru/caw.vim')
-    -- vim.fn['minpac#add']('sheerun/vim-polyglot')
+    vim.fn['minpac#add']('sheerun/vim-polyglot')
     vim.fn['minpac#add']('neoclide/coc.nvim', {branch = 'release'})
     -- vim.fn['minpac#add']('neovim/nvim-lspconfig')
     -- vim.fn['minpac#add']('nvim-lua/completion-nvim')
@@ -129,7 +129,7 @@ vim.api.nvim_command([[ command! PackClean  call v:lua.packclean() ]])
 vim.api.nvim_exec([[
 augroup Clean
     autocmd!
-    autocmd BufWritePre *.go    silent :call CocAction('organizeImport')
+    " autocmd BufWritePre *.go    silent :call CocAction('organizeImport')
     autocmd BufWritePre *       silent :%s/\s\+$//e
     autocmd BufWritePre *       silent :v/\_s*\S/d
     autocmd BufWritePre *       silent :nohlsearch

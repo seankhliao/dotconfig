@@ -14,6 +14,7 @@ export DOCKER_BUILDKIT=1
 # export TAG_CMD_FMT_STRING="${EDITOR} {{.Filename }} +{{ .LineNumber }}"
 # export TAG_SEARCH_PROG=rg
 export VIRTUAL_ENV_DISABLE_PROMPT=1
+export NO_AT_BRIDGE=1
 #
 # zsh
 export HISTSIZE=999999999
@@ -74,6 +75,7 @@ export NPM_CONFIG_USERCONFIG="${XDG_CONFIG_HOME}"/npmrc
 export PSQLRC="${XDG_CONFIG_HOME}"/psqlrc
 export PYTHONSTARTUP="${XDG_CONFIG_HOME}"/python/startup.py
 export SCREENRC="${XDG_CONFIG_HOME}"/screenrc
+export TF_CLI_CONFIG_FILE="${XDG_CONFIG_HOME}/terraform.rc"
 export VIMINIT=":source ${XDG_CONFIG_HOME}"/nvim/init.vim
 export WEECHAT_HOME=${XDG_CONFIG_HOME}/weechat
 export WGETRC="${XDG_CONFIG_HOME}"/wgetrc

@@ -47,7 +47,17 @@
 [color "status"]
 	added = green
 	changed = yellow
-	untracked = red
+    untracked = red
+
+[core]
+    pager = delta
+
+[delta]
+    file-decoration-style = none
+    file-style = bold yellow ul
+    line-numbers = true
+    # side-by-side = true
+    syntax-theme = zenburn
 
 [diff]
     algorithm = histogram
@@ -64,6 +74,9 @@
 
 [init]
     defaultBranch = main
+
+[interactive]
+    diffFilter = delta --color-only
 
 [pull]
     rebase = true

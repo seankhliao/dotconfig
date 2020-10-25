@@ -94,7 +94,7 @@
     insteadOf = "https://github.com/seankhliao/"
 
 [url "git@github.com:"]
-	insteadOf = "gh:"
+	insteadOf = "g:"
 	insteadOf = "git://github.com/"
 	insteadOf = "https://github.com/"
 

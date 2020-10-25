@@ -9,7 +9,11 @@ function _sudo_cmdline() {
 }
 
 bindkey -e
-bindkey "\e\e" _sudo_cmdline
+# ^[ == escape
+bindkey '^[^[' _sudo_cmdline
+bindkey '^[w' vi-forward-word
+bindkey '^[e' vi-forward-word-end
+bindkey '^[b' vi-backward-word
 bindkey '^[[A' history-substring-search-up
 bindkey '\eOA' history-substring-search-up
 bindkey '^[[B' history-substring-search-down

@@ -1,11 +1,5 @@
 {
   "coc.preferences.formatOnSaveFiletypes": ["css", "go", "html", "javascript", "json", "markdown", "terraform", "yaml"],
-  "pairs.enableCharacters": ["(", "[", "{", "'", "\"", "`"],
-  "prettier.printWidth": 120,
-  "markdownlint.config": {
-    "line_length": false,
-    "no-bare-urls": false
-  },
   "languageserver": {
     "bash": {
       "command": "bash-language-server",
@@ -28,6 +22,7 @@
       "rootPatterns": ["go.mod"],
       "filetypes": ["go", "gomod"],
       "initializationOptions": {
+        "gofumpt": true,
         "linksInHover": false,
         "staticcheck": true,
         "analyses": {
@@ -40,6 +35,12 @@
       "filetypes": ["lua"]
     }
   },
+  "markdownlint.config": {
+    "line_length": false,
+    "no-bare-urls": false
+  },
+  "pairs.enableCharacters": ["(", "[", "{", "'", "\"", "`"],
+  "prettier.printWidth": 120,
   "yaml": {
     "schemas": {
       "https://json.schemastore.org/kustomization": ["kustomization.yaml"],

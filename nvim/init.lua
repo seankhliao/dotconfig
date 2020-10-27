@@ -48,7 +48,6 @@ vim.bo.tabstop          = 4
 vim.bo.undofile         = true
 
 vim.g.lightline             = {colorscheme = 'fahrenheit'}
-vim.g.python3_host_prog     = '/usr/bin/python3'
 vim.g.signify_sign_change   = '~'
 
 
@@ -83,7 +82,7 @@ vim.api.nvim_set_keymap('n', ';',       ':',                                    
 -- require'nvim_lsp'.yamlls.setup{}
 
 
-function packinit()
+function Packinit()
     vim.cmd('packadd minpac')
     vim.fn['minpac#init']()
     vim.fn['minpac#add']('k-takata/minpac', {type = 'opt'})
@@ -97,44 +96,25 @@ function packinit()
     -- vim.fn['minpac#add']('nvim-lua/completion-nvim')
 end
 
-function packupdate()
-    packinit()
+function Packupdate()
+    Packinit()
     vim.fn['minpac#update']()
 end
-function packclean()
-    packinit()
+function Packclean()
+    Packinit()
     vim.fn['minpac#clean']()
 end
--- function go_organize_imports_sync(timeout_ms)
---   local context = { source = { organizeImports = true } }
---   vim.validate { context = { context, 't', true } }
---   local params = vim.lsp.util.make_range_params()
---   params.context = context
---
---   local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, timeout_ms)
---   if not result then return end
---   result = result[1].result
---   if not result then return end
---   edit = result[1].edit
---   vim.lsp.util.apply_workspace_edit(edit)
--- end
---
---     " autocmd BufWritePre *.go    silent :lua go_organize_imports_sync(10000)
---     " autocmd BufWritePre *       silent :lua vim.lsp.buf.formatting_sync()
 
-vim.api.nvim_command([[ command! PackUpdate call v:lua.packupdate() ]])
-vim.api.nvim_command([[ command! PackClean  call v:lua.packclean() ]])
+vim.api.nvim_command([[ command! PackUpdate call v:lua.Packupdate() ]])
+vim.api.nvim_command([[ command! PackClean  call v:lua.Packclean() ]])
 
 
 vim.api.nvim_exec([[
 augroup Clean
     autocmd!
-    " autocmd BufWritePre *.go    silent :call CocAction('organizeImport')
+    autocmd BufWritePre *.go    silent :call CocAction('runCommand', 'editor.action.organizeImport')
     autocmd BufWritePre *       silent :%s/\s\+$//e
     autocmd BufWritePre *       silent :v/\_s*\S/d
     autocmd BufWritePre *       silent :nohlsearch
 augroup END
 ]], false)
-
--- vim.api.nvim_command([[ autocmd BufEnter * lua require'completion'.on_attach() ]])
--- vim.api.nvim_command([[ autocmd BufEnter go.mod set filetype=gomod  ]])

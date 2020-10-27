@@ -101,9 +101,3 @@
 [user]
     email = seankhliao@gmail.com
     name = Sean Liao
-
-[http]
-	cookiefile = /home/arccy/.ccookies
-
-[credential "https://source.developers.google.com"]
-	helper = gcloud.sh

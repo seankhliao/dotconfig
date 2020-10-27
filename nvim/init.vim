@@ -95,7 +95,7 @@ else
 
     augroup Clean
         autocmd!
-        autocmd BufWritePre *.go    silent :call CocAction('organizeImport')
+        autocmd BufWritePre *.go    silent :call CocAction('runCommand', 'editor.action.organizeImport')
         autocmd BufWritePre *       silent :%s/\s\+$//e
         autocmd BufWritePre *       silent :v/\_s*\S/d
         autocmd BufWritePre *       silent :nohlsearch

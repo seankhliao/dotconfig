@@ -12,7 +12,7 @@ function _precmd() {
     vcs_info
     local newline=$'\n%{\r%}'
 
-    PROMPT="${newline}%F{green}%*%f %F{blue}%~%f %F{yellow}${human}%f${newline}"
+    PROMPT="%F{green}%*%f %F{blue}%~%f %F{yellow}${human}%f${newline}"
     PROMPT+="%F{242}${STY:+screen-}${VIRTUAL_ENV:+venv-}${vcs_info_msg_0_:+${vcs_info_msg_0_} }%f"
     PROMPT+="%(?.%F{magenta}.%F{red})${SSH_CONNECTION+%n@%m}»%f "
     # "»" character causes bugs

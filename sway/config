@@ -31,13 +31,14 @@ bindsym {
     # Screenshot
     Print                   exec grim -g "$(slurp)" "$HOME/data/screen/$(date +'%Y-%m-%d-%H%M%S').png"
     $mod+t                  exec google-chrome-stable
-    $mod+n                  exec google-chrome-stable --incognito
+    # $mod+n                  exec google-chrome-stable --incognito
     $mod+Shift+t            exec google-chrome-stable --user-data-dir="$HOME/.config/chrome-custom"
     $mod+Return             exec $term
     $mod+d                  exec $menu
     $mod+c                  exec makoctl dismiss
-    $mod+i                  exec alacritty -t irc -e weechat
-    # $mod+i                  exec alacritty -t irc -e ssh arch -t screen -r weechat
+    # $mod+i                  exec alacritty -t irc -e weechat
+    $mod+i                  exec alacritty -t irc -e ssh arch -t screen -r weechat
+    $mod+y                  exec yubioath-desktop
 
     XF86AudioRaiseVolume    exec pulsemixer --change-volume +5
     XF86AudioLowerVolume    exec pulsemixer --change-volume -5
@@ -61,7 +62,7 @@ bindsym {
     $mod+$down              focus down
     $mod+$up                focus up
     $mod+$right             focus right
-    $mod+a                  focus parent
+    # $mod+a                  focus parent
 
     $mod+Shift+$left        move left
     $mod+Shift+$down        move down

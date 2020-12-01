@@ -2,6 +2,13 @@ function vsk(){
     nvim $(sk)
 }
 
+function goupdate() {
+    rm ${XDG_DATA_HOME}/go/bin/go 2>/dev/null || true
+    (( $+commands[gotip] )) || go get golang.org/dl/gotip
+    gotip download
+    ln -sf ${XDG_DATA_HOME}/go/bin/gotip ${XDG_DATA_HOME}/go/bin/go
+}
+
 function gsall() {
     local bold=$(tput bold)
     local normal=$(tput sgr0)

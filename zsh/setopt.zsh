@@ -3,16 +3,17 @@ setopt COMPLETE_IN_WORD
 setopt LIST_PACKED
 setopt EXTENDED_GLOB
 setopt GLOB_DOTS
-setopt EXTENDED_HISTORY
+
 setopt HIST_FCNTL_LOCK
 setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_IGNORE_SPACE
 setopt HIST_LEX_WORDS
 setopt HIST_NO_FUNCTIONS
 setopt HIST_NO_STORE
-setopt HIST_REDUCE_BLANKS
+# setopt HIST_REDUCE_BLANKS # maybe messes with multiline continuation
 setopt HIST_SAVE_NO_DUPS
 setopt SHARE_HISTORY
+
 setopt IGNORE_EOF
 setopt INTERACTIVE_COMMENTS
 setopt PIPE_FAIL

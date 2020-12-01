@@ -41,7 +41,6 @@ case "${OSTYPE}" in
     linux*)
         alias cr='google-chrome-stable'
         alias diff='diff --color=always'
-        alias goupdate='rm $XDG_DATA_HOME/go/bin/go && gotip download && ln -s $XDG_DATA_HOME/go/bin/gotip $XDG_DATA_HOME/go/bin/go'
         alias p='yay'
         alias sc='sudo systemctl'
         alias scu='systemctl --user'

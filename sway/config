@@ -37,7 +37,7 @@ bindsym {
     $mod+d                  exec $menu
     $mod+c                  exec makoctl dismiss
     # $mod+i                  exec alacritty -t irc -e weechat
-    $mod+i                  exec alacritty -t irc -e ssh arch -t screen -r weechat
+    $mod+i                  exec alacritty -t irc -e  ssh arch -t TERM=xterm-256color LANG=en_US.UTF-8 screen -r weechat
     $mod+y                  exec yubioath-desktop
 
     XF86AudioRaiseVolume    exec pulsemixer --change-volume +5
@@ -45,9 +45,9 @@ bindsym {
     XF86AudioMute           exec pulsemixer --toggle-mute
     XF86MonBrightnessUp     exec brightnessctl -d intel_backlight set +10%
     XF86MonBrightnessDown   exec brightnessctl -d intel_backlight set 10%-
-    XF86AudioPlay           exec playerctl play-pause
-    XF86AudioPrev           exec playerctl previous
-    XF86AudioNext           exec playerctl next
+    # XF86AudioPlay           exec playerctl play-pause
+    # XF86AudioPrev           exec playerctl previous
+    # XF86AudioNext           exec playerctl next
 
     $mod+q                  kill
     $mod+h                  splith

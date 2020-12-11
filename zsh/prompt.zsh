@@ -12,7 +12,9 @@ function _precmd() {
     vcs_info 2>&1 >/dev/null
     local newline=$'\n%{\r%}'
 
-    PROMPT="%F{green}%*%f %F{blue}%~%f %F{yellow}${human}%f${newline}"
+    PROMPT="%F{green}%*%f %F{blue}%~%f %F{yellow}${human}%f"
+    PROMPT+="${KUBECTL_CONTEXT:+ ${KUBECTL_CONTEXT/gke*_/} / }${KUBECTL_NAMESPACE:+${KUBECTL_NAMESPACE}}"
+    PROMPT+="${newline}"
     PROMPT+="%F{242}${STY:+screen-}${VIRTUAL_ENV:+venv-}${vcs_info_msg_0_:+${vcs_info_msg_0_} }%f"
     PROMPT+="%(?.%F{magenta}.%F{red})${SSH_CONNECTION+%n@%m}»%f "
 }

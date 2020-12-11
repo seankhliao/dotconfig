@@ -28,7 +28,7 @@ alias ln='ln -v'
 alias mv='mv -v'
 alias g='git'
 alias h='htop'
-alias k='kubectl'
+alias k='kubectl ${KUBECTL_CONTEXT+--context=${KUBECTL_CONTEXT}} ${KUBECTL_NAMESPACE+--namespace=${KUBECTL_NAMESPACE}}'
 alias kctx='kubectx'
 alias kns='kubens'
 alias s='ssh'
@@ -61,3 +61,26 @@ function {
         fi
     done < "${gitconfig}"
 }
+
+function kc() {
+    export KUBECTL_CONTEXT=$1
+}
+function kn() {
+    export KUBECTL_NAMESPACE=$1
+}
+
+_kube_contexts()
+{
+    local curr_arg;
+    curr_arg=${COMP_WORDS[COMP_CWORD]}
+    COMPREPLY=( $(compgen -W "$(kubectl config get-contexts --output='name')" -- $curr_arg ) );
+}
+complete -F _kube_contexts kc
+
+_kube_namespaces()
+{
+    local curr_arg;
+    curr_arg=${COMP_WORDS[COMP_CWORD]}
+    COMPREPLY=( $(compgen -W "$(kubectl get namespaces -o=jsonpath='{range .items[*].metadata.name}{@}{"\n"}{end}')" -- $curr_arg ) );
+}
+complete -F _kube_namespaces kn

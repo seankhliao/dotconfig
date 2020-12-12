@@ -39,7 +39,8 @@ function glall() {
         if [[ -d ${dir} ]] && [[ -d ${dir}/.git ]]; then
             printf "\n${bold}$dir${normal}\n"
             git -C ${dir} checkout $(git -C ${dir} symbolic-ref --short HEAD)
-            git -C ${dir} pull --prune --prune-tags --ff-only --jobs=$(nproc)
+            git -C ${dir} fetch --tags --prune --prune-tags --force --jobs=$(nproc)
+            git -C ${dir} merge --ff-only --autostash
         fi
     done
 }

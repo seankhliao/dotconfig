@@ -16,7 +16,7 @@ function gsall() {
     for dir in ./*; do
         if [[ -d ${dir} ]] && [[ -d ${dir}/.git ]]; then
             if git -C ${dir} remote | grep origin >/dev/null ; then
-                local default=$(git -C ${dir} remote show origin | sed -n -e 's/\s*HEAD branch:\s*\([^\s]*\)/\1/p')
+                local default=$(git -C ${dir} remote show origin | sed -n -e 's/[[:space:]]*HEAD branch:[[:space:]]*\([^[[:space:]]]*\)/\1/p')
                 if ! git -C ${dir} diff-index --quiet --exit-code origin/${default} ; then
                     printf "\n${bold}$dir${normal}\n"
                     git -C ${dir} log --oneline origin/${default}..HEAD

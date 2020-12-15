@@ -43,6 +43,7 @@
   "prettier.printWidth": 120,
   "yaml": {
     "schemas": {
+      "https://json.schemastore.org/cloudbuild": ["cloudbuild.yaml"],
       "https://json.schemastore.org/kustomization": ["kustomization.yaml"],
       "https://json.schemastore.org/github-workflow": [".github/workflows/*.yaml"],
       "https://json.schemastore.org/prometheus": ["prometheus.yml"],

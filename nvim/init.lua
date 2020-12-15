@@ -47,6 +47,9 @@ vim.bo.swapfile         = false
 vim.bo.tabstop          = 4
 vim.bo.undofile         = true
 
+-- want status line: lightline
+-- MODE file            line ending | encoding | ft percent line:col
+
 vim.g.lightline             = {colorscheme = 'fahrenheit'}
 vim.g.signify_sign_change   = '~'
 

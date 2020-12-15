@@ -13,11 +13,6 @@ function _precmd() {
     local newline=$'\n%{\r%}'
 
     PROMPT="%F{green}%*%f %F{blue}%~%f %F{yellow}${human}%f"
-
-    PROMPT+="%F{blue}"
-    [[ ${KUBECTL_CONTEXT} =~ prod ]] && PROMPT+="%F{red}"
-    PROMPT+="${KUBECTL_CONTEXT:+ ${KUBECTL_CONTEXT/gke*_/} / }${KUBECTL_NAMESPACE:+${KUBECTL_NAMESPACE}}%f"
-
     PROMPT+="${newline}"
     PROMPT+="%F{242}${STY:+screen-}${VIRTUAL_ENV:+venv-}${vcs_info_msg_0_:+${vcs_info_msg_0_} }%f"
     PROMPT+="%(?.%F{magenta}.%F{red})${SSH_CONNECTION+%n@%m}»%f "

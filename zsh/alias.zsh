@@ -28,7 +28,7 @@ alias ln='ln -v'
 alias mv='mv -v'
 alias g='git'
 alias h='htop'
-alias k='kubectl ${KUBECTL_CONTEXT+--context=${KUBECTL_CONTEXT}} ${KUBECTL_NAMESPACE+--namespace=${KUBECTL_NAMESPACE}}'
+alias k='kubectl'
 alias kctx='kubectx'
 alias kns='kubens'
 alias s='ssh'
@@ -60,13 +60,6 @@ function {
             [[ $line =~ '\s*\[alias\]' ]] && start_alias=true
         fi
     done < "${gitconfig}"
-}
-
-function kc() {
-    export KUBECTL_CONTEXT=$1
-}
-function kn() {
-    export KUBECTL_NAMESPACE=$1
 }
 
 _kube_contexts()

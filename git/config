@@ -4,7 +4,8 @@
 [alias]
     a       = add
 
-    b       = checkout
+    b       = switch
+    bc      = checkout
     bprune  = fetch -a
     bd      = branch -D
     bn      = checkout -b

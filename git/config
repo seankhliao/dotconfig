@@ -2,52 +2,52 @@
 	addIgnoredFile = false
 
 [alias]
-    a       = add
+    a     = add
 
-    b       = switch
-    bc      = checkout
-    bprune  = fetch -a
-    bd      = branch -D
-    bn      = checkout -b
+    b     = switch
+    bc    = checkout
+    bd    = branch -D
+    bn    = checkout -b
 
-    c       = clone --recursive
+    c     = clone --recursive
 
-    cam     = !git commit -a -m "\""$*"\"" && :
-    camp    = !git commit -a -m "\""$*"\"" && git push && :
-    cm      = !git commit  -m "\""$*"\"" && :
+    cam   = !git commit -a -m "\""$*"\"" && :
+    camp  = !git commit -a -m "\""$*"\"" && git push && :
+    campu = !git commit -a -m "\""$*"\"" && git push -u origin HEAD && :
+    cm    = !git commit    -m "\""$*"\"" && :
 
-    d       = diff
-    dh      = diff HEAD
+    d     = diff
+    dh    = diff HEAD
 
-    l       = pull --rebase --autostash
+    l     = pull --rebase --autostash
 
-    lo      = log --all --graph --format='%C(auto)%h%d %s %C( bold black)%cr %C(blue)<%an>'
-    los     = log --all --graph --simplify-by-decoration --format='%C(auto)%h%d %s %C( bold black)%cr %C(blue)<%an>'
+    lo    = log --all --graph --format='%C(auto)%h%d %s %C( bold black)%cr %C(blue)<%an>'
+    los   = log --all --graph --simplify-by-decoration --format='%C(auto)%h%d %s %C( bold black)%cr %C(blue)<%an>'
 
-    p       = push
-    pu      = push -u origin HEAD
+    p     = push
+    pu    = push -u origin HEAD
 
-    s       = status
+    s     = status
 
-    t       = tag
+    t     = tag
 
 [color]
     ui = auto
 
 [color "branch"]
 	current = yellow reverse
-	local = yellow
-	remote = green
+	local   = yellow
+	remote  = green
 
 [color "diff"]
-	meta = yellow bold
+	meta = yellow  bold
 	frag = magenta bold # line info
-	old = red # deletions
-	new = green # additions
+	old  = red          # deletions
+	new  = green        # additions
 
 [color "status"]
-	added = green
-	changed = yellow
+	added     = green
+	changed   = yellow
     untracked = red
 
 [core]
@@ -55,22 +55,22 @@
 
 [delta]
     file-decoration-style = none
-    file-style = bold yellow ul
-    line-numbers = true
-    # side-by-side = true
-    syntax-theme = zenburn
+    file-style            = bold yellow ul
+    line-numbers          = true
+    # side-by-side        = true
+    syntax-theme          = zenburn
 
 [diff]
     algorithm = histogram
 
 [fetch]
-    parallel = 0
-    prune = true
+    parallel  = 10
+    prune     = true
     pruneTags = true
 
 [filter "ageencrypt"]
-	clean = age -r age14mg08panez45c6lj2cut2l8nqja0k5vm2vxmv5zvc4ufqgptgy2qcjfmuu -a -
-	smudge = age -d -i ~/.ssh/age.key -
+	clean    = age -r age14mg08panez45c6lj2cut2l8nqja0k5vm2vxmv5zvc4ufqgptgy2qcjfmuu -a -
+	smudge   = age -d -i ~/.ssh/age.key -
 	required = true
 
 [init]
@@ -89,16 +89,21 @@
 [tag]
 	sort = version:refname
 
-[url "git@github.com:seankhliao/"]
-    insteadOf = "s:"
-    insteadOf = "git://github.com/seankhliao/"
-    insteadOf = "https://github.com/seankhliao/"
+[url "git@github.com:erred/"]
+    insteadOf = "e:"
+    insteadOf = "git://github.com/erred/"
+    insteadOf = "https://github.com/erred/"
 
 [url "git@github.com:"]
 	insteadOf = "g:"
 	insteadOf = "git://github.com/"
 	insteadOf = "https://github.com/"
 
+[url "git@github.com:seankhliao/"]
+    insteadOf = "s:"
+    insteadOf = "git://github.com/seankhliao/"
+    insteadOf = "https://github.com/seankhliao/"
+
 [user]
     email = seankhliao@gmail.com
-    name = Sean Liao
+    name  = Sean Liao

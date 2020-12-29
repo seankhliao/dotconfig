@@ -19,7 +19,7 @@ else
     set confirm
     set fsync
     set ignorecase
-    " set inccommand=split
+    set inccommand=split
     set incsearch
     set scrolloff=4
     set shortmess=aoOtTIc

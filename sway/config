@@ -25,7 +25,8 @@ set {
 font IBM Plex Mono 11
 
 # background
-output * background $XDG_CONFIG_HOME/sway/bg.jpg fill
+output * background $XDG_CONFIG_HOME/sway/bg.png fill
+# output * background $XDG_CONFIG_HOME/sway/bg.jpg fill
 
 bindsym {
     # Screenshot

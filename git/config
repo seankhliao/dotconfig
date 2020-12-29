@@ -86,6 +86,9 @@
     autoStash = true
     abbreviateCommands = true
 
+[rerere]
+    enabled = true
+
 [tag]
 	sort = version:refname
 

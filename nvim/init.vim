@@ -86,6 +86,8 @@ else
     inoremap <silent><expr> <TAB>       pumvisible() ? "\<C-n>" :  <SID>check_back_space() ? "\<TAB>" : coc#refresh()
     inoremap <expr>         <S-TAB>     pumvisible() ? "\<C-p>" : "\<C-h>"
     nnoremap                ;           :
+    nnoremap                ss          "_dd
+    vnoremap                s           "_d
     cnoreabbrev WQ          wq
 
     function! s:check_back_space() abort

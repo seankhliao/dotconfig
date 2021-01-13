@@ -64,6 +64,8 @@ vim.api.nvim_command('hi DiffText   ctermbg=235 ctermfg=208 cterm=reverse guibg=
 vim.api.nvim_command([[ cnoreabbrev cr google-chrome-stable % 2>/dev/null ]])
 vim.api.nvim_command([[ cnoreabbrev WQ wq ]])
 vim.api.nvim_command([[ cnoreabbrev W execute 'silent! write !sudo tee % >/dev/null' <bar> edit! ]])
+vim.api.nvim_command([[ nnoremap ss "_dd ]])
+vim.api.nvim_command([[ vnoremap s "_d ]])
 vim.api.nvim_set_keymap('i', '<TAB>',   'pumvisible() ? "\\<C-n>" : "\\<Tab>"',                             {noremap = true, silent = true, expr = true})
 vim.api.nvim_set_keymap('i', '<S-TAB>', 'pumvisible() ? "\\<C-p>" : "\\<S-Tab>"',                           {noremap = true, silent = true, expr = true})
 vim.api.nvim_set_keymap('n', ';',       ':',                                                                {noremap = true, silent = true})

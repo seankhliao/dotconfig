@@ -31,6 +31,7 @@ else
     set updatetime=300
     set wildignorecase
     set wildmode=longest,list:longest,full
+    set mouse=a
 
     set breakindent
     set nofoldenable

@@ -40,6 +40,7 @@ export GEM_SPEC_CACHE="${XDG_CACHE_HOME}"/gem
 export NUGET_PACKAGES="${XDG_CACHE_HOME}"/NuGetPackages
 export PYTHON_EGG_CACHE="${XDG_CACHE_HOME}"/python-eggs
 export RANDFILE="${XDG_CACHE_HOME}"/rnd
+export SKAFFOLD_CACHE_FILE="${XDG_CACHE_HOME}"/skaffold/cache
 
 # XDG DATA
 export CARGO_HOME="${XDG_DATA_HOME}"/cargo
@@ -65,11 +66,14 @@ export IPYTHONDIR="${XDG_CONFIG_HOME}"/jupyter
 export _JAVA_OPTIONS=-Djava.util.prefs.userRoot="${XDG_CONFIG_HOME}"/java
 export JUPYTER_CONFIG_DIR="${XDG_CONFIG_HOME}"/jupyter
 export KUBECONFIG="${XDG_CONFIG_HOME}"/kube/config
+export K9SCONFIG="${XDG_CONFIG_HOME}"/k9s
 export LESSKEY="${XDG_CONFIG_HOME}"/lesskey
 export NPM_CONFIG_USERCONFIG="${XDG_CONFIG_HOME}"/npmrc
 export PSQLRC="${XDG_CONFIG_HOME}"/psqlrc
 export PYTHONSTARTUP="${XDG_CONFIG_HOME}"/python/startup.py
 export SCREENRC="${XDG_CONFIG_HOME}"/screenrc
+export SKAFFOLD_CONFIG="${XDG_CONFIG_HOME}"/skaffold/config.yaml
+export STEPPATH="${XDG_CONFIG_HOME}"/step
 export TF_CLI_CONFIG_FILE="${XDG_CONFIG_HOME}/terraform.rc"
 export VIMINIT=":source ${XDG_CONFIG_HOME}"/nvim/init.vim
 export WEECHAT_HOME=${XDG_CONFIG_HOME}/weechat

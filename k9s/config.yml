@@ -13,16 +13,32 @@ k9s:
     fullScreenLogs: false
     textWrap: false
     showTime: false
-  currentContext: kind-image-mirror
-  currentCluster: kind-image-mirror
+  currentContext: kind-kind
+  currentCluster: kind-kind
   clusters:
-    kind-image-mirror:
+    kind-kind:
       namespace:
         active: default
         favorites:
         - default
       view:
-        active: ctx
+        active: svc
+      featureGates:
+        nodeShell: false
+      shellPod:
+        image: busybox:1.31
+        namespace: default
+        limits:
+          cpu: 100m
+          memory: 100Mi
+      portForwardAddress: localhost
+    kind-permissions:
+      namespace:
+        active: default
+        favorites:
+        - default
+      view:
+        active: po
       featureGates:
         nodeShell: false
       shellPod:

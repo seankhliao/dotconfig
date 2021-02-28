@@ -30,10 +30,16 @@
         }
       }
     },
-    "lua": {
-      "command": "lua-language-server",
-      "filetypes": ["lua"]
-    }
+		"terraform": {
+			"command": "terraform-ls",
+			"args": ["serve"],
+			"filetypes": [
+				"terraform",
+				"tf"
+			],
+			"initializationOptions": {},
+			"settings": {}
+		}
   },
   "markdownlint.config": {
     "line_length": false,
@@ -42,6 +48,7 @@
   "pairs.enableCharacters": ["(", "[", "{", "'", "\"", "`"],
   "prettier.printWidth": 120,
   "yaml": {
+    "schemaStore.enable": true,
     "schemas": {
       "https://json.schemastore.org/cloudbuild": ["cloudbuild.yaml"],
       "https://json.schemastore.org/kustomization": ["kustomization.yaml"],

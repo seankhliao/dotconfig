@@ -1,8 +1,9 @@
-vim.api.nvim_command('filetype plugin indent on')
-vim.api.nvim_command('syntax enable')
+vim.cmd [[ filetype plugin indent on ]]
+vim.cmd [[ syntax enable' ]]
 
 
-local cache_dir = os.getenv('XDG_CACHE_HOME')
+
+local cache_dir = vim.env.XDG_CACHE_HOME
 local backup_dir = cache_dir .. '/nvim/backup'
 local undo_dir = cache_dir .. '/nvim/undo'
 os.execute('mkdir -p ' .. backup_dir)
@@ -33,6 +34,7 @@ vim.o.wildmode          = 'longest,list:longest,full'
 vim.wo.breakindent      = true
 vim.wo.foldenable       = false
 vim.wo.number           = true
+vim.wo.statusline       = '%-F %-r %-m %= [%{&fileencoding}] | %y | %l/%L : %c'
 
 vim.bo.autoindent       = true
 vim.bo.autoread         = true
@@ -47,29 +49,12 @@ vim.bo.swapfile         = false
 vim.bo.tabstop          = 4
 vim.bo.undofile         = true
 
--- want status line: lightline
--- MODE file            line ending | encoding | ft percent line:col
 
-vim.g.lightline             = {colorscheme = 'fahrenheit'}
+
 vim.g.signify_sign_change   = '~'
 
-
-vim.api.nvim_command('colorscheme fahrenheit')
-vim.api.nvim_command('hi DiffAdd    ctermbg=235 ctermfg=108 cterm=reverse guibg=#262626 guifg=#87af87 gui=reverse')
-vim.api.nvim_command('hi DiffChange ctermbg=235 ctermfg=103 cterm=reverse guibg=#262626 guifg=#8787af gui=reverse')
-vim.api.nvim_command('hi DiffDelete ctermbg=235 ctermfg=131 cterm=reverse guibg=#262626 guifg=#af5f5f gui=reverse')
-vim.api.nvim_command('hi DiffText   ctermbg=235 ctermfg=208 cterm=reverse guibg=#262626 guifg=#ff8700 gui=reverse')
-
-
-vim.api.nvim_command([[ cnoreabbrev cr google-chrome-stable % 2>/dev/null ]])
-vim.api.nvim_command([[ cnoreabbrev WQ wq ]])
-vim.api.nvim_command([[ cnoreabbrev W execute 'silent! write !sudo tee % >/dev/null' <bar> edit! ]])
-vim.api.nvim_command([[ nnoremap ss "_dd ]])
-vim.api.nvim_command([[ vnoremap s "_d ]])
-vim.api.nvim_set_keymap('i', '<TAB>',   'pumvisible() ? "\\<C-n>" : "\\<Tab>"',                             {noremap = true, silent = true, expr = true})
-vim.api.nvim_set_keymap('i', '<S-TAB>', 'pumvisible() ? "\\<C-p>" : "\\<S-Tab>"',                           {noremap = true, silent = true, expr = true})
-vim.api.nvim_set_keymap('n', ';',       ':',                                                                {noremap = true, silent = true})
-
+-- polygot conflict with tree-sitter?
+-- vim.g.g:polyglot_disabled = []
 
 -- https://github.com/neovim/nvim-lspconfig
 -- vim.cmd('packadd nvim-lspconfig')
@@ -86,32 +71,50 @@ vim.api.nvim_set_keymap('n', ';',       ':',                                    
 -- require'nvim_lsp'.texlab.setup{}
 -- require'nvim_lsp'.yamlls.setup{}
 
+require'nvim-treesitter.configs'.setup {
+  ensure_installed  = "maintained",
+  highlight         = { enable = true },
+  indent            = { enable = true },
+}
 
-function Packinit()
-    vim.cmd('packadd minpac')
-    vim.fn['minpac#init']()
-    vim.fn['minpac#add']('k-takata/minpac', {type = 'opt'})
-    vim.fn['minpac#add']('fcpg/vim-fahrenheit')
-    vim.fn['minpac#add']('mhinz/vim-signify')
-    vim.fn['minpac#add']('itchyny/lightline.vim')
-    vim.fn['minpac#add']('tyru/caw.vim')
-    vim.fn['minpac#add']('sheerun/vim-polyglot')
-    vim.fn['minpac#add']('neoclide/coc.nvim', {branch = 'release'})
-    -- vim.fn['minpac#add']('neovim/nvim-lspconfig')
-    -- vim.fn['minpac#add']('nvim-lua/completion-nvim')
+
+
+vim.cmd [[ colorscheme   fahrenheit ]]
+vim.cmd [[ hi DiffAdd    ctermbg=235 ctermfg=108 cterm=reverse guibg=#262626 guifg=#87af87 gui=reverse ]]
+vim.cmd [[ hi DiffChange ctermbg=235 ctermfg=103 cterm=reverse guibg=#262626 guifg=#8787af gui=reverse ]]
+vim.cmd [[ hi DiffDelete ctermbg=235 ctermfg=131 cterm=reverse guibg=#262626 guifg=#af5f5f gui=reverse ]]
+vim.cmd [[ hi DiffText   ctermbg=235 ctermfg=208 cterm=reverse guibg=#262626 guifg=#ff8700 gui=reverse ]]
+
+vim.cmd [[ cnoreabbrev W execute 'silent! write !sudo tee % >/dev/null' <bar> edit! ]]
+
+_G.tab1 = function() return vim.api.nvim_replace_termcodes(vim.fn.pumvisible() == 1 and '<C-n>' or '<Tab>',   true, true, true) end
+_G.tab2 = function() return vim.api.nvim_replace_termcodes(vim.fn.pumvisible() == 1 and '<C-p>' or '<S-Tab>', true, true, true) end
+
+vim.api.nvim_set_keymap('c', 'WQ',      'wq',           {noremap = true})
+vim.api.nvim_set_keymap('i', '<TAB>',   'v:lua.tab1()', {noremap = true, silent = true, expr = true})
+vim.api.nvim_set_keymap('i', '<S-TAB>', 'v:lua.tab2()', {noremap = true, silent = true, expr = true})
+vim.api.nvim_set_keymap('v', 's',       '"_d',          {noremap = true})
+vim.api.nvim_set_keymap('n', 'ss',      '"_dd',         {noremap = true})
+vim.api.nvim_set_keymap('n', ';',       ':',            {noremap = true, silent = true})
+
+
+
+
+local install_path = vim.fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
+if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
+    os.execute('git clone https://github.com/wbthomason/packer.nvim ' .. install_path)
 end
 
-function Packupdate()
-    Packinit()
-    vim.fn['minpac#update']()
-end
-function Packclean()
-    Packinit()
-    vim.fn['minpac#clean']()
-end
+require'packer'.startup(function()
+    use {'wbthomason/packer.nvim'}
+    use {'fcpg/vim-fahrenheit'}
+    use {'mhinz/vim-signify'}
+    use {'tyru/caw.vim'}
+    use {'sheerun/vim-polyglot'}
+    use {'neoclide/coc.nvim', branch='release'}
+    use {'nvim-treesitter/nvim-treesitter', run=':TSUpdate'}
+end)
 
-vim.api.nvim_command([[ command! PackUpdate call v:lua.Packupdate() ]])
-vim.api.nvim_command([[ command! PackClean  call v:lua.Packclean() ]])
 
 
 vim.api.nvim_exec([[

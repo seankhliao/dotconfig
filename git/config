@@ -16,6 +16,8 @@
     campu = !git commit -a -m "\""$*"\"" && git push -u origin HEAD && :
     cm    = !git commit    -m "\""$*"\"" && :
 
+    cr    = codereview
+
     d     = diff
     dh    = diff HEAD
 
@@ -73,6 +75,9 @@
 	smudge   = age -d -i ~/.ssh/age.key -
 	required = true
 
+[http]
+	cookiefile = /home/arccy/.ssh/gitcookies
+
 [init]
     defaultBranch = main
 
@@ -110,3 +115,6 @@
 [user]
     email = seankhliao@gmail.com
     name  = Sean Liao
+
+[versionsort]
+	suffix = -

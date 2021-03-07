@@ -48,14 +48,6 @@
   "pairs.enableCharacters": ["(", "[", "{", "'", "\"", "`"],
   "prettier.printWidth": 120,
   "yaml": {
-    "schemaStore.enable": true,
-    "schemas": {
-      "https://json.schemastore.org/cloudbuild": ["cloudbuild.yaml"],
-      "https://json.schemastore.org/kustomization": ["kustomization.yaml"],
-      "https://json.schemastore.org/github-workflow": [".github/workflows/*.yaml"],
-      "https://json.schemastore.org/prometheus": ["prometheus.yml"],
-      "https://json.schemastore.org/traefik-v2": ["traefik.yaml"],
-      "kubernetes": ["*.k8s.yaml"]
-    }
+    "schemaStore.enable": true
   }
 }

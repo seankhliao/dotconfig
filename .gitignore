@@ -48,7 +48,7 @@ QtProject.conf
 rclone/
 remmina/
 Riot/
-SECRETS
+skaffold/
 Slack/
 spotify/
 systemd/user/*.wants/

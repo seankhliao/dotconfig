@@ -3,6 +3,7 @@ vim.cmd [[ syntax enable' ]]
 
 
 
+
 local cache_dir = vim.env.XDG_CACHE_HOME
 local backup_dir = cache_dir .. '/nvim/backup'
 local undo_dir = cache_dir .. '/nvim/undo'
@@ -34,7 +35,7 @@ vim.o.wildmode          = 'longest,list:longest,full'
 vim.wo.breakindent      = true
 vim.wo.foldenable       = false
 vim.wo.number           = true
-vim.wo.statusline       = '%-F %-r %-m %= [%{&fileencoding}] | %y | %l/%L : %c'
+vim.wo.statusline       = '%-F %-r %-m %= %{&fileencoding} | %y | %3.l/%3.L:%3.c'
 
 vim.bo.autoindent       = true
 vim.bo.autoread         = true
@@ -48,6 +49,7 @@ vim.bo.smartindent      = true
 vim.bo.swapfile         = false
 vim.bo.tabstop          = 4
 vim.bo.undofile         = true
+
 
 
 
@@ -76,6 +78,7 @@ require'nvim-treesitter.configs'.setup {
   highlight         = { enable = true },
   indent            = { enable = true },
 }
+
 
 
 
@@ -114,6 +117,7 @@ require'packer'.startup(function()
     use {'neoclide/coc.nvim', branch='release'}
     use {'nvim-treesitter/nvim-treesitter', run=':TSUpdate'}
 end)
+
 
 
 

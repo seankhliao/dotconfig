@@ -31,7 +31,8 @@ output * background $HOME/.ssh/bg.png fill
 bindsym {
     # Screenshot
     Print                   exec grim -g "$(slurp)" "$HOME/data/screen/$(date +'%Y-%m-%d-%H%M%S').png"
-    $mod+t                  exec google-chrome-stable
+    # $mod+t                  exec google-chrome-stable
+    $mod+t                  exec google-chrome-stable -enable-features=UseOzonePlatform -ozone-platform=wayland
     # $mod+n                  exec google-chrome-stable --incognito
     $mod+Shift+t            exec google-chrome-stable --user-data-dir="$HOME/.config/chrome-custom"
     $mod+Return             exec $term
@@ -130,8 +131,8 @@ bar {
 }
 
 # floating
-# auto float (currently unsupported...
-# for_window [window_role="pop-up"] floating enable
+# Not to be confused with Google-chrome (main browser window)
+for_window [app_id="google-chrome"] floating enable
 for_window [title="wl-clipboard"] floating enable
 for_window [class="Vncviewer"] fullscreen enable
 assign [class="Spotify"] workspace $ws9

@@ -42,6 +42,7 @@ nvim/plugged
 nvim/pack
 Outline Manager/
 pavucontrol.ini
+pipewire/
 pipewire-media-session/
 pulse/
 qBittorrent/

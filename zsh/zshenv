@@ -3,7 +3,7 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
 # preferences
-export BROWSER=google-chrome-stable
+export BROWSER="google-chrome-stable -enable-features=UseOzonePlatform -ozone-platform=wayland"
 export EDITOR=nvim
 export MANPAGER="nvim -c 'set ft=man' -"
 

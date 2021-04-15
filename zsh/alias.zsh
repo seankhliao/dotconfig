@@ -39,7 +39,7 @@ alias vbare='${EDITOR} -u NONE'
 
 case "${OSTYPE}" in
     linux*)
-        alias cr='google-chrome-stable'
+        alias cr='${BROWSER}'
         alias p='yay'
         alias sc='sudo systemctl'
         alias scu='systemctl --user'

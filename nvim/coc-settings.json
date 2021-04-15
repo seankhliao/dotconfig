@@ -47,7 +47,8 @@
   },
   "pairs.enableCharacters": ["(", "[", "{", "'", "\"", "`"],
   "prettier.printWidth": 120,
-  "yaml": {
-    "schemaStore.enable": true
+  "yaml.schemaStore.enable": true,
+  "yaml.schemas": {
+    "kubernetes": ["*.k8s.yaml"]
   }
 }

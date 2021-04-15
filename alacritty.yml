@@ -394,7 +394,9 @@ mouse:
     #   - (Windows) explorer
     launcher:
       program: google-chrome-stable
-    #  args: []
+      args:
+        - -enable-features=UseOzonePlatform
+        - -ozone-platform=wayland
     # URL modifiers
     #
     # These are the modifiers that need to be held down for opening URLs when clicking

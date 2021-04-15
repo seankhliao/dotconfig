@@ -34,7 +34,7 @@ bindsym {
     # $mod+t                  exec google-chrome-stable
     $mod+t                  exec google-chrome-stable -enable-features=UseOzonePlatform -ozone-platform=wayland
     # $mod+n                  exec google-chrome-stable --incognito
-    $mod+Shift+t            exec google-chrome-stable --user-data-dir="$HOME/.config/chrome-custom"
+    $mod+Shift+t            exec google-chrome-stable --user-data-dir="$HOME/.config/chrome-custom" -enable-features=UseOzonePlatform -ozone-platform=wayland
     $mod+Return             exec $term
     $mod+d                  exec $menu
     $mod+c                  exec makoctl dismiss

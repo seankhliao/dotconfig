@@ -2,8 +2,8 @@ function testrepo() {
     set -xo pipefail
     local vers=$(( $(cat ${XDG_CONFIG_HOME}/testrepo-version)+1))
     local repo=testrepo-${vers}
-    mkdir ${HOME}/${repo}
-    cd ${HOME}/${repo}
+    mkdir -p ${HOME}/tmp/${repo}
+    cd ${HOME}/tmp/${repo}
     echo ${vers} > ${XDG_CONFIG_HOME}/testrepo-version
     git init
     git commit --allow-empty -m "root-commit"
@@ -64,7 +64,7 @@ function mrgo() {
     go mod init go.seankhliao.com/${repo}
 
     cat << EOF >> README.md
-[![pkg.go.dev](http://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](https://pkg.go.dev/go.seankhliao.com/${repo})
+[![Go Reference](https://pkg.go.dev/badge/go.seankhliao.com/${repo}.svg)](https://pkg.go.dev/go.seankhliao.com/${repo})
 ![Version](https://img.shields.io/github/v/tag/seankhliao/${repo}?sort=semver&style=flat-square)
 EOF
 }

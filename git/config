@@ -112,6 +112,10 @@
     insteadOf = "git://github.com/seankhliao/"
     insteadOf = "https://github.com/seankhliao/"
 
+[url "arccy@arch.seankhliao.com:"]
+    insteadOf = "git://arch.seankhliao.com/"
+    insteadOf = "https://arch.seankhliao.com/"
+
 [user]
     email = seankhliao@gmail.com
     name  = Sean Liao

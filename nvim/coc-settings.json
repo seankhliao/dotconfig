@@ -1,38 +1,67 @@
 {
-  "coc.preferences.formatOnSaveFiletypes": ["css", "go", "html", "javascript", "json", "markdown", "terraform", "yaml"],
-  "languageserver": {
-    "bash": {
-      "command": "bash-language-server",
-      "args": ["start"],
-      "filetypes": ["sh", "bash"],
-      "ignoredRootPaths": ["~"]
-    },
-    "dockerfile": {
-      "command": "docker-langserver",
-      "filetypes": ["Dockerfile"],
-      "args": ["--stdio"],
-      "initializationOptions": {
-        "directiveCasing": "error",
-        "emptyContinuationLine": "error"
-      }
-    },
-    "golang": {
-      "command": "gopls",
-      "args": ["serve"],
-      "rootPatterns": ["go.mod"],
-      "filetypes": ["go", "gomod"],
-      "initializationOptions": {
-        "gofumpt": true,
-        "linksInHover": false,
-        "staticcheck": true,
-        "analyses": {
-          "ST1000": false
-        }
-      }
-    },
+	"coc.preferences.formatOnSaveFiletypes": [
+		"css",
+		"go",
+		"html",
+		"javascript",
+		"json",
+		"markdown",
+		"terraform",
+		"yaml"
+	],
+	"languageserver": {
+		"bash": {
+			"command": "bash-language-server",
+			"args": [
+				"start"
+			],
+			"filetypes": [
+				"sh",
+				"bash"
+			],
+			"ignoredRootPaths": [
+				"~"
+			]
+		},
+		"dockerfile": {
+			"command": "docker-langserver",
+			"filetypes": [
+				"Dockerfile"
+			],
+			"args": [
+				"--stdio"
+			],
+			"initializationOptions": {
+				"directiveCasing": "error",
+				"emptyContinuationLine": "error"
+			}
+		},
+		"golang": {
+			"command": "gopls",
+			"args": [
+				"serve"
+			],
+			"rootPatterns": [
+				"go.mod"
+			],
+			"filetypes": [
+				"go",
+				"gomod"
+			],
+			"initializationOptions": {
+				"gofumpt": true,
+				"linksInHover": false,
+				"staticcheck": true,
+				"analyses": {
+					"ST1000": false
+				}
+			}
+		},
 		"terraform": {
 			"command": "terraform-ls",
-			"args": ["serve"],
+			"args": [
+				"serve"
+			],
 			"filetypes": [
 				"terraform",
 				"tf"
@@ -40,15 +69,17 @@
 			"initializationOptions": {},
 			"settings": {}
 		}
-  },
-  "markdownlint.config": {
-    "line_length": false,
-    "no-bare-urls": false
-  },
-  "pairs.enableCharacters": ["(", "[", "{", "'", "\"", "`"],
-  "prettier.printWidth": 120,
-  "yaml.schemaStore.enable": true,
-  "yaml.schemas": {
-    "kubernetes": ["*.k8s.yaml"]
-  }
+	},
+	"markdownlint.config": {
+		"line_length": false,
+		"no-bare-urls": false
+	},
+	"pairs.enableCharacters": [
+		"(",
+		"[",
+		"{",
+		"'",
+		"\"",
+		"`"
+	]
 }

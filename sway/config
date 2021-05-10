@@ -144,3 +144,5 @@ input "1739:30382:DLL0704:01_06CB:76AE_Touchpad" {
     natural_scroll      enabled
     middle_emulation    enabled
 }
+
+exec mako

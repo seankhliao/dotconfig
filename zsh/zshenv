@@ -52,6 +52,7 @@ export PGPASSFILE="${XDG_DATA_HOME}"/psql/pgpass
 export PSQL_HISTORY="${XDG_DATA_HOME}"/psql/history
 export PYLINTHOME=${XDG_DATA_HOME}/pylint
 export SQLITE_HISTORY=${XDG_DATA_HOME}/sqlite_history
+export TREE_SITTER_DIR=${XDG_DATA_HOME}/tree-sitter
 
 # XDG CONFIG
 export ANDROID_SDK_HOME="${XDG_CONFIG_HOME}"/android

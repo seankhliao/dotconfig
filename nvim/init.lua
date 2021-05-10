@@ -13,7 +13,8 @@ os.execute('mkdir -p ' .. undo_dir)
 vim.o.background        = 'dark'
 vim.o.backupdir         = backup_dir
 vim.o.clipboard         = 'unnamedplus'
-vim.o.completeopt       = 'menuone,noinsert,noselect,preview'
+vim.o.completeopt       = 'menuone,noselect'
+-- vim.o.completeopt       = 'menuone,noinsert,noselect,preview'
 vim.o.confirm           = true
 vim.o.fsync             = true
 vim.o.ignorecase        = true
@@ -55,28 +56,71 @@ vim.bo.undofile         = true
 
 vim.g.signify_sign_change   = '~'
 
--- polygot conflict with tree-sitter?
--- vim.g.g:polyglot_disabled = []
 
--- https://github.com/neovim/nvim-lspconfig
--- vim.cmd('packadd nvim-lspconfig')
--- vim.cmd('packadd completion-nvim')
--- require'nvim_lsp'.bashls.setup{}
--- require'nvim_lsp'.clangd.setup{}
--- require'nvim_lsp'.cssls.setup{}
--- require'nvim_lsp'.dockerls.setup{}
--- require'nvim_lsp'.gopls.setup{}
--- require'nvim_lsp'.html.setup{}
--- require'nvim_lsp'.jsonls.setup{}
--- require'nvim_lsp'.pyls.setup{}
--- require'nvim_lsp'.terraformls.setup{}
--- require'nvim_lsp'.texlab.setup{}
--- require'nvim_lsp'.yamlls.setup{}
+
+
+local nvim_lsp = require('lspconfig')
+require'lspconfig'.gopls.setup{
+    root_dir = nvim_lsp.util.root_pattern('go.mod');
+    settings = {
+        gopls = {
+            gofumpt = true,
+            linksInHover = false,
+            staticcheck = true,
+            analyses = {
+                ST1000 = false,
+            },
+        },
+    },
+}
+require'lspconfig'.yamlls.setup{
+    settings = {
+        yaml = {
+            schemaStore = {
+                enable = true,
+            },
+            schemas = {
+                kubernetes = {'*.k8s.yaml'}
+            },
+        },
+    },
+}
+
+
+
 
 require'nvim-treesitter.configs'.setup {
   ensure_installed  = "maintained",
   highlight         = { enable = true },
   indent            = { enable = true },
+}
+
+
+
+
+require'compe'.setup {
+  enabled = true;
+  autocomplete = true;
+  debug = false;
+  min_length = 1;
+  preselect = 'enable';
+  throttle_time = 80;
+  source_timeout = 200;
+  incomplete_delay = 400;
+  max_abbr_width = 100;
+  max_kind_width = 100;
+  max_menu_width = 100;
+  documentation = true;
+
+  source = {
+    path = true;
+    buffer = true;
+    calc = true;
+    nvim_lsp = true;
+    nvim_lua = true;
+    spell = true;
+    treesitter = true;
+  };
 }
 
 
@@ -90,16 +134,72 @@ vim.cmd [[ hi DiffText   ctermbg=235 ctermfg=208 cterm=reverse guibg=#262626 gui
 
 vim.cmd [[ cnoreabbrev W execute 'silent! write !sudo tee % >/dev/null' <bar> edit! ]]
 
-_G.tab1 = function() return vim.api.nvim_replace_termcodes(vim.fn.pumvisible() == 1 and '<C-n>' or '<Tab>',   true, true, true) end
-_G.tab2 = function() return vim.api.nvim_replace_termcodes(vim.fn.pumvisible() == 1 and '<C-p>' or '<S-Tab>', true, true, true) end
 
-vim.api.nvim_set_keymap('c', 'WQ',      'wq',           {noremap = true})
-vim.api.nvim_set_keymap('i', '<TAB>',   'v:lua.tab1()', {noremap = true, silent = true, expr = true})
-vim.api.nvim_set_keymap('i', '<S-TAB>', 'v:lua.tab2()', {noremap = true, silent = true, expr = true})
-vim.api.nvim_set_keymap('v', 's',       '"_d',          {noremap = true})
-vim.api.nvim_set_keymap('n', 'ss',      '"_dd',         {noremap = true})
-vim.api.nvim_set_keymap('n', ';',       ':',            {noremap = true, silent = true})
+vim.api.nvim_set_keymap('c', 'WQ', 'wq', {noremap = true})
+vim.api.nvim_set_keymap('v', 's', '"_d', {noremap = true})
+vim.api.nvim_set_keymap('n', 'ss', '"_dd', {noremap = true})
+vim.api.nvim_set_keymap('n', ';', ':', {noremap = true, silent = true})
 
+
+
+
+local t = function(str)
+  return vim.api.nvim_replace_termcodes(str, true, true, true)
+end
+
+local check_back_space = function()
+    local col = vim.fn.col('.') - 1
+    if col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
+        return true
+    else
+        return false
+    end
+end
+
+-- Use (s-)tab to:
+--- move to prev/next item in completion menuone
+--- jump to prev/next snippet's placeholder
+_G.tab_complete = function()
+  if vim.fn.pumvisible() == 1 then
+    return t "<C-n>"
+  elseif vim.fn.call("vsnip#available", {1}) == 1 then
+    return t "<Plug>(vsnip-expand-or-jump)"
+  elseif check_back_space() then
+    return t "<Tab>"
+  else
+    return vim.fn['compe#complete']()
+  end
+end
+_G.s_tab_complete = function()
+  if vim.fn.pumvisible() == 1 then
+    return t "<C-p>"
+  elseif vim.fn.call("vsnip#jumpable", {-1}) == 1 then
+    return t "<Plug>(vsnip-jump-prev)"
+  else
+    return t "<S-Tab>"
+  end
+end
+
+vim.api.nvim_set_keymap("i", "<Tab>", "v:lua.tab_complete()", {expr = true})
+vim.api.nvim_set_keymap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
+vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
+vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
+
+
+vim.api.nvim_exec([[
+inoremap <silent><expr> <C-Space> compe#complete()
+inoremap <silent><expr> <CR>      compe#confirm('<CR>')
+inoremap <silent><expr> <C-e>     compe#close('<C-e>')
+inoremap <silent><expr> <C-f>     compe#scroll({ 'delta': +4 })
+inoremap <silent><expr> <C-d>     compe#scroll({ 'delta': -4 })
+
+inoremap <silent><expr> <C-Space> compe#complete()
+inoremap <silent><expr> <CR>      compe#confirm({ 'keys': "\<Plug>delimitMateCR", 'mode': '' })
+inoremap <silent><expr> <C-e>     compe#close('<C-e>')
+inoremap <silent><expr> <C-f>     compe#scroll({ 'delta': +4 })
+inoremap <silent><expr> <C-d>     compe#scroll({ 'delta': -4 })
+
+]], false)
 
 
 
@@ -113,18 +213,47 @@ require'packer'.startup(function()
     use {'fcpg/vim-fahrenheit'}
     use {'mhinz/vim-signify'}
     use {'tyru/caw.vim'}
+    use {'Raimondi/delimitMate'}
     use {'sheerun/vim-polyglot'}
-    use {'neoclide/coc.nvim', branch='release'}
+    use {'neovim/nvim-lspconfig'}
     use {'nvim-treesitter/nvim-treesitter', run=':TSUpdate'}
+    use {'hrsh7th/vim-vsnip'}
+    use {'hrsh7th/nvim-compe'}
 end)
 
 
 
 
+function lsp_organize_imports()
+  local context = { source = { organizeImports = true } }
+  vim.validate { context = { context, "table", true } }
+
+  local params = vim.lsp.util.make_range_params()
+  params.context = context
+
+  local method = "textDocument/codeAction"
+  local timeout = 1000 -- ms
+
+  local resp = vim.lsp.buf_request_sync(0, method, params, timeout)
+  if not resp then return end
+
+  for _, client in ipairs(vim.lsp.get_active_clients()) do
+    if resp[client.id] then
+      local result = resp[client.id].result
+      if not result or not result[1] then return end
+
+      local edit = result[1].edit
+      vim.lsp.util.apply_workspace_edit(edit)
+    end
+  end
+end
+
+-- lua vim.lsp.buf.formatting_sync(nil, 1000)
 vim.api.nvim_exec([[
 augroup Clean
     autocmd!
-    autocmd BufWritePre *.go    silent :call CocAction('runCommand', 'editor.action.organizeImport')
+    autocmd BufWritePre *       silent :lua lsp_organize_imports()
+    autocmd BufWritePre *       silent :lua vim.lsp.buf.formatting_sync()
     autocmd BufWritePre *       silent :%s/\s\+$//e
     autocmd BufWritePre *       silent :v/\_s*\S/d
     autocmd BufWritePre *       silent :nohlsearch

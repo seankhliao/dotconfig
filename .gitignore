@@ -53,6 +53,7 @@ Riot/
 skaffold/
 Slack/
 spotify/
+step/
 systemd/user/*.wants/
 TabNine/
 testrepo-version

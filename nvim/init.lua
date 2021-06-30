@@ -73,11 +73,13 @@ require'lspconfig'.gopls.setup{
         },
     },
 }
+require'lspconfig'.terraformls.setup{}
 require'lspconfig'.yamlls.setup{
     settings = {
         yaml = {
             schemaStore = {
                 enable = true,
+                url = "https://json.schemastore.org/"
             },
             schemas = {
                 kubernetes = {'*.k8s.yaml'}
@@ -104,13 +106,10 @@ require'compe'.setup {
   debug = false;
   min_length = 1;
   preselect = 'enable';
-  throttle_time = 80;
-  source_timeout = 200;
-  incomplete_delay = 400;
-  max_abbr_width = 100;
-  max_kind_width = 100;
-  max_menu_width = 100;
-  documentation = true;
+  documentation = {
+    border = "none", -- the border option is the same as `|help nvim_open_win|`
+    winhighlight = "CompeDocumentation", -- highlight group used for the documentation window
+  };
 
   source = {
     path = true;
@@ -188,17 +187,10 @@ vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
 
 vim.api.nvim_exec([[
 inoremap <silent><expr> <C-Space> compe#complete()
-inoremap <silent><expr> <CR>      compe#confirm('<CR>')
-inoremap <silent><expr> <C-e>     compe#close('<C-e>')
-inoremap <silent><expr> <C-f>     compe#scroll({ 'delta': +4 })
-inoremap <silent><expr> <C-d>     compe#scroll({ 'delta': -4 })
-
-inoremap <silent><expr> <C-Space> compe#complete()
 inoremap <silent><expr> <CR>      compe#confirm({ 'keys': "\<Plug>delimitMateCR", 'mode': '' })
 inoremap <silent><expr> <C-e>     compe#close('<C-e>')
 inoremap <silent><expr> <C-f>     compe#scroll({ 'delta': +4 })
 inoremap <silent><expr> <C-d>     compe#scroll({ 'delta': -4 })
-
 ]], false)
 
 
@@ -224,36 +216,28 @@ end)
 
 
 
-function lsp_organize_imports()
+-- Synchronously organise (Go) imports.
+function go_organize_imports_sync(timeout_ms)
   local context = { source = { organizeImports = true } }
-  vim.validate { context = { context, "table", true } }
-
+  vim.validate { context = { context, 't', true } }
   local params = vim.lsp.util.make_range_params()
   params.context = context
 
-  local method = "textDocument/codeAction"
-  local timeout = 1000 -- ms
-
-  local resp = vim.lsp.buf_request_sync(0, method, params, timeout)
-  if not resp then return end
-
-  for _, client in ipairs(vim.lsp.get_active_clients()) do
-    if resp[client.id] then
-      local result = resp[client.id].result
-      if not result or not result[1] then return end
-
-      local edit = result[1].edit
-      vim.lsp.util.apply_workspace_edit(edit)
-    end
-  end
+  local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, timeout_ms)
+  if not result then return end
+  result = result[1].result
+  if not result then return end
+  edit = result[1].edit
+  vim.lsp.util.apply_workspace_edit(edit)
 end
 
--- lua vim.lsp.buf.formatting_sync(nil, 1000)
+
 vim.api.nvim_exec([[
 augroup Clean
     autocmd!
-    autocmd BufWritePre *       silent :lua lsp_organize_imports()
-    autocmd BufWritePre *       silent :lua vim.lsp.buf.formatting_sync()
+    " autocmd BufWritePre *.go    lua vim.lsp.buf.code_action({source={organizeImports=true}})
+    autocmd BufWritePre *.go    lua go_organize_imports_sync(3000)
+    autocmd BufWritePre *       lua vim.lsp.buf.formatting_sync()
     autocmd BufWritePre *       silent :%s/\s\+$//e
     autocmd BufWritePre *       silent :v/\_s*\S/d
     autocmd BufWritePre *       silent :nohlsearch

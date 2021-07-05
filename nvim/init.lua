@@ -60,7 +60,7 @@ vim.g.signify_sign_change   = '~'
 
 
 local nvim_lsp = require('lspconfig')
-require'lspconfig'.gopls.setup{
+nvim_lsp.gopls.setup{
     root_dir = nvim_lsp.util.root_pattern('go.mod');
     settings = {
         gopls = {
@@ -72,9 +72,16 @@ require'lspconfig'.gopls.setup{
             },
         },
     },
+    on_init = function(client)
+        if string.match(vim.loop.cwd(), vim.env.HOME .. '/go/.*') then
+            client.config.settings.gopls.gofumpt = false
+            client.notify("workspace/didChangeConfiguration")
+        end
+        return true
+    end
 }
-require'lspconfig'.terraformls.setup{}
-require'lspconfig'.yamlls.setup{
+nvim_lsp.terraformls.setup{}
+nvim_lsp.yamlls.setup{
     settings = {
         yaml = {
             schemaStore = {
@@ -106,9 +113,31 @@ require'compe'.setup {
   debug = false;
   min_length = 1;
   preselect = 'enable';
+  throttle_time = 80;
+  source_timeout = 200;
+  resolve_timeout = 800;
+  incomplete_delay = 400;
+  max_abbr_width = 100;
+  max_kind_width = 100;
+  max_menu_width = 100;
   documentation = {
-    border = "none", -- the border option is the same as `|help nvim_open_win|`
-    winhighlight = "CompeDocumentation", -- highlight group used for the documentation window
+    border = "none",
+    winhighlight = "NormalFloat:CompeDocumentation,FloatBorder:CompeDocumentationBorder",
+    max_width = 120,
+    min_width = 60,
+    max_height = math.floor(vim.o.lines * 0.3),
+    min_height = 1,
+  };
+
+  source = {
+    path = true;
+    buffer = true;
+    calc = true;
+    nvim_lsp = true;
+    nvim_lua = true;
+    vsnip = true;
+    ultisnips = true;
+    luasnip = true;
   };
 
   source = {
@@ -120,6 +149,24 @@ require'compe'.setup {
     spell = true;
     treesitter = true;
   };
+}
+
+
+
+
+require'formatter'.setup {
+    logging = false,
+    filetype = {
+        markdown = {
+            function()
+                return {
+                    exe = "prettier",
+                    args = {"--stdin-filepath", vim.api.nvim_buf_get_name(0), '--parser', 'markdown'},
+                    stdin = true,
+                }
+            end
+        }
+    }
 }
 
 
@@ -211,6 +258,7 @@ require'packer'.startup(function()
     use {'nvim-treesitter/nvim-treesitter', run=':TSUpdate'}
     use {'hrsh7th/vim-vsnip'}
     use {'hrsh7th/nvim-compe'}
+    use {'mhartington/formatter.nvim'}
 end)
 
 
@@ -237,6 +285,7 @@ augroup Clean
     autocmd!
     " autocmd BufWritePre *.go    lua vim.lsp.buf.code_action({source={organizeImports=true}})
     autocmd BufWritePre *.go    lua go_organize_imports_sync(3000)
+    autocmd BufWritePost *.md    FormatWrite
     autocmd BufWritePre *       lua vim.lsp.buf.formatting_sync()
     autocmd BufWritePre *       silent :%s/\s\+$//e
     autocmd BufWritePre *       silent :v/\_s*\S/d

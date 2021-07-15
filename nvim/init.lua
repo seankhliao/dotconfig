@@ -72,6 +72,9 @@ nvim_lsp.gopls.setup{
             },
         },
     },
+    on_attach = function(client, bufnr)
+        require "lsp_signature".on_attach()
+    end,
     on_init = function(client)
         if string.match(vim.loop.cwd(), vim.env.HOME .. '/go/.*') then
             client.config.settings.gopls.gofumpt = false
@@ -127,17 +130,6 @@ require'compe'.setup {
     min_width = 60,
     max_height = math.floor(vim.o.lines * 0.3),
     min_height = 1,
-  };
-
-  source = {
-    path = true;
-    buffer = true;
-    calc = true;
-    nvim_lsp = true;
-    nvim_lua = true;
-    vsnip = true;
-    ultisnips = true;
-    luasnip = true;
   };
 
   source = {
@@ -232,14 +224,12 @@ vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
 vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
 
 
-vim.api.nvim_exec([[
-inoremap <silent><expr> <C-Space> compe#complete()
-inoremap <silent><expr> <CR>      compe#confirm({ 'keys': "\<Plug>delimitMateCR", 'mode': '' })
-inoremap <silent><expr> <C-e>     compe#close('<C-e>')
-inoremap <silent><expr> <C-f>     compe#scroll({ 'delta': +4 })
-inoremap <silent><expr> <C-d>     compe#scroll({ 'delta': -4 })
-]], false)
-
+local kmopt = {expr = true, noremap = true, silent = true}
+vim.api.nvim_set_keymap("i", "<C-Space>", [[ compe#complete() ]], kmopt)
+vim.api.nvim_set_keymap("i", "<CR>",      [[ compe#confirm({ 'keys': "\<Plug>delimitMateCR", 'mode': '' }) ]], kmopt)
+vim.api.nvim_set_keymap("i", "<C-e>",     [[ compe#close('<C-e>') ]], kmopt)
+vim.api.nvim_set_keymap("i", "<C-f>",     [[ compe#scroll({ 'delta': +4 }) ]], kmopt)
+vim.api.nvim_set_keymap("i", "<C-d>",     [[ compe#scroll({ 'delta': -4 }) ]], kmopt)
 
 
 local install_path = vim.fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
@@ -259,24 +249,40 @@ require'packer'.startup(function()
     use {'hrsh7th/vim-vsnip'}
     use {'hrsh7th/nvim-compe'}
     use {'mhartington/formatter.nvim'}
+    use {'ray-x/lsp_signature.nvim'}
 end)
 
 
 
-
 -- Synchronously organise (Go) imports.
-function go_organize_imports_sync(timeout_ms)
-  local context = { source = { organizeImports = true } }
-  vim.validate { context = { context, 't', true } }
-  local params = vim.lsp.util.make_range_params()
-  params.context = context
+function goimports(timeout_ms)
+    local context = { source = { organizeImports = true } }
+    vim.validate { context = { context, "t", true } }
 
-  local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, timeout_ms)
-  if not result then return end
-  result = result[1].result
-  if not result then return end
-  edit = result[1].edit
-  vim.lsp.util.apply_workspace_edit(edit)
+    local params = vim.lsp.util.make_range_params()
+    params.context = context
+
+    -- See the implementation of the textDocument/codeAction callback
+    -- (lua/vim/lsp/handler.lua) for how to do this properly.
+    local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, timeout_ms)
+    if not result or next(result) == nil then return end
+    local actions = result[1].result
+    if not actions then return end
+    local action = actions[1]
+
+    -- textDocument/codeAction can return either Command[] or CodeAction[]. If it
+    -- is a CodeAction, it can have either an edit, a command or both. Edits
+    -- should be executed first.
+    if action.edit or type(action.command) == "table" then
+        if action.edit then
+            vim.lsp.util.apply_workspace_edit(action.edit)
+        end
+        if type(action.command) == "table" then
+            vim.lsp.buf.execute_command(action.command)
+        end
+    else
+        vim.lsp.buf.execute_command(action)
+    end
 end
 
 
@@ -284,7 +290,7 @@ vim.api.nvim_exec([[
 augroup Clean
     autocmd!
     " autocmd BufWritePre *.go    lua vim.lsp.buf.code_action({source={organizeImports=true}})
-    autocmd BufWritePre *.go    lua go_organize_imports_sync(3000)
+    autocmd BufWritePre *.go    lua goimports(1000)
     autocmd BufWritePost *.md    FormatWrite
     autocmd BufWritePre *       lua vim.lsp.buf.formatting_sync()
     autocmd BufWritePre *       silent :%s/\s\+$//e

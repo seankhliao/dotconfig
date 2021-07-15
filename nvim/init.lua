@@ -164,6 +164,14 @@ require'formatter'.setup {
 
 
 
+require'nvim-autopairs'.setup {
+    map_cr = true,
+    map_complete = true
+}
+
+
+
+
 vim.cmd [[ colorscheme   fahrenheit ]]
 vim.cmd [[ hi DiffAdd    ctermbg=235 ctermfg=108 cterm=reverse guibg=#262626 guifg=#87af87 gui=reverse ]]
 vim.cmd [[ hi DiffChange ctermbg=235 ctermfg=103 cterm=reverse guibg=#262626 guifg=#8787af gui=reverse ]]
@@ -226,7 +234,9 @@ vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
 
 local kmopt = {expr = true, noremap = true, silent = true}
 vim.api.nvim_set_keymap("i", "<C-Space>", [[ compe#complete() ]], kmopt)
-vim.api.nvim_set_keymap("i", "<CR>",      [[ compe#confirm({ 'keys': "\<Plug>delimitMateCR", 'mode': '' }) ]], kmopt)
+-- vim.api.nvim_set_keymap("i", "<CR>",      [[ compe#confirm({ 'keys': "\<Plug>delimitMateCR", 'mode': '' }) ]], kmopt)
+-- vim.api.nvim_set_keymap("i", "<CR>",      [[ compe#confirm('<CR>') ]], kmopt)
+vim.api.nvim_set_keymap("i", "<CR>",      [[ compe#confirm(luaeval("require 'nvim-autopairs'.autopairs_cr()")) ]], kmopt)
 vim.api.nvim_set_keymap("i", "<C-e>",     [[ compe#close('<C-e>') ]], kmopt)
 vim.api.nvim_set_keymap("i", "<C-f>",     [[ compe#scroll({ 'delta': +4 }) ]], kmopt)
 vim.api.nvim_set_keymap("i", "<C-d>",     [[ compe#scroll({ 'delta': -4 }) ]], kmopt)
@@ -242,7 +252,7 @@ require'packer'.startup(function()
     use {'fcpg/vim-fahrenheit'}
     use {'mhinz/vim-signify'}
     use {'tyru/caw.vim'}
-    use {'Raimondi/delimitMate'}
+    use {'windwp/nvim-autopairs'}
     use {'sheerun/vim-polyglot'}
     use {'neovim/nvim-lspconfig'}
     use {'nvim-treesitter/nvim-treesitter', run=':TSUpdate'}

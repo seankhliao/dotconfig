@@ -40,7 +40,7 @@ bindsym {
     $mod+c                  exec makoctl dismiss
     # $mod+i                  exec alacritty -t irc -e weechat
     # $mod+i                  exec alacritty -t irc -e  ssh arch -t TERM=xterm-256color LANG=en_US.UTF-8 screen -r weechat
-    $mod+i                  exec alacritty -t irc -e kubectl --context kind-cluster30 --namespace weechat exec -it weechat-0 -- screen -dr weechat
+    $mod+i                  exec alacritty -t irc -e kubectl --context default --namespace weechat exec -it weechat-0 -- screen -dr weechat
     $mod+y                  exec yubioath-desktop
 
     XF86AudioRaiseVolume    exec pulsemixer --change-volume +5

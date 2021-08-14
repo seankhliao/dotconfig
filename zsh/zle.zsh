@@ -21,6 +21,8 @@ bindkey '\eOB' history-substring-search-down
 bindkey '^[[H' beginning-of-line
 bindkey '^[[F' end-of-line
 
+zstyle ':completion:*:make:*:targets' call-command true # exec make to get targets
+zstyle ':completion:*:make:*' tag-order targets # ignore make variables
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' gain-privileges true
 zstyle ':completion:*' list-colors "${(@s.:.)LS_COLORS}"

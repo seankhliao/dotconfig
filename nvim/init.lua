@@ -10,57 +10,75 @@ local undo_dir = cache_dir .. '/nvim/undo'
 os.execute('mkdir -p ' .. backup_dir)
 os.execute('mkdir -p ' .. undo_dir)
 
-vim.o.background        = 'dark'
-vim.o.backupdir         = backup_dir
-vim.o.clipboard         = 'unnamedplus'
-vim.o.completeopt       = 'menuone,noselect'
--- vim.o.completeopt       = 'menuone,noinsert,noselect,preview'
-vim.o.confirm           = true
-vim.o.fsync             = true
-vim.o.ignorecase        = true
-vim.o.inccommand        = 'split'
-vim.o.incsearch         = true
-vim.o.mouse             = 'a'
-vim.o.mousefocus        = true
-vim.o.scrolloff         = 4
-vim.o.shortmess         = 'aoOtTIc'
-vim.o.sidescrolloff     = 4
-vim.o.smartcase         = true
-vim.o.smarttab          = true
-vim.o.termguicolors     = true
-vim.o.undodir           = undo_dir
-vim.o.updatetime        = 300
-vim.o.wildignorecase    = true
-vim.o.wildmode          = 'longest,list:longest,full'
+vim.o.background     = 'dark'
+vim.o.backupdir      = backup_dir
+vim.o.clipboard      = 'unnamedplus'
+vim.o.completeopt    = 'menuone,noselect'
+vim.o.confirm        = true
+vim.o.fsync          = true
+vim.o.ignorecase     = true
+vim.o.inccommand     = 'split'
+vim.o.incsearch      = true
+vim.o.mouse          = 'a'
+vim.o.mousefocus     = true
+vim.o.scrolloff      = 4
+vim.o.shortmess      = 'aoOtTIc'
+vim.o.sidescrolloff  = 4
+vim.o.smartcase      = true
+vim.o.smarttab       = true
+vim.o.termguicolors  = true
+vim.o.undodir        = undo_dir
+vim.o.updatetime     = 300
+vim.o.wildignorecase = true
+vim.o.wildmode       = 'longest,list:longest,full'
 
-vim.wo.breakindent      = true
-vim.wo.foldenable       = false
-vim.wo.number           = true
-vim.wo.statusline       = '%-F %-r %-m %= %{&fileencoding} | %y | %3.l/%3.L:%3.c'
+vim.wo.breakindent   = true
+vim.wo.foldenable    = false
+vim.wo.number        = true
+vim.wo.statusline    = '%-F %-r %-m %= %{&fileencoding} | %y | %3.l/%3.L:%3.c'
 
-vim.bo.autoindent       = true
-vim.bo.autoread         = true
-vim.bo.commentstring    = '#\\ %s'
-vim.bo.copyindent       = true
-vim.bo.expandtab        = true
-vim.bo.grepprg          = 'rg'
-vim.bo.modeline         = false
-vim.bo.shiftwidth       = 0
-vim.bo.smartindent      = true
-vim.bo.swapfile         = false
-vim.bo.tabstop          = 4
-vim.bo.undofile         = true
-
-
+vim.bo.autoindent    = true
+vim.bo.autoread      = true
+vim.bo.commentstring = '#\\ %s'
+vim.bo.copyindent    = true
+vim.bo.expandtab     = true
+vim.bo.grepprg       = 'rg'
+vim.bo.modeline      = false
+vim.bo.shiftwidth    = 0
+vim.bo.smartindent   = true
+vim.bo.swapfile      = false
+vim.bo.tabstop       = 4
+vim.bo.undofile      = true
 
 
 vim.g.signify_sign_change   = '~'
 
 
+local install_path = vim.fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
+if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
+    os.execute('git clone https://github.com/wbthomason/packer.nvim ' .. install_path)
+end
+
+require'packer'.startup(function()
+    use {'wbthomason/packer.nvim'}
+    use {'fcpg/vim-fahrenheit'}
+    use {'mhinz/vim-signify'}
+    use {'tyru/caw.vim'}
+    use {'windwp/nvim-autopairs'}
+    use {'sheerun/vim-polyglot'}
+    use {'neovim/nvim-lspconfig'}
+    use {'nvim-treesitter/nvim-treesitter', run=':TSUpdate'}
+    use {'hrsh7th/vim-vsnip'}
+    use {'hrsh7th/nvim-compe'}
+    use {'mhartington/formatter.nvim'}
+    use {'ray-x/lsp_signature.nvim'}
+end)
+
+
 
 
 local nvim_lsp = require('lspconfig')
-nvim_lsp.gopls.setup{
+nvim_lsp.gopls.setup {
     root_dir = nvim_lsp.util.root_pattern('go.mod');
     settings = {
         gopls = {
@@ -72,59 +90,75 @@ nvim_lsp.gopls.setup{
             },
         },
     },
-    on_attach = function(client, bufnr)
-        require "lsp_signature".on_attach()
-    end,
     on_init = function(client)
         if string.match(vim.loop.cwd(), vim.env.HOME .. '/go/.*') then
             client.config.settings.gopls.gofumpt = false
             client.notify("workspace/didChangeConfiguration")
         end
         return true
-    end
+    end,
 }
-nvim_lsp.terraformls.setup{}
-nvim_lsp.yamlls.setup{
+nvim_lsp.terraformls.setup {
+    flags = {
+        debounce_text_changes = 150,
+    },
+}
+nvim_lsp.yamlls.setup {
     settings = {
         yaml = {
             schemaStore = {
                 enable = true,
-                url = "https://json.schemastore.org/"
+                url = "https://json.schemastore.org/",
             },
             schemas = {
-                kubernetes = {'*.k8s.yaml'}
+                -- table string key syntax...
+                ['https://raw.githubusercontent.com/GoogleContainerTools/skaffold/main/docs/content/en/schemas/v2beta20.json'] = 'skaffold.yaml',
+                ['https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/cloudbuild.json'] = 'cloudbuild*.yaml',
+                ['https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/github-workflow.json'] = '.github/workflows/*.yaml',
+                ['https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/kustomization.json'] = 'kustomization.yaml',
+                ['https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/traefik-v2.json'] = {'ingressroute.k8s.yaml'},
+                ['https://kpt.dev/reference/schema/kptfile/kptfile.yaml'] = 'Kptfile',
+                -- conflicts with builtin
+                kubernetes = '*.k8s.yaml',
+                -- ['https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.22.0-standalone-strict/all.json'] = '*.k8s.yaml',
             },
         },
     },
 }
 
 
-
-
 require'nvim-treesitter.configs'.setup {
+  autopairs = {enable = true},
   ensure_installed  = "maintained",
+  ignore_install    = {"godotResource"},
   highlight         = { enable = true },
   indent            = { enable = true },
 }
 
 
+require "lsp_signature".setup {
+    hint_enable = false,
+    handler_opts = {
+        border = "none",
+    },
+}
 
 
 require'compe'.setup {
-  enabled = true;
-  autocomplete = true;
-  debug = false;
-  min_length = 1;
-  preselect = 'enable';
-  throttle_time = 80;
-  source_timeout = 200;
-  resolve_timeout = 800;
-  incomplete_delay = 400;
-  max_abbr_width = 100;
-  max_kind_width = 100;
-  max_menu_width = 100;
+  enabled = true,
+  autocomplete = true,
+  debug = false,
+  min_length = 1,
+  preselect = "enable",
+  throttle_time = 80,
+  source_timeout = 200,
+  resolve_timeout = 800,
+  incomplete_delay = 400,
+  max_abbr_width = 100,
+  max_kind_width = 100,
+  max_menu_width = 100,
   documentation = {
-    border = "none",
+    border = { '', '' ,'', ' ', '', '', '', ' ' },
     winhighlight = "NormalFloat:CompeDocumentation,FloatBorder:CompeDocumentationBorder",
     max_width = 120,
     min_width = 60,
@@ -133,17 +167,15 @@ require'compe'.setup {
   };
 
   source = {
-    path = true;
-    buffer = true;
-    calc = true;
-    nvim_lsp = true;
-    nvim_lua = true;
-    spell = true;
-    treesitter = true;
+    path = true,
+    buffer = true,
+    nvim_lsp = true,
+    nvim_lua = true,
+    spell = true,
+    treesitter = true,
+    vsnip = true,
   };
 }
-
-
 
 
 require'formatter'.setup {
@@ -153,7 +185,12 @@ require'formatter'.setup {
             function()
                 return {
                     exe = "prettier",
-                    args = {"--stdin-filepath", vim.api.nvim_buf_get_name(0), '--parser', 'markdown'},
+                    args = {
+                        "--stdin-filepath",
+                        vim.api.nvim_buf_get_name(0),
+                        "--parser",
+                        "markdown",
+                    },
                     stdin = true,
                 }
             end
@@ -162,14 +199,11 @@ require'formatter'.setup {
 }
 
 
-
-
 require'nvim-autopairs'.setup {
+    check_ts = true,
     map_cr = true,
     map_complete = true
 }
-
-
 
 
 vim.cmd [[ colorscheme   fahrenheit ]]
@@ -177,7 +211,6 @@ vim.cmd [[ hi DiffAdd    ctermbg=235 ctermfg=108 cterm=reverse guibg=#262626 gui
 vim.cmd [[ hi DiffChange ctermbg=235 ctermfg=103 cterm=reverse guibg=#262626 guifg=#8787af gui=reverse ]]
 vim.cmd [[ hi DiffDelete ctermbg=235 ctermfg=131 cterm=reverse guibg=#262626 guifg=#af5f5f gui=reverse ]]
 vim.cmd [[ hi DiffText   ctermbg=235 ctermfg=208 cterm=reverse guibg=#262626 guifg=#ff8700 gui=reverse ]]
-
 vim.cmd [[ cnoreabbrev W execute 'silent! write !sudo tee % >/dev/null' <bar> edit! ]]
 
 
@@ -186,6 +219,12 @@ vim.api.nvim_set_keymap('v', 's', '"_d', {noremap = true})
 vim.api.nvim_set_keymap('n', 'ss', '"_dd', {noremap = true})
 vim.api.nvim_set_keymap('n', ';', ':', {noremap = true, silent = true})
 
+local lopt = {noremap = true, silent = true}
+vim.api.nvim_set_keymap('n', '<C-d>', '<Cmd>lua vim.lsp.buf.definition()<CR>', lopt)
+vim.api.nvim_set_keymap('n', '<C-h>', '<Cmd>lua vim.lsp.buf.signature_help()<CR>', lopt)
+vim.api.nvim_set_keymap('n', '<C-e>', '<Cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', lopt)
+vim.api.nvim_set_keymap('n', '<C-Tab>', '<Cmd>lua vim.lsp.diagnostic.goto_next()<CR>', lopt)
+vim.api.nvim_set_keymap('n', '<C-S-Tab>', '<Cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', lopt)
 
 
 
@@ -226,6 +265,7 @@ _G.s_tab_complete = function()
   end
 end
 
+
 vim.api.nvim_set_keymap("i", "<Tab>", "v:lua.tab_complete()", {expr = true})
 vim.api.nvim_set_keymap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
 vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
@@ -234,34 +274,7 @@ vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
 
 local kmopt = {expr = true, noremap = true, silent = true}
 vim.api.nvim_set_keymap("i", "<C-Space>", [[ compe#complete() ]], kmopt)
--- vim.api.nvim_set_keymap("i", "<CR>",      [[ compe#confirm({ 'keys': "\<Plug>delimitMateCR", 'mode': '' }) ]], kmopt)
--- vim.api.nvim_set_keymap("i", "<CR>",      [[ compe#confirm('<CR>') ]], kmopt)
 vim.api.nvim_set_keymap("i", "<CR>",      [[ compe#confirm(luaeval("require 'nvim-autopairs'.autopairs_cr()")) ]], kmopt)
-vim.api.nvim_set_keymap("i", "<C-e>",     [[ compe#close('<C-e>') ]], kmopt)
-vim.api.nvim_set_keymap("i", "<C-f>",     [[ compe#scroll({ 'delta': +4 }) ]], kmopt)
-vim.api.nvim_set_keymap("i", "<C-d>",     [[ compe#scroll({ 'delta': -4 }) ]], kmopt)
-
-
-local install_path = vim.fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
-if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-    os.execute('git clone https://github.com/wbthomason/packer.nvim ' .. install_path)
-end
-
-require'packer'.startup(function()
-    use {'wbthomason/packer.nvim'}
-    use {'fcpg/vim-fahrenheit'}
-    use {'mhinz/vim-signify'}
-    use {'tyru/caw.vim'}
-    use {'windwp/nvim-autopairs'}
-    use {'sheerun/vim-polyglot'}
-    use {'neovim/nvim-lspconfig'}
-    use {'nvim-treesitter/nvim-treesitter', run=':TSUpdate'}
-    use {'hrsh7th/vim-vsnip'}
-    use {'hrsh7th/nvim-compe'}
-    use {'mhartington/formatter.nvim'}
-    use {'ray-x/lsp_signature.nvim'}
-end)
-
 
 
 -- Synchronously organise (Go) imports.
@@ -299,12 +312,17 @@ end
 vim.api.nvim_exec([[
 augroup Clean
     autocmd!
-    " autocmd BufWritePre *.go    lua vim.lsp.buf.code_action({source={organizeImports=true}})
-    autocmd BufWritePre *.go    lua goimports(1000)
-    autocmd BufWritePost *.md    FormatWrite
+    " autocmd BufWritePre *.go    lua goimports(1000)
+    autocmd BufWritePost *.md   FormatWrite
     autocmd BufWritePre *       lua vim.lsp.buf.formatting_sync()
     autocmd BufWritePre *       silent :%s/\s\+$//e
     autocmd BufWritePre *       silent :v/\_s*\S/d
     autocmd BufWritePre *       silent :nohlsearch
+augroup END
+]], false)
+
+vim.api.nvim_exec([[
+augroup Kptfile
+    autocmd BufNewFile,BufRead Kptfile      set ft=yaml
 augroup END
 ]], false)

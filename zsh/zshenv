@@ -36,6 +36,7 @@ export __GL_SHADER_DISK_CACHE_PATH="${XDG_CACHE_HOME}"/nv
 export CCACHE_DIR="${XDG_CACHE_HOME}"/ccache
 export CUDA_CACHE_PATH="${XDG_CACHE_HOME}"/nv
 export GEM_SPEC_CACHE="${XDG_CACHE_HOME}"/gem
+export KPT_CACHE_DIR="${XDG_CACHE_HOME}"/kpt/repos
 export NUGET_PACKAGES="${XDG_CACHE_HOME}"/NuGetPackages
 export PYTHON_EGG_CACHE="${XDG_CACHE_HOME}"/python-eggs
 export RANDFILE="${XDG_CACHE_HOME}"/rnd

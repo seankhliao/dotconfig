@@ -86,6 +86,7 @@
 
 [pull]
     rebase = true
+    twohead = ort
 
 [rebase]
     autoStash = true

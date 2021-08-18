@@ -279,7 +279,7 @@ vim.api.nvim_set_keymap("i", "<CR>",      [[ compe#confirm(luaeval("require 'nvi
 
 -- Synchronously organise (Go) imports.
 function goimports(timeout_ms)
-    local context = { source = { organizeImports = true } }
+    local context = { only = { "source.organizeImports" } }
     vim.validate { context = { context, "t", true } }
 
     local params = vim.lsp.util.make_range_params()
@@ -312,7 +312,7 @@ end
 vim.api.nvim_exec([[
 augroup Clean
     autocmd!
-    " autocmd BufWritePre *.go    lua goimports(1000)
+    autocmd BufWritePre *.go    lua goimports(1000)
     autocmd BufWritePost *.md   FormatWrite
     autocmd BufWritePre *       lua vim.lsp.buf.formatting_sync()
     autocmd BufWritePre *       silent :%s/\s\+$//e

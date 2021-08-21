@@ -3,7 +3,6 @@ vim.cmd [[ syntax enable' ]]
 
 
 
-
 local cache_dir = vim.env.XDG_CACHE_HOME
 local backup_dir = cache_dir .. '/nvim/backup'
 local undo_dir = cache_dir .. '/nvim/undo'
@@ -13,7 +12,7 @@ os.execute('mkdir -p ' .. undo_dir)
 vim.o.background     = 'dark'
 vim.o.backupdir      = backup_dir
 vim.o.clipboard      = 'unnamedplus'
-vim.o.completeopt    = 'menuone,noselect'
+vim.o.completeopt    = 'menuone,noinsert,noselect'
 vim.o.confirm        = true
 vim.o.fsync          = true
 vim.o.ignorecase     = true
@@ -52,6 +51,7 @@ vim.bo.undofile      = true
 
 
 vim.g.signify_sign_change   = '~'
+vim.g.completion_enable_snippet = 'snippets.nvim'
 
 
 local install_path = vim.fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
@@ -68,10 +68,10 @@ require'packer'.startup(function()
     use {'sheerun/vim-polyglot'}
     use {'neovim/nvim-lspconfig'}
     use {'nvim-treesitter/nvim-treesitter', run=':TSUpdate'}
-    use {'hrsh7th/vim-vsnip'}
-    use {'hrsh7th/nvim-compe'}
     use {'mhartington/formatter.nvim'}
-    use {'ray-x/lsp_signature.nvim'}
+
+    use {'nvim-lua/completion-nvim'}
+    use {'norcalli/snippets.nvim'}
 end)
 
 
@@ -136,48 +136,6 @@ require'nvim-treesitter.configs'.setup {
 }
 
 
-require "lsp_signature".setup {
-    hint_enable = false,
-    handler_opts = {
-        border = "none",
-    },
-}
-
-
-require'compe'.setup {
-  enabled = true,
-  autocomplete = true,
-  debug = false,
-  min_length = 1,
-  preselect = "enable",
-  throttle_time = 80,
-  source_timeout = 200,
-  resolve_timeout = 800,
-  incomplete_delay = 400,
-  max_abbr_width = 100,
-  max_kind_width = 100,
-  max_menu_width = 100,
-  documentation = {
-    border = { '', '' ,'', ' ', '', '', '', ' ' },
-    winhighlight = "NormalFloat:CompeDocumentation,FloatBorder:CompeDocumentationBorder",
-    max_width = 120,
-    min_width = 60,
-    max_height = math.floor(vim.o.lines * 0.3),
-    min_height = 1,
-  };
-
-  source = {
-    path = true,
-    buffer = true,
-    nvim_lsp = true,
-    nvim_lua = true,
-    spell = true,
-    treesitter = true,
-    vsnip = true,
-  };
-}
-
-
 require'formatter'.setup {
     logging = false,
     filetype = {
@@ -206,6 +164,9 @@ require'nvim-autopairs'.setup {
 }
 
 
+require'snippets'.use_suggested_mappings()
+
+
 vim.cmd [[ colorscheme   fahrenheit ]]
 vim.cmd [[ hi DiffAdd    ctermbg=235 ctermfg=108 cterm=reverse guibg=#262626 guifg=#87af87 gui=reverse ]]
 vim.cmd [[ hi DiffChange ctermbg=235 ctermfg=103 cterm=reverse guibg=#262626 guifg=#8787af gui=reverse ]]
@@ -219,62 +180,9 @@ vim.api.nvim_set_keymap('v', 's', '"_d', {noremap = true})
 vim.api.nvim_set_keymap('n', 'ss', '"_dd', {noremap = true})
 vim.api.nvim_set_keymap('n', ';', ':', {noremap = true, silent = true})
 
-local lopt = {noremap = true, silent = true}
-vim.api.nvim_set_keymap('n', '<C-d>', '<Cmd>lua vim.lsp.buf.definition()<CR>', lopt)
-vim.api.nvim_set_keymap('n', '<C-h>', '<Cmd>lua vim.lsp.buf.signature_help()<CR>', lopt)
-vim.api.nvim_set_keymap('n', '<C-e>', '<Cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', lopt)
-vim.api.nvim_set_keymap('n', '<C-Tab>', '<Cmd>lua vim.lsp.diagnostic.goto_next()<CR>', lopt)
-vim.api.nvim_set_keymap('n', '<C-S-Tab>', '<Cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', lopt)
+vim.cmd [[ inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>" ]]
+vim.cmd [[ inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>" ]]
 
-
-
-local t = function(str)
-  return vim.api.nvim_replace_termcodes(str, true, true, true)
-end
-
-local check_back_space = function()
-    local col = vim.fn.col('.') - 1
-    if col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
-        return true
-    else
-        return false
-    end
-end
-
--- Use (s-)tab to:
---- move to prev/next item in completion menuone
---- jump to prev/next snippet's placeholder
-_G.tab_complete = function()
-  if vim.fn.pumvisible() == 1 then
-    return t "<C-n>"
-  elseif vim.fn.call("vsnip#available", {1}) == 1 then
-    return t "<Plug>(vsnip-expand-or-jump)"
-  elseif check_back_space() then
-    return t "<Tab>"
-  else
-    return vim.fn['compe#complete']()
-  end
-end
-_G.s_tab_complete = function()
-  if vim.fn.pumvisible() == 1 then
-    return t "<C-p>"
-  elseif vim.fn.call("vsnip#jumpable", {-1}) == 1 then
-    return t "<Plug>(vsnip-jump-prev)"
-  else
-    return t "<S-Tab>"
-  end
-end
-
-
-vim.api.nvim_set_keymap("i", "<Tab>", "v:lua.tab_complete()", {expr = true})
-vim.api.nvim_set_keymap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
-vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
-vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
-
-
-local kmopt = {expr = true, noremap = true, silent = true}
-vim.api.nvim_set_keymap("i", "<C-Space>", [[ compe#complete() ]], kmopt)
-vim.api.nvim_set_keymap("i", "<CR>",      [[ compe#confirm(luaeval("require 'nvim-autopairs'.autopairs_cr()")) ]], kmopt)
 
 
 -- Synchronously organise (Go) imports.
@@ -326,3 +234,5 @@ augroup Kptfile
     autocmd BufNewFile,BufRead Kptfile      set ft=yaml
 augroup END
 ]], false)
+
+vim.api.nvim_exec([[ autocmd BufEnter * lua require'completion'.on_attach() ]], false)

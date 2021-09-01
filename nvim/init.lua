@@ -3,11 +3,12 @@ vim.cmd [[ syntax enable' ]]
 
 
 
+
 local cache_dir = vim.env.XDG_CACHE_HOME
 local backup_dir = cache_dir .. '/nvim/backup'
 local undo_dir = cache_dir .. '/nvim/undo'
-os.execute('mkdir -p ' .. backup_dir)
-os.execute('mkdir -p ' .. undo_dir)
+vim.fn.system({'mkdir', '-p', backup_dir})
+vim.fn.system({'mkdir', '-p', undo_dir})
 
 vim.o.background     = 'dark'
 vim.o.backupdir      = backup_dir
@@ -23,6 +24,7 @@ vim.o.mousefocus     = true
 vim.o.scrolloff      = 4
 vim.o.shortmess      = 'aoOtTIc'
 vim.o.sidescrolloff  = 4
+vim.o.signcolumn     = 'yes'
 vim.o.smartcase      = true
 vim.o.smarttab       = true
 vim.o.termguicolors  = true
@@ -50,121 +52,33 @@ vim.bo.tabstop       = 4
 vim.bo.undofile      = true
 
 
+
+
 vim.g.signify_sign_change   = '~'
-vim.g.completion_enable_snippet = 'snippets.nvim'
 
 
-local install_path = vim.fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
+
+
+local packer_install_path = vim.fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-    os.execute('git clone https://github.com/wbthomason/packer.nvim ' .. install_path)
+    vim.fn.system({'git', 'clone', 'https://github.com/wbthomason/packer.nvim', packer_install_path})
+    vim.cmd [[ packadd packer.nvim ]]
 end
 
 require'packer'.startup(function()
-    use {'wbthomason/packer.nvim'}
     use {'fcpg/vim-fahrenheit'}
     use {'mhinz/vim-signify'}
-    use {'tyru/caw.vim'}
-    use {'windwp/nvim-autopairs'}
     use {'sheerun/vim-polyglot'}
-    use {'neovim/nvim-lspconfig'}
-    use {'nvim-treesitter/nvim-treesitter', run=':TSUpdate'}
-    use {'mhartington/formatter.nvim'}
-
-    use {'nvim-lua/completion-nvim'}
-    use {'norcalli/snippets.nvim'}
+    use {'tyru/caw.vim'}
+    use {'wbthomason/packer.nvim'}
+    use {
+        'neoclide/coc.nvim',
+        branch = 'release',
+        run = ':CocInstall coc-dictionary coc-go coc-graphql coc-prettier coc-json coc-pairs coc-sh coc-swagger coc-syntax coc-word coc-yaml',
+    }
 end)
 
 
-
-
-local nvim_lsp = require('lspconfig')
-nvim_lsp.gopls.setup {
-    root_dir = nvim_lsp.util.root_pattern('go.mod');
-    settings = {
-        gopls = {
-            gofumpt = true,
-            linksInHover = false,
-            staticcheck = true,
-            analyses = {
-                ST1000 = false,
-            },
-        },
-    },
-    on_init = function(client)
-        if string.match(vim.loop.cwd(), vim.env.HOME .. '/go/.*') then
-            client.config.settings.gopls.gofumpt = false
-            client.notify("workspace/didChangeConfiguration")
-        end
-        return true
-    end,
-}
-nvim_lsp.terraformls.setup {
-    flags = {
-        debounce_text_changes = 150,
-    },
-}
-nvim_lsp.yamlls.setup {
-    settings = {
-        yaml = {
-            schemaStore = {
-                enable = true,
-                url = "https://json.schemastore.org/",
-            },
-            schemas = {
-                -- table string key syntax...
-                ['https://raw.githubusercontent.com/GoogleContainerTools/skaffold/main/docs/content/en/schemas/v2beta20.json'] = 'skaffold.yaml',
-                ['https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/cloudbuild.json'] = 'cloudbuild*.yaml',
-                ['https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/github-workflow.json'] = '.github/workflows/*.yaml',
-                ['https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/kustomization.json'] = 'kustomization.yaml',
-                ['https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/traefik-v2.json'] = {'ingressroute.k8s.yaml'},
-                ['https://kpt.dev/reference/schema/kptfile/kptfile.yaml'] = 'Kptfile',
-                -- conflicts with builtin
-                kubernetes = '*.k8s.yaml',
-                -- ['https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.22.0-standalone-strict/all.json'] = '*.k8s.yaml',
-            },
-        },
-    },
-}
-
-
-require'nvim-treesitter.configs'.setup {
-  autopairs = {enable = true},
-  ensure_installed  = "maintained",
-  ignore_install    = {"godotResource"},
-  highlight         = { enable = true },
-  indent            = { enable = true },
-}
-
-
-require'formatter'.setup {
-    logging = false,
-    filetype = {
-        markdown = {
-            function()
-                return {
-                    exe = "prettier",
-                    args = {
-                        "--stdin-filepath",
-                        vim.api.nvim_buf_get_name(0),
-                        "--parser",
-                        "markdown",
-                    },
-                    stdin = true,
-                }
-            end
-        }
-    }
-}
-
-
-require'nvim-autopairs'.setup {
-    check_ts = true,
-    map_cr = true,
-    map_complete = true
-}
-
-
-require'snippets'.use_suggested_mappings()
 
 
 vim.cmd [[ colorscheme   fahrenheit ]]
@@ -180,49 +94,13 @@ vim.api.nvim_set_keymap('v', 's', '"_d', {noremap = true})
 vim.api.nvim_set_keymap('n', 'ss', '"_dd', {noremap = true})
 vim.api.nvim_set_keymap('n', ';', ':', {noremap = true, silent = true})
 
-vim.cmd [[ inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>" ]]
-vim.cmd [[ inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>" ]]
 
-
-
--- Synchronously organise (Go) imports.
-function goimports(timeout_ms)
-    local context = { only = { "source.organizeImports" } }
-    vim.validate { context = { context, "t", true } }
-
-    local params = vim.lsp.util.make_range_params()
-    params.context = context
-
-    -- See the implementation of the textDocument/codeAction callback
-    -- (lua/vim/lsp/handler.lua) for how to do this properly.
-    local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, timeout_ms)
-    if not result or next(result) == nil then return end
-    local actions = result[1].result
-    if not actions then return end
-    local action = actions[1]
-
-    -- textDocument/codeAction can return either Command[] or CodeAction[]. If it
-    -- is a CodeAction, it can have either an edit, a command or both. Edits
-    -- should be executed first.
-    if action.edit or type(action.command) == "table" then
-        if action.edit then
-            vim.lsp.util.apply_workspace_edit(action.edit)
-        end
-        if type(action.command) == "table" then
-            vim.lsp.buf.execute_command(action.command)
-        end
-    else
-        vim.lsp.buf.execute_command(action)
-    end
-end
 
 
 vim.api.nvim_exec([[
 augroup Clean
     autocmd!
-    autocmd BufWritePre *.go    lua goimports(1000)
-    autocmd BufWritePost *.md   FormatWrite
-    autocmd BufWritePre *       lua vim.lsp.buf.formatting_sync()
+    autocmd BufWritePre *.go    silent :call CocAction('runCommand', 'editor.action.organizeImport')
     autocmd BufWritePre *       silent :%s/\s\+$//e
     autocmd BufWritePre *       silent :v/\_s*\S/d
     autocmd BufWritePre *       silent :nohlsearch
@@ -234,5 +112,3 @@ augroup Kptfile
     autocmd BufNewFile,BufRead Kptfile      set ft=yaml
 augroup END
 ]], false)
-
-vim.api.nvim_exec([[ autocmd BufEnter * lua require'completion'.on_attach() ]], false)

@@ -33,8 +33,8 @@ colors:
     cyan: "0x14ffff"
     white: "0xececec"
 
-#selection:
-#semantic_escape_chars: ",│`|:\"' ()[]{}<>\t"
+selection:
+  semantic_escape_chars: ",│`|\"' ()[]{}<>\t"
 
 # When set to `true`, selected text will be copied to the primary clipboard.
 #save_to_clipboard: false

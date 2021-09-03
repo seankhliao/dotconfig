@@ -74,7 +74,7 @@ require'packer'.startup(function()
     use {
         'neoclide/coc.nvim',
         branch = 'release',
-        run = ':CocInstall coc-dictionary coc-go coc-graphql coc-prettier coc-json coc-pairs coc-sh coc-swagger coc-syntax coc-word coc-yaml',
+        run = ':CocInstall coc-dictionary coc-graphql coc-prettier coc-json coc-pairs coc-swagger coc-syntax coc-word coc-yaml',
     }
 end)
 
@@ -89,10 +89,10 @@ vim.cmd [[ hi DiffText   ctermbg=235 ctermfg=208 cterm=reverse guibg=#262626 gui
 vim.cmd [[ cnoreabbrev W execute 'silent! write !sudo tee % >/dev/null' <bar> edit! ]]
 
 
-vim.api.nvim_set_keymap('c', 'WQ', 'wq', {noremap = true})
-vim.api.nvim_set_keymap('v', 's', '"_d', {noremap = true})
-vim.api.nvim_set_keymap('n', 'ss', '"_dd', {noremap = true})
-vim.api.nvim_set_keymap('n', ';', ':', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('c', 'WQ',  'wq',   {noremap = true})
+vim.api.nvim_set_keymap('v', 's',   '"_d',  {noremap = true})
+vim.api.nvim_set_keymap('n', 'ss',  '"_dd', {noremap = true})
+vim.api.nvim_set_keymap('n', ';',   ':',    {noremap = true, silent = true})
 
 
 
@@ -111,4 +111,13 @@ vim.api.nvim_exec([[
 augroup Kptfile
     autocmd BufNewFile,BufRead Kptfile      set ft=yaml
 augroup END
+]], false)
+
+vim.api.nvim_exec([[
+autocmd FileType go         setlocal shiftwidth=8 softtabstop=8 expandtab
+autocmd FileType html       setlocal shiftwidth=2 softtabstop=2 expandtab
+autocmd FileType javascript setlocal shiftwidth=2 softtabstop=2 expandtab
+autocmd FileType make       setlocal noexpandtab
+autocmd FileType markdown   setlocal shiftwidth=2 softtabstop=2 expandtab
+autocmd FileType yaml       setlocal shiftwidth=2 softtabstop=2 expandtab
 ]], false)

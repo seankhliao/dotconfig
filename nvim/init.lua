@@ -114,10 +114,11 @@ augroup END
 ]], false)
 
 vim.api.nvim_exec([[
-autocmd FileType go         setlocal shiftwidth=8 softtabstop=8 expandtab
-autocmd FileType html       setlocal shiftwidth=2 softtabstop=2 expandtab
-autocmd FileType javascript setlocal shiftwidth=2 softtabstop=2 expandtab
+autocmd FileType go         setlocal shiftwidth=8 softtabstop=8 tabstop=8 expandtab
+autocmd FileType html       setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
+autocmd FileType javascript setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
 autocmd FileType make       setlocal noexpandtab
-autocmd FileType markdown   setlocal shiftwidth=2 softtabstop=2 expandtab
-autocmd FileType yaml       setlocal shiftwidth=2 softtabstop=2 expandtab
+autocmd FileType markdown   setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
+autocmd FileType toml       setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
+autocmd FileType yaml       setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
 ]], false)

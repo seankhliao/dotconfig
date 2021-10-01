@@ -50,6 +50,9 @@
       "filetypes": ["yaml"]
     }
   },
+  "prettier": {
+    "printWidth": 200
+  },
   "yaml": {
     "schemaStore": {
       "enable": true

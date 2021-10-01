@@ -8,7 +8,7 @@ font:
   normal:
     family: IBM Plex Mono
 
-  size: 12.0
+  size: 11.0
 
 colors:
   primary:
@@ -58,7 +58,6 @@ hints:
   #   mouse:
   #     enabled: true
   #     mods: None
-
 
 key_bindings:
   - key: C

@@ -77,9 +77,10 @@ if vim.env.SSH_CONNECTION ~= nil then
     --     copy)
     --         buffer=$(base64)
     --         [[ -n "$TTY" ]] && printf $'\e]52;c;%s\a' "$buffer" > "$TTY"
-    --
+    --     ;;
     --     paste)
     --         exit 1
+    --     ;;
     -- esac
 end
 

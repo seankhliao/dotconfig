@@ -57,6 +57,33 @@ vim.bo.undofile      = true
 vim.g.signify_sign_change   = '~'
 
 
+if vim.env.SSH_CONNECTION != nil then
+    vim.g.clipboard = {
+        name = 'osc52clip',
+        copy = {
+            ['+'] = 'osc52clip copy',
+        },
+        paste = {
+            ['+'] = 'osc52clip paste',
+        },
+    }
+
+    -- -- put in PATH as osc52clip
+    -- #!/bin/bash
+    --
+    -- : ${TTY:=`(tty || tty </proc/$PPID/fd/0) 2>/dev/null | grep /dev/`}
+    --
+    -- case $1 in
+    --     copy)
+    --         buffer=$(base64)
+    --         [[ -n "$TTY" ]] && printf $'\e]52;c;%s\a' "$buffer" > "$TTY"
+    --
+    --     paste)
+    --         exit 1
+    -- esac
+end
+
+
 
 
 local packer_install_path = vim.fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'

@@ -57,7 +57,7 @@ vim.bo.undofile      = true
 vim.g.signify_sign_change   = '~'
 
 
-if vim.env.SSH_CONNECTION != nil then
+if vim.env.SSH_CONNECTION ~= nil then
     vim.g.clipboard = {
         name = 'osc52clip',
         copy = {

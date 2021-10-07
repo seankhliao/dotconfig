@@ -54,6 +54,7 @@ skaffold/
 Slack/
 spotify/
 step/
+swi-prolog/
 systemd/user/*.wants/
 TabNine/
 testrepo-version

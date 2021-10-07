@@ -107,11 +107,6 @@ augroup Clean
 augroup END
 ]], false)
 
-vim.api.nvim_exec([[
-augroup Kptfile
-    autocmd BufNewFile,BufRead Kptfile      set ft=yaml
-augroup END
-]], false)
 
 vim.api.nvim_exec([[
 autocmd FileType go         setlocal shiftwidth=8 softtabstop=8 tabstop=8 expandtab

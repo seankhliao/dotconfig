@@ -5,7 +5,7 @@ export LANG=en_US.UTF-8
 # preferences
 export BROWSER="google-chrome-stable -enable-features=UseOzonePlatform -ozone-platform=wayland"
 export EDITOR=nvim
-export MANPAGER="nvim -c 'set ft=man' -"
+export MANPAGER="nvim +Man!"
 
 # programs
 export CLOUDSDK_PYTHON=python3

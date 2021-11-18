@@ -6,7 +6,7 @@ general {
 
 # order += "ethernet wg6"
 # order += "ethernet wg4"
-# order += "ethernet wg0"
+order += "ethernet wg0"
 order += "ethernet _first_"
 order += "wireless _first_"
 order += "disk /"
@@ -28,16 +28,6 @@ ethernet _first_ {
 ethernet wg0 {
     format_up = "wg0: %ip"
     format_down = "wg0: --"
-}
-
-ethernet wg4 {
-    format_up = "wg4: %ip"
-    format_down = "wg4: --"
-}
-
-ethernet wg6 {
-    format_up = "wg6: %ip"
-    format_down = "wg6: --"
 }
 
 battery all {

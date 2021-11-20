@@ -15,6 +15,8 @@
     camp  = !git commit -a -m "\""$*"\"" && git push && :
     campu = !git commit -a -m "\""$*"\"" && git push -u origin HEAD && :
     cm    = !git commit    -m "\""$*"\"" && :
+    cmp   = !git commit    -m "\""$*"\"" && git push && :
+    cmpu  = !git commit    -m "\""$*"\"" && git push -u origin HEAD && :
 
     cr    = codereview
 
@@ -59,7 +61,7 @@
     file-decoration-style = none
     file-style            = bold yellow ul
     line-numbers          = true
-    # side-by-side        = true
+    side-by-side          = true
     syntax-theme          = zenburn
 
 [diff]
@@ -76,7 +78,7 @@
 	required = true
 
 [http]
-	cookiefile = /home/arccy/.ssh/gitcookies
+	cookiefile = /home/arccy/.ssh/git/cookies
 
 [init]
     defaultBranch = main

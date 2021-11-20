@@ -13,7 +13,7 @@
   "batchinstall": true,
   "answerclean": "no",
   "answerdiff": "no",
-  "answeredit": "no",
+  "answeredit": "",
   "answerupgrade": "",
   "gitbin": "git",
   "gpgbin": "gpg",

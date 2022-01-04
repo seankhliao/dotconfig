@@ -50,17 +50,7 @@
       "filetypes": ["yaml"]
     }
   },
-  "prettier": {
-    "printWidth": 200
-  },
-  "yaml": {
-    "schemaStore": {
-      "enable": true
-    },
-    "schemas": {
-      "https://raw.githubusercontent.com/GoogleContainerTools/skaffold/main/docs/content/en/schemas/v2beta20.json": [
-        "skaffold.yaml"
-      ],
+    "yaml.schemas": {
       "https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/cloudbuild.json": [
         "cloudbuild*.yaml"
       ],
@@ -76,5 +66,4 @@
       "https://kpt.dev/reference/schema/kptfile/kptfile.yaml": ["Kptfile"],
       "kubernetes": ["*.k8s.yaml"]
     }
-  }
 }

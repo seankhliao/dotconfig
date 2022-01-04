@@ -2,6 +2,8 @@ android/
 ardour5/
 binwalk/
 boto/
+cargo/
+!cargo/config.toml
 chrome-custom/
 chromium/
 coc/

@@ -23,6 +23,7 @@ GNS3/
 gnuais/
 GNU Radio/
 google-*
+gops/
 gqrx/
 gsutil/
 gtk-*
@@ -33,6 +34,7 @@ jupyter/
 k9s/
 keybase/
 Keybase/
+kn/
 kube/
 matplotlib/
 menus/
@@ -42,6 +44,7 @@ nvim/autoload
 nvim/.netrwhist
 nvim/plugged
 nvim/pack
+nvim/schema.*
 Outline Manager/
 packer/
 pavucontrol.ini
@@ -53,6 +56,7 @@ QtProject.conf
 rclone/
 remmina/
 Riot/
+rustup/
 skaffold/
 Slack/
 spotify/

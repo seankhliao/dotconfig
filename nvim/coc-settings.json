@@ -51,6 +51,7 @@
     }
   },
     "yaml.schemas": {
+      "/home/arccy/.config/nvim/schema.skaffold.v2beta26.json": ["skaffold.yaml"],
       "https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/cloudbuild.json": [
         "cloudbuild*.yaml"
       ],

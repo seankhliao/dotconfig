@@ -1,0 +1,3 @@
+cmd open $nvim $fx
+cmd q quit
+set previewer ~/.config/lf/preview.sh

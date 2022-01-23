@@ -38,7 +38,6 @@ vim.wo.foldenable    = false
 vim.wo.number        = true
 vim.wo.statusline    = '%-F %-r %-m %= %{&fileencoding} | %y | %3.l/%3.L:%3.c'
 
-vim.bo.autoindent    = true
 vim.bo.autoread      = true
 vim.bo.commentstring = '#\\ %s'
 vim.bo.copyindent    = true

@@ -45,7 +45,6 @@ hints:
       command:
         program: google-chrome-stable
         args:
-          - -enable-features=UseOzonePlatform
           - -ozone-platform=wayland
       post_processing: true
       mouse:

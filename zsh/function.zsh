@@ -1,7 +1,3 @@
-function vsk(){
-    nvim $(sk)
-}
-
 function goupdate() {
     rm ${XDG_DATA_HOME}/go/bin/go 2>/dev/null || true
     (( $+commands[gotip] )) || go get golang.org/dl/gotip
@@ -53,4 +49,13 @@ function md() {
 function t() {
     command t -i "$@"
     source /tmp/t_aliases 2>/dev/null
+}
+
+function colortest () {
+    for i in {0..255} ; do
+        printf "\x1b[48;5;%sm%3d\e[0m " "$i" "$i"
+        if (( i == 15 )) || (( i > 15 )) && (( (i-15) % 6 == 0 )); then
+            printf "\n";
+        fi
+    done
 }

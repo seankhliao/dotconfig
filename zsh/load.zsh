@@ -9,4 +9,6 @@ zmodload zsh/cap
 zmodload zsh/datetime
 zmodload zsh/stat
 # zmodload zsh/zprof
+# zmodload zsh/zftp
+# zmodload zsh/ztcp
 zmodload zsh/zpty

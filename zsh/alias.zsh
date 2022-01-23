@@ -1,6 +1,3 @@
-alias -s go='go run'
-alias -s py='python'
-
 (( $+commands[exa] )) \
     && alias l='exa -l --git --time-style iso --group-directories-first' \
     || alias l='ls -lh';

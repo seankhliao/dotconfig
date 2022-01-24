@@ -5,8 +5,8 @@ set {
     $down   Down
     $up     Up
     $right  Right
-    # $term   kitty
-    $term   alacritty
+    $term   kitty
+    # $term   alacritty
     # $menu   bemenu-run
     $menu   wofi
 

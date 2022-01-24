@@ -5,7 +5,6 @@ source ${ZDOTDIR}/zle.zsh
 source ${ZDOTDIR}/alias.zsh
 source ${ZDOTDIR}/function.zsh
 source ${ZDOTDIR}/function_repo.zsh
-source ${ZDOTDIR}/function_semver.zsh
 source ${ZDOTDIR}/prompt.zsh
 source ${ZDOTDIR}/zsh-autosuggestions.zsh
 source ${ZDOTDIR}/zsh-syntax-highlighting.zsh

@@ -86,6 +86,10 @@
 [interactive]
     diffFilter = delta --color-only
 
+[merge]
+    # zdiff3
+    conflictStyle = diff3
+
 [pull]
     rebase = true
     twohead = ort

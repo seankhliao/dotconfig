@@ -5,7 +5,6 @@
     a     = add
 
     b     = switch
-    bc    = checkout
     bd    = branch -D
     bn    = checkout -b
 
@@ -35,9 +34,6 @@
 
     t     = tag
 
-[color]
-    ui = auto
-
 [color "branch"]
 	current = yellow reverse
 	local   = yellow
@@ -54,6 +50,9 @@
 	changed   = yellow
     untracked = red
 
+[commit]
+    gpgSign = true
+
 [core]
     pager = delta
 
@@ -66,19 +65,25 @@
 
 [diff]
     algorithm = histogram
+    renames = copies
 
 [fetch]
-    parallel  = 10
     prune     = true
     pruneTags = true
 
 [filter "ageencrypt"]
 	clean    = age -r age14mg08panez45c6lj2cut2l8nqja0k5vm2vxmv5zvc4ufqgptgy2qcjfmuu -a -
-	smudge   = age -d -i ~/.ssh/age.key -
+	smudge   = age -d -i ~/.ssh/git/age.key -
 	required = true
 
+[gpg]
+    format = ssh
+
+[gpg "ssh"]
+    allowedSignersFile = ~/.ssh/git/allowed_signers
+
 [http]
-	cookiefile = /home/arccy/.ssh/git/cookies
+	cookiefile = ~/.ssh/git/cookies
 
 [init]
     defaultBranch = main
@@ -87,41 +92,44 @@
     diffFilter = delta --color-only
 
 [merge]
-    # zdiff3
-    conflictStyle = diff3
+    conflictStyle = zdiff3
 
 [pull]
     rebase = true
-    twohead = ort
 
 [rebase]
-    autoStash = true
-    abbreviateCommands = true
+    autoStash           = true
+    abbreviateCommands  = true
 
 [rerere]
     enabled = true
 
 [tag]
-	sort = version:refname
+    gpgSign = true
+    sort    = version:refname
 
 [url "git@github.com:erred/"]
-    insteadOf = "e:"
-    insteadOf = "git://github.com/erred/"
-    insteadOf = "https://github.com/erred/"
+    insteadOf = e:
+    insteadOf = git://github.com/erred/
+    insteadOf = https://github.com/erred/
 
 [url "git@github.com:"]
-	insteadOf = "g:"
-	insteadOf = "git://github.com/"
-	insteadOf = "https://github.com/"
+	insteadOf = g:
+	insteadOf = git://github.com/
+	insteadOf = https://github.com/
 
 [url "git@github.com:seankhliao/"]
-    insteadOf = "s:"
-    insteadOf = "git://github.com/seankhliao/"
-    insteadOf = "https://github.com/seankhliao/"
+    insteadOf = s:
+    insteadOf = git://github.com/seankhliao/
+    insteadOf = https://github.com/seankhliao/
 
 [user]
     email = seankhliao@gmail.com
     name  = Sean Liao
+    signingKey = ~/.ssh/id/id_ed25519
 
 [versionsort]
-	suffix = -
+    suffix = -
+
+[includeIf "gitdir:~/go/"]
+    path = go.config

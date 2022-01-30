@@ -100,7 +100,7 @@ require'packer'.startup(function()
     use {'fcpg/vim-fahrenheit'}
     use {'lukas-reineke/indent-blankline.nvim'}
     use {'lewis6991/gitsigns.nvim', requires = {'nvim-lua/plenary.nvim'}}
-    -- use {'sheerun/vim-polyglot'}
+    use {'sheerun/vim-polyglot'}
 
     use {'tyru/caw.vim'}
     use {'windwp/nvim-autopairs'}

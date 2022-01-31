@@ -104,6 +104,7 @@ require'packer'.startup(function()
 
     use {'tyru/caw.vim'}
     use {'windwp/nvim-autopairs'}
+    use {'mhartington/formatter.nvim'}
     use {'nvim-treesitter/nvim-treesitter',run = ':TSUpdate'}
 
     use {'hrsh7th/nvim-cmp'}
@@ -133,6 +134,7 @@ end
 
 local autopairs         = require('nvim-autopairs')
 local cmp               = require('cmp')
+local formatter         = require('formatter')
 local gitsigns          = require('gitsigns')
 local indent_blankline  = require('indent_blankline')
 local lspconfig         = require('lspconfig')
@@ -190,6 +192,29 @@ cmp.setup{
     },
 }
 
+formatter.setup {
+    filetype = {
+        markdown = {
+            function()
+                return {
+                    exe = "prettier",
+                    args = {"--stdin-filepath", vim.fn.fnameescape(vim.api.nvim_buf_get_name(0))},
+                    stdin = true,
+                }
+            end
+        },
+        terraform = {
+            function()
+                return {
+                    exe = "terraform",
+                    args = {"fmt", "-"},
+                    stdin = true,
+                }
+            end
+        },
+    },
+}
+
 gitsigns.setup {
     signs = {
         add = { hl = 'DiffAdd', text = '+' },
@@ -226,6 +251,7 @@ lspconfig.gopls.setup {
 lspconfig.jsonls.setup {
     capabilities = capabilities
 }
+lspconfig.terraformls.setup{}
 lspconfig.yamlls.setup {
     capabilities = capabilities
     -- settings = {
@@ -271,10 +297,11 @@ vim.api.nvim_set_keymap('n', ';',   ':',    {noremap = true, silent = true})
 vim.api.nvim_exec([[
 augroup Clean
     autocmd!
-    autocmd BufWritePre *.go    silent :lua vim.lsp.buf.formatting_sync()
-    autocmd BufWritePre *       silent :%s/\s\+$//e
-    autocmd BufWritePre *       silent :v/\_s*\S/d
-    autocmd BufWritePre *       silent :nohlsearch
+    autocmd BufWritePre *.go        silent :lua vim.lsp.buf.formatting_sync()
+    autocmd BufWritePre *.md,*.tf   silent FormatWrite
+    autocmd BufWritePre *           silent :%s/\s\+$//e
+    autocmd BufWritePre *           silent :v/\_s*\S/d
+    autocmd BufWritePre *           silent :nohlsearch
 augroup END
 ]], false)
 

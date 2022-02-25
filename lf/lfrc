@@ -1,3 +1,4 @@
 cmd open $nvim $fx
 cmd q quit
-set previewer ~/.config/lf/preview.sh
+set previewer ~/.config/lf/preview
+set cleaner ~/.config/lf/clean

@@ -70,7 +70,7 @@ if vim.env.SSH_CONNECTION ~= nil then
     -- -- put in PATH as osc52clip
     -- #!/bin/bash
     --
-    -- : ${TTY:=`(tty || tty </proc/$PPID/fd/0) 2>/dev/null | grep /dev/`}
+    -- : ${TTY:=$((tty || tty </proc/$PPID/fd/0) 2>/dev/null | grep /dev/)}
     --
     -- case $1 in
     --     copy)
@@ -117,12 +117,6 @@ require'packer'.startup(function()
 
     use {'L3MON4D3/LuaSnip'}
     use {'saadparwaiz1/cmp_luasnip'}
-
-    -- use {
-    --     'neoclide/coc.nvim',
-    --     branch = 'release',
-    --     run = ':CocInstall coc-dictionary coc-graphql coc-prettier coc-json coc-pairs coc-swagger coc-syntax coc-word coc-yaml',
-    -- }
 end)
 
 if packer_install then
@@ -153,13 +147,13 @@ cmp.setup{
     mapping = {
         ['<CR>'] = cmp.mapping.confirm {
             behavior = cmp.ConfirmBehavior.Replace,
-            select = true,
         },
         ["<Tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
                 cmp.select_next_item()
-            elseif luasnip.expand_or_jumpable() then
-                luasnip.expand_or_jump()
+            -- prevents inserting literal tab
+            -- elseif luasnip.expand_or_jumpable() then
+            --     luasnip.expand_or_jump()
             elseif has_words_before() then
                 cmp.complete()
             else
@@ -170,8 +164,8 @@ cmp.setup{
         ["<S-Tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
                 cmp.select_prev_item()
-            elseif luasnip.jumpable(-1) then
-                luasnip.jump(-1)
+            -- elseif luasnip.jumpable(-1) then
+            --     luasnip.jump(-1)
             else
                 fallback()
             end
@@ -246,7 +240,13 @@ lspconfig.dockerls.setup {
     -- root_dir = root_pattern("*Dockerfile*")
 }
 lspconfig.gopls.setup {
-    capabilities = capabilities
+    capabilities = capabilities,
+    settings = {
+        gopls = {
+            gofumpt = true,
+            staticcheck = true,
+        },
+    },
 }
 lspconfig.jsonls.setup {
     capabilities = capabilities
@@ -294,11 +294,45 @@ vim.api.nvim_set_keymap('n', ';',   ':',    {noremap = true, silent = true})
 
 
 
+function goimports(timeout_ms)
+  local context = { only = { "source.organizeImports" } }
+  vim.validate { context = { context, "t", true } }
+
+  local params = vim.lsp.util.make_range_params()
+  params.context = context
+
+  -- See the implementation of the textDocument/codeAction callback
+  -- (lua/vim/lsp/handler.lua) for how to do this properly.
+  local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, timeout_ms)
+  if not result or next(result) == nil then return end
+  local actions = result[1].result
+  if not actions then return end
+  local action = actions[1]
+
+  -- textDocument/codeAction can return either Command[] or CodeAction[]. If it
+  -- is a CodeAction, it can have either an edit, a command or both. Edits
+  -- should be executed first.
+  if action.edit or type(action.command) == "table" then
+    if action.edit then
+      vim.lsp.util.apply_workspace_edit(action.edit)
+    end
+    if type(action.command) == "table" then
+      vim.lsp.buf.execute_command(action.command)
+    end
+  else
+    vim.lsp.buf.execute_command(action)
+  end
+end
+
+
+
+
 vim.api.nvim_exec([[
 augroup Clean
     autocmd!
+    autocmd BufWritePre *.go        silent :lua goimports(1000)
     autocmd BufWritePre *.go        silent :lua vim.lsp.buf.formatting_sync()
-    autocmd BufWritePre *.md,*.tf   silent FormatWrite
+    autocmd BufWritePre *.md,*.tf   silent :FormatWrite
     autocmd BufWritePre *           silent :%s/\s\+$//e
     autocmd BufWritePre *           silent :v/\_s*\S/d
     autocmd BufWritePre *           silent :nohlsearch

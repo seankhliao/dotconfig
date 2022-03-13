@@ -124,7 +124,7 @@
     insteadOf = https://github.com/seankhliao/
 
 [user]
-    email = seankhliao@gmail.com
+    email = sean+git@liao.dev
     name  = Sean Liao
     signingKey = ~/.ssh/id/id_ed25519
 

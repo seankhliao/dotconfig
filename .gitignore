@@ -30,6 +30,7 @@ gtk-*
 helm/
 hub/
 java/
+jgit/
 jupyter/
 k9s/
 keybase/
@@ -59,6 +60,7 @@ Riot/
 rustup/
 skaffold/
 Slack/
+spicy/
 spotify/
 step/
 swi-prolog/

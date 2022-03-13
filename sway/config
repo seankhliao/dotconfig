@@ -32,9 +32,9 @@ bindsym {
     # Screenshot
     Print                   exec grim -g "$(slurp)" "$HOME/data/screen/$(date +'%Y-%m-%d-%H%M%S').png"
     # $mod+t                  exec google-chrome-stable
-    $mod+t                  exec google-chrome-unstable
+    $mod+t                  exec google-chrome-unstable -ozone-platform=wayland
     # $mod+n                  exec google-chrome-stable --incognito
-    $mod+Shift+t            exec google-chrome-unstable --user-data-dir="$HOME/.config/chrome-custom"
+    $mod+Shift+t            exec google-chrome-unstable --user-data-dir="$HOME/.config/chrome-custom" -ozone-platform=wayland
     $mod+Return             exec $term
     $mod+d                  exec $menu
     $mod+c                  exec makoctl dismiss

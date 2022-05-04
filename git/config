@@ -24,8 +24,9 @@
 
     l     = pull --rebase --autostash
 
-    lo    = log --all --graph --format='%C(auto)%h%d %s %C( bold black)%cr %C(blue)<%an>'
-    los   = log --all --graph --simplify-by-decoration --format='%C(auto)%h%d %s %C( bold black)%cr %C(blue)<%an>'
+    lo    = log --all --graph --format='%C(auto)%h %d %s %C(black)%ar/%cr %C(blue)<%an>'
+    lob   = log --graph --format='%C(auto)%h %d %s %C(black)%ar/%cr %C(blue)<%an>'
+    los   = log --all --graph --simplify-by-decoration --format='%C(auto)%h %d %s %C(black)%ar/%cr %C(blue)<%an>'
 
     p     = push
     pu    = push -u origin HEAD

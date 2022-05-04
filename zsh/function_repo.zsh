@@ -1,15 +1,3 @@
-function testrepo() {
-    set -xo pipefail
-    local vers=$(( $(cat ${XDG_CONFIG_HOME}/testrepo-version)+1))
-    local repo=testrepo-${vers}
-    mkdir -p ${HOME}/tmp/${repo}
-    cd ${HOME}/tmp/${repo}
-    echo ${vers} > ${XDG_CONFIG_HOME}/testrepo-version
-    git init
-    git commit --allow-empty -m "root-commit"
-    git remote add origin s:${repo}
-    go mod init go.seankhliao.com/${repo}
-}
 
 function mr() {
     local repo=${1// }
@@ -19,18 +7,6 @@ function mr() {
     git init
     git commit --allow-empty -m "root-commit"
     git remote add origin s:${repo}
-
-    cat << EOF > .gitignore
-${repo}
-EOF
-
-    cat << EOF > README.md
-# ${repo}
-
-A repo for ${repo}
-
-[![License](https://img.shields.io/github/license/seankhliao/${repo}.svg?style=flat-square)](LICENSE)
-EOF
 
     cat << EOF > LICENSE
 MIT License
@@ -57,6 +33,15 @@ SOFTWARE.
 EOF
 }
 
+function testrepo() {
+    local vers=$(( $(cat ${XDG_CONFIG_HOME}/testrepo-version)+1))
+    echo ${vers} > ${XDG_CONFIG_HOME}/testrepo-version
+    mkdir -p ${HOME}/tmp
+    cd ${HOME}/tmp
+    mr testrepo-${vers}
+    go mod init go.seankhliao.com/testrepo-${vers}
+}
+
 function mrgo() {
     local repo=${1// }
     [[ -z ${repo} ]] && echo "no repo name given" && return 1
@@ -65,6 +50,6 @@ function mrgo() {
 
     cat << EOF >> README.md
 [![Go Reference](https://pkg.go.dev/badge/go.seankhliao.com/${repo}.svg)](https://pkg.go.dev/go.seankhliao.com/${repo})
-![Version](https://img.shields.io/github/v/tag/seankhliao/${repo}?sort=semver&style=flat-square)
+[![License](https://img.shields.io/github/license/seankhliao/${repo}.svg?style=flat-square)](LICENSE)
 EOF
 }

@@ -1,15 +1,21 @@
-vim.cmd [[ filetype plugin indent on ]]
-vim.cmd [[ syntax enable' ]]
+vim.cmd [[ syntax enable ]]
 
 
-
-
-local cache_dir = vim.env.XDG_CACHE_HOME
+local config_dir = vim.env.XDG_CONFIG_HOME or "~/.config"
+local bin_dir = config_dir .. '/bin'
+local cache_dir = vim.env.XDG_CACHE_HOME or "~/.cache"
 local backup_dir = cache_dir .. '/nvim/backup'
 local undo_dir = cache_dir .. '/nvim/undo'
-vim.fn.system({'mkdir', '-p', backup_dir})
-vim.fn.system({'mkdir', '-p', undo_dir})
+os.execute('mkdir -p ' .. backup_dir)
+os.execute('mkdir -p ' .. undo_dir)
 
+
+vim.g.did_load_filetypes = 1
+vim.g.do_filetype_lua = 1
+vim.g.signify_sign_change   = '~'
+
+
+-- https://neovim.io/doc/user/options.html#options
 vim.o.background     = 'dark'
 vim.o.backupdir      = backup_dir
 vim.o.clipboard      = 'unnamedplus'
@@ -38,22 +44,18 @@ vim.wo.foldenable    = false
 vim.wo.number        = true
 vim.wo.statusline    = '%-F %-r %-m %= %{&fileencoding} | %y | %3.l/%3.L:%3.c'
 
+vim.bo.autoindent    = true
 vim.bo.autoread      = true
 vim.bo.commentstring = '#\\ %s'
--- vim.bo.copyindent    = true
+vim.bo.copyindent    = true
 vim.bo.expandtab     = true
 vim.bo.grepprg       = 'rg'
 vim.bo.modeline      = false
 vim.bo.shiftwidth    = 0
--- vim.bo.smartindent   = true
+vim.bo.smartindent   = true
 vim.bo.swapfile      = false
 vim.bo.tabstop       = 4
 vim.bo.undofile      = true
-
-
-
-
-vim.g.signify_sign_change   = '~'
 
 
 if vim.env.SSH_CONNECTION ~= nil then
@@ -67,29 +69,35 @@ if vim.env.SSH_CONNECTION ~= nil then
         },
     }
 
-    -- -- put in PATH as osc52clip
-    -- #!/bin/bash
-    --
-    -- : ${TTY:=$((tty || tty </proc/$PPID/fd/0) 2>/dev/null | grep /dev/)}
-    --
-    -- case $1 in
-    --     copy)
-    --         buffer=$(base64)
-    --         [[ -n "$TTY" ]] && printf $'\e]52;c;%s\a' "$buffer" > "$TTY"
-    --     ;;
-    --     paste)
-    --         exit 1
-    --     ;;
-    -- esac
+    local osc52clip = io.open(bin_dir .. '/osc52clip', 'w')
+    if osc52clip ~= nil then
+        osc52clip:write([[#!/bin/bash
+: ${TTY:=$((tty || tty </proc/$PPID/fd/0) 2>/dev/null | grep /dev/)}
+
+case $1 in
+    copy)
+        buffer=$(base64)
+        [ -n "$TTY" ] && printf $'\e]52;c;%s\a' "$buffer" > "$TTY"
+    ;;
+    paste)
+        exit 1
+    ;;
+esac
+]])
+        osc52clip:close()
+        os.execute('chmod +x ' .. bin_dir .. '/osc52clip')
+    end
 end
 
 
 
-
 local packer_install_path = vim.env.XDG_DATA_HOME .. '/nvim/site/pack/packer/start/packer.nvim'
+local packer_dir_file = io.open(packer_install_path)
 local packer_install = false
-if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-    vim.fn.system({'git', 'clone', 'https://github.com/wbthomason/packer.nvim', packer_install_path})
+if packer_dir_file ~= nil then
+    packer_dir_file:close()
+else
+    os.execute('git clone https://github.com/wbthomason/packer.nvim ' .. packer_install_path)
     vim.cmd [[ packadd packer.nvim ]]
     packer_install = true
 end
@@ -101,6 +109,7 @@ require'packer'.startup(function()
     use {'lukas-reineke/indent-blankline.nvim'}
     use {'lewis6991/gitsigns.nvim', requires = {'nvim-lua/plenary.nvim'}}
     use {'sheerun/vim-polyglot'}
+    use {'jjo/vim-cue'}
 
     use {'tyru/caw.vim'}
     use {'windwp/nvim-autopairs'}
@@ -151,9 +160,6 @@ cmp.setup{
         ["<Tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
                 cmp.select_next_item()
-            -- prevents inserting literal tab
-            -- elseif luasnip.expand_or_jumpable() then
-            --     luasnip.expand_or_jump()
             elseif has_words_before() then
                 cmp.complete()
             else
@@ -164,12 +170,13 @@ cmp.setup{
         ["<S-Tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
                 cmp.select_prev_item()
-            -- elseif luasnip.jumpable(-1) then
-            --     luasnip.jump(-1)
             else
                 fallback()
             end
         end, { "i", "s" }),
+
+        ['<Down>'] = cmp.mapping(cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }), {'i'}),
+        ['<Up>'] = cmp.mapping(cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }), {'i'}),
 
     },
     snippet = {
@@ -221,8 +228,8 @@ gitsigns.setup {
 
 indent_blankline.setup {
     buftype_exclude = {
-    'terminal',
-    'nofile',
+        'terminal',
+        'nofile',
     },
     char_highlight_list = {
         'IndentBlankline1',
@@ -277,13 +284,33 @@ treesitter.setup {
 
 
 
-vim.cmd [[ colorscheme   fahrenheit ]]
-vim.cmd [[ hi IndentBlankline1 guifg=#262626 gui=nocombine ]]
-vim.cmd [[ hi DiffAdd    ctermbg=235 ctermfg=108 cterm=reverse guibg=#262626 guifg=#87af87 gui=reverse ]]
-vim.cmd [[ hi DiffChange ctermbg=235 ctermfg=103 cterm=reverse guibg=#262626 guifg=#8787af gui=reverse ]]
-vim.cmd [[ hi DiffDelete ctermbg=235 ctermfg=131 cterm=reverse guibg=#262626 guifg=#af5f5f gui=reverse ]]
-vim.cmd [[ hi DiffText   ctermbg=235 ctermfg=208 cterm=reverse guibg=#262626 guifg=#ff8700 gui=reverse ]]
-vim.cmd [[ cnoreabbrev W execute 'silent! write !sudo tee % >/dev/null' <bar> edit! ]]
+vim.cmd [[ colorscheme fahrenheit ]]
+
+local set_hl = {
+    IndentBlankline1 = {fg="#262626"},
+    DiffAdd = {ctermbg=235, ctermfg=108, bg="#A3BE8C", fg="#262626"},
+    DiffChange = {ctermbg=235, ctermfg=103, bg="#B48EAD", fg="#262626"},
+    DiffDelete = {ctermbg=235, ctermfg=131, bg="#BF616A", fg="#262626"},
+    DiffText = {ctermbg=235, ctermfg=208, bg="#5E81AC", fg="#262626"},
+}
+for k,v in pairs(set_hl) do
+    vim.api.nvim_set_hl(0, k, v)
+end
+
+
+function sudowrite()
+    local tmpfilename = os.tmpname()
+    local tmpfile = io.open(tmpfilename, 'w')
+    for i, line in ipairs(vim.api.nvim_buf_get_lines(0, 0, -1, false)) do
+        tmpfile:write(line .. '\n')
+    end
+    tmpfile:close()
+    local curfilename = vim.api.nvim_buf_get_name(0)
+    os.execute(string.format("sudo tee %s < %s > /dev/null", curfilename, tmpfilename))
+    vim.cmd [[ edit! ]]
+    os.remove(tmpfilename)
+end
+vim.cmd [[ command W :lua sudowrite() ]]
 
 
 vim.api.nvim_set_keymap('c', 'WQ',  'wq',   {noremap = true})
@@ -340,12 +367,17 @@ augroup END
 ]], false)
 
 
-vim.api.nvim_exec([[
-autocmd FileType go         setlocal shiftwidth=8 softtabstop=8 tabstop=8 expandtab
-autocmd FileType html       setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
-autocmd FileType javascript setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
-autocmd FileType make       setlocal noexpandtab
-autocmd FileType markdown   setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
-autocmd FileType toml       setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
-autocmd FileType yaml       setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
-]], false)
+local ft_tab_width = {
+    [2] = {"html", "javascript", "markdown", "toml", "yaml"},
+    [8] = {"go"},
+}
+for k,v in pairs(ft_tab_width) do
+    vim.api.nvim_create_autocmd("FileType", {
+        pattern = v,
+        callback = function()
+            vim.opt_local.shiftwidth=k
+            vim.opt_local.softtabstop=k
+            vim.opt_local.tabstop=k
+        end,
+    })
+end

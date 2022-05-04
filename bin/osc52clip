@@ -1,11 +1,10 @@
 #!/bin/bash
-
-: ${TTY:=`(tty || tty </proc/$PPID/fd/0) 2>/dev/null | grep /dev/`}
+: ${TTY:=$((tty || tty </proc/$PPID/fd/0) 2>/dev/null | grep /dev/)}
 
 case $1 in
     copy)
         buffer=$(base64)
-        [[ -n "$TTY" ]] && printf $'\e]52;c;%s\a' "$buffer" > "$TTY"
+        [ -n "$TTY" ] && printf $'\e]52;c;%s\a' "$buffer" > "$TTY"
     ;;
     paste)
         exit 1

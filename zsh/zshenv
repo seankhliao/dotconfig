@@ -8,7 +8,6 @@ export EDITOR=nvim
 export MANPAGER="nvim +Man!"
 
 # programs
-export CLOUDSDK_PYTHON=python3.9
 export DOCKER_BUILDKIT=1
 export FZF_DEFAULT_COMMAND="rg --files --hidden --follow --glob '!.git'"
 export KITTY_ENABLE_WAYLAND=1
@@ -23,10 +22,11 @@ export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=40
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=7'
 
 # XDG dirs
-export XDG_CONFIG_HOME="$HOME"/.config
-export XDG_CACHE_HOME="$HOME"/.cache
-export XDG_DATA_HOME="$HOME"/.data
-mkdir -p "${XDG_CONFIG_HOME}" "${XDG_DATA_HOME}" "${XDG_CACHE_HOME}" 2>/dev/null || true
+export XDG_CONFIG_HOME="${HOME}/.config"
+export XDG_CACHE_HOME="${HOME}/.cache"
+export XDG_DATA_HOME="${HOME}/.data"
+export XDG_STATE_HOME="${HOME}/.data/state"
+mkdir -p "${XDG_CONFIG_HOME}" "${XDG_DATA_HOME}" "${XDG_CACHE_HOME}" "${XDG_STATE_HOME}" 2>/dev/null || true
 
 # XDG RUNTIME
 export XAUTHORITY="${XDG_RUNTIME_DIR}/Xauthority"
@@ -79,7 +79,7 @@ export SKAFFOLD_CONFIG="${XDG_CONFIG_HOME}/skaffold/config.yaml"
 export STEPPATH="${XDG_CONFIG_HOME}/step"
 export TF_CLI_CONFIG_FILE="${XDG_CONFIG_HOME}/terraform.rc"
 # export VIMINIT=":source ${XDG_CONFIG_HOME}"/nvim/init.vim
-export WEECHAT_HOME=$"{XDG_CONFIG_HOME}/weechat"
+export WEECHAT_HOME="${XDG_CONFIG_HOME}/weechat"
 export WGETRC="${XDG_CONFIG_HOME}/wgetrc"
 export ZDOTDIR="${XDG_CONFIG_HOME}/zsh"
 

@@ -127,10 +127,10 @@
 [user]
     email = sean+git@liao.dev
     name  = Sean Liao
-    signingKey = ~/.ssh/id/id_ed25519
+    signingKey = ~/.ssh/ssh/id_ed25519
 
 [versionsort]
     suffix = -
 
-[includeIf "gitdir:~/go/"]
+[includeIf "gitdir:~/code/go.googlesource.com/"]
     path = go.config

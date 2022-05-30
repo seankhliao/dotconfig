@@ -9,9 +9,11 @@ chromium/
 coc/
 configstore/
 containers/
+dagger/
 dconf/
 dlv/
 docker/
+droidcam
 freerdp/
 gcloud/
 gconf/

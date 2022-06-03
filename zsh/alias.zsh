@@ -6,7 +6,10 @@
     || alias ll='ls -alh';
 (( $+commands[exa] )) \
     && alias ls='exa --group-directories-first' \
-    || alias ll='ls -h';
+    || alias ls='ls -h';
+(( $+commands[yay] )) \
+    && alias p='yay' \
+    || alias p='sudo pacman';
 
 alias ..='cd ..'
 alias ...='cd ../..'
@@ -24,8 +27,6 @@ alias cp='cp -v'
 alias ln='ln -v'
 alias mv='mv -v'
 alias g='git'
-alias gmt='go mod tidy'
-alias gr='go run .'
 alias h='htop'
 alias icat='kitty +kitten icat'
 alias k='kubectl'
@@ -33,6 +34,8 @@ alias kctx='kubectx'
 alias kns='kubens'
 alias rr='cd $(git rev-parse --show-toplevel)'
 alias s='ssh'
+alias sc='sudo systemctl'
+alias scu='systemctl --user'
 alias title='printf "\033]0;%s\a"'
 alias tf='terraform'
 alias v='${EDITOR}'
@@ -41,9 +44,6 @@ alias vbare='${EDITOR} -u NONE'
 case "${OSTYPE}" in
     linux*)
         alias cr='${BROWSER}'
-        alias p='yay'
-        alias sc='sudo systemctl'
-        alias scu='systemctl --user'
     ;;
 esac
 

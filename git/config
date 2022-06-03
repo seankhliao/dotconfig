@@ -33,7 +33,7 @@
 
     s     = status
 
-    t     = tag
+    t     = !git tag -m "\""$*"\"" "\""$*"\"" && :
 
 [color "branch"]
 	current = yellow reverse

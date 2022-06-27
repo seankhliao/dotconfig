@@ -119,6 +119,9 @@
     insteadOf = git://github.com/seankhliao/
     insteadOf = https://github.com/seankhliao/
 
+[url "arccy@soft-serve:"]
+    insteadOf = ss:
+
 [user]
     email = sean+git@liao.dev
     name  = Sean Liao

@@ -32,15 +32,13 @@ bindsym {
     # Screenshot
     Print                   exec grim -g "$(slurp)" "$HOME/data/screen/$(date +'%Y-%m-%d-%H%M%S').png"
     # $mod+t                  exec google-chrome-stable
-    $mod+t                  exec google-chrome-unstable -ozone-platform=wayland
+    $mod+t                  exec google-chrome-unstable
     # $mod+n                  exec google-chrome-stable --incognito
-    $mod+Shift+t            exec google-chrome-unstable --user-data-dir="$HOME/.config/chrome-custom" -ozone-platform=wayland
+    $mod+Shift+t            exec google-chrome-unstable --user-data-dir="$HOME/.config/chrome-custom"
     $mod+Return             exec $term
     $mod+d                  exec $menu
     $mod+c                  exec makoctl dismiss
-    $mod+i                  exec alacritty -t irc -e weechat
-    # $mod+i                  exec alacritty -t irc -e  ssh medea -t TERM=xterm-256color LANG=en_US.UTF-8 screen -r weechat
-    # $mod+i                  exec alacritty -t irc -e kubectl --context default --namespace weechat exec -it weechat-0 -- screen -dr weechat
+    $mod+i                  exec kitty -T irc weechat
     $mod+y                  exec yubioath-desktop
 
     XF86AudioRaiseVolume    exec pulsemixer --change-volume +5
@@ -146,4 +144,4 @@ input "1739:30382:DLL0704:01_06CB:76AE_Touchpad" {
     middle_emulation    enabled
 }
 
-exec mako
+exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway

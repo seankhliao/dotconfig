@@ -4,14 +4,16 @@ function gsall() {
 
     for dir in ./*; do
         if [[ -d ${dir} ]] && [[ -d ${dir}/.git ]]; then
-            if git -C ${dir} remote | grep origin >/dev/null ; then
-                local default=$(git -C ${dir} remote show origin | sed -n -e 's/[[:space:]]*HEAD branch:[[:space:]]*\([^[[:space:]]]*\)/\1/p')
+            local printed=false
+            local default=$(git -C ${dir} remote show origin | awk '/HEAD branch/ {print $NF}')
+            if [[ "${default}" != "" ]]; then
+                printf "\n${bold}$dir${normal}\n"
                 if ! git -C ${dir} diff-index --quiet --exit-code origin/${default} ; then
-                    printf "\n${bold}$dir${normal}\n"
                     git -C ${dir} log --oneline origin/${default}..HEAD
                     git -C ${dir} status -s
+                    printed=true
                 fi
-            elif git -C ${dir} diff-index --quiet --exit-code HEAD ; then
+            else
                 printf "\n${bold}$dir${normal}\n"
                 git -C ${dir} branch --show-current
                 git -C ${dir} status -s

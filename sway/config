@@ -5,10 +5,8 @@ set {
     $down   Down
     $up     Up
     $right  Right
-    $term   kitty
-    # $term   alacritty
-    # $menu   bemenu-run
-    $menu   wofi
+    # $term   kitty
+    # $menu   wofi
 
     $ws1 1:Alpha
     $ws2 2:Beta
@@ -31,14 +29,14 @@ output * background $XDG_CONFIG_HOME/sway/bg.jpg fill
 bindsym {
     # Screenshot
     Print                   exec grim -g "$(slurp)" "$HOME/data/screen/$(date +'%Y-%m-%d-%H%M%S').png"
-    # $mod+t                  exec google-chrome-stable
-    $mod+t                  exec google-chrome-unstable
     # $mod+n                  exec google-chrome-stable --incognito
     $mod+Shift+t            exec google-chrome-unstable --user-data-dir="$HOME/.config/chrome-custom"
-    $mod+Return             exec $term
-    $mod+d                  exec $menu
+    $mod+Return             exec kitty
     $mod+c                  exec makoctl dismiss
+    $mod+d                  exec wofi
     $mod+i                  exec kitty -T irc weechat
+    $mod+s                  exec spotify
+    $mod+t                  exec google-chrome-unstable
     $mod+y                  exec yubioath-desktop
 
     XF86AudioRaiseVolume    exec pulsemixer --change-volume +5
@@ -130,13 +128,10 @@ bar {
 }
 
 # floating
-# Not to be confused with Google-chrome (main browser window)
-# for_window [app_id="google-chrome"] floating enable
 for_window [title="wl-clipboard"] floating enable
 for_window [class="Vncviewer"] fullscreen enable
 assign [class="Spotify"] workspace $ws9
 assign [title="irc"] workspace $ws10
-# for_window [title="OpenCPN 5.0.0"] fullscreen enable
 
 input "1739:30382:DLL0704:01_06CB:76AE_Touchpad" {
     tap                 enabled

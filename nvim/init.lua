@@ -254,6 +254,12 @@ lspconfig.gopls.setup {
             staticcheck = true,
         },
     },
+    on_init = function (client)
+        local path = client.workspace_folders[1].name
+        if path:find("go.googlesource.com") then
+            client.config.settings.gopls.gofumpt = false
+        end
+    end
 }
 lspconfig.jsonls.setup {
     capabilities = capabilities

@@ -67,6 +67,8 @@ spotify/
 step/
 swi-prolog/
 systemd/user/*.wants/
+systemd/user/xdg-document-portal.service
+systemd/user/xdg-permission-store.service
 TabNine/
 testrepo-version
 Trolltech.conf

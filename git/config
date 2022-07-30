@@ -133,5 +133,5 @@
 [versionsort]
     suffix = -
 
-[includeIf "gitdir:~/code/go.googlesource.com/"]
+[includeIf "hasconfig:remote.*.url:https://go.googlesource.com/*"]
     path = go.config

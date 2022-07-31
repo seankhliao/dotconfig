@@ -108,7 +108,6 @@ require("packer").startup(function()
 	use({ "tyru/caw.vim" })
 	use({ "windwp/nvim-autopairs" })
 	use({ "mhartington/formatter.nvim" })
-	use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" })
 
 	use({ "hrsh7th/nvim-cmp" })
 	use({ "hrsh7th/cmp-buffer" })
@@ -133,7 +132,6 @@ local gitsigns = require("gitsigns")
 local indent_blankline = require("indent_blankline")
 local lspconfig = require("lspconfig")
 local luasnip = require("luasnip")
-local treesitter = require("nvim-treesitter.configs")
 
 autopairs.setup({
 	check_ts = true,
@@ -318,47 +316,6 @@ lspconfig.yamlls.setup({
                 ["editor.formatOnType"] = false,
 			},
 		},
-	},
-})
-
-treesitter.setup({
-	ensure_installed = {
-		"bash",
-		"c",
-		"cpp",
-		"comment",
-		"css",
-		"dockerfile",
-		"dot",
-		"go",
-		"gomod",
-		"gowork",
-		"html",
-		"java",
-		"javascript",
-		"json",
-		"json5",
-		"kotlin",
-		"lua",
-		"make",
-		"markdown",
-		"proto",
-		"python",
-		"regex",
-		"sql",
-		"toml",
-		"typescript",
-		-- "yaml",
-	},
-	sync_install = true,
-	highlight = {
-		enable = true,
-	},
-	incremental_selection = {
-		enable = true,
-	},
-	indent = {
-		enable = true,
 	},
 })
 

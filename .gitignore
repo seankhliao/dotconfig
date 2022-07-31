@@ -46,6 +46,7 @@ neofetch/
 nvim/autoload
 nvim/.netrwhist
 nvim/plugged
+nvim/plugin/
 nvim/pack
 nvim/schema.*
 Outline Manager/

@@ -76,12 +76,6 @@ Trolltech.conf
 VirtualBox/
 vlc/
 weechat/
-!weechat/buflist.conf
-!weechat/irc.conf
-!weechat/relay.conf
-!weechat/sec.conf
-!weechat/trigger.conf
-!weechat/weechat.conf
 wgetrc
 whoozle.github.io/
 wireshark/

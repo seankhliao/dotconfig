@@ -36,9 +36,20 @@ function glall() {
     done
 }
 
+function godev() {
+    export GOROOT=$(git rev-parse --show-toplevel)
+    export PATH="$GOROOT/bin:$PATH"
+}
+
 function md() {
     [[ -z ${1// } ]] && echo "no directory name given" && return 1
     mkdir -p "$1" && cd "$1"
+}
+
+function repos() {
+    local out=$(command repos "$@")
+    # source <(<<< "${out}")
+    eval "${out}"
 }
 
 function t() {

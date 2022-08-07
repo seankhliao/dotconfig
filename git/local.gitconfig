@@ -1,0 +1,29 @@
+[commit]
+    gpgSign = true
+
+[filter "ageencrypt"]
+	clean    = age -r age14mg08panez45c6lj2cut2l8nqja0k5vm2vxmv5zvc4ufqgptgy2qcjfmuu -a -
+	smudge   = age -d -i ~/.ssh/git/age.key -
+	required = true
+
+[gpg]
+    format = ssh
+
+[gpg "ssh"]
+    allowedSignersFile = ~/.ssh/git/allowed_signers
+
+[tag]
+    gpgSign = true
+
+[url "git@github.com:seankhliao/"]
+    insteadOf = s:
+    insteadOf = git://github.com/seankhliao/
+    insteadOf = https://github.com/seankhliao/
+
+[url "arccy@soft-serve:"]
+    insteadOf = ss:
+
+[user]
+    email = sean+git@liao.dev
+    name  = Sean Liao
+    signingKey = ~/.ssh/ssh/id_ed25519

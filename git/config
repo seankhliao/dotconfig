@@ -12,10 +12,8 @@
 
     cam   = !git commit -a -m "\""$*"\"" && :
     camp  = !git commit -a -m "\""$*"\"" && git push && :
-    campu = !git commit -a -m "\""$*"\"" && git push -u origin HEAD && :
     cm    = !git commit    -m "\""$*"\"" && :
     cmp   = !git commit    -m "\""$*"\"" && git push && :
-    cmpu  = !git commit    -m "\""$*"\"" && git push -u origin HEAD && :
 
     cr    = codereview
 
@@ -29,7 +27,6 @@
     los   = log --all --graph --simplify-by-decoration --format='%C(auto)%h %d %s %C(black)%ar/%cr %C(blue)<%an>'
 
     p     = push
-    pu    = push -u origin HEAD
 
     s     = status
 
@@ -51,9 +48,6 @@
 	changed   = yellow
     untracked = red
 
-[commit]
-    gpgSign = true
-
 [core]
     pager = delta
 
@@ -71,17 +65,6 @@
 [fetch]
     prune     = true
     pruneTags = true
-
-[filter "ageencrypt"]
-	clean    = age -r age14mg08panez45c6lj2cut2l8nqja0k5vm2vxmv5zvc4ufqgptgy2qcjfmuu -a -
-	smudge   = age -d -i ~/.ssh/git/age.key -
-	required = true
-
-[gpg]
-    format = ssh
-
-[gpg "ssh"]
-    allowedSignersFile = ~/.ssh/git/allowed_signers
 
 [http]
 	cookiefile = ~/.ssh/git/cookies
@@ -109,7 +92,6 @@
     enabled = true
 
 [tag]
-    gpgSign = true
     sort    = version:refname
 
 [url "git@github.com:"]
@@ -117,21 +99,11 @@
 	insteadOf = git://github.com/
 	insteadOf = https://github.com/
 
-[url "git@github.com:seankhliao/"]
-    insteadOf = s:
-    insteadOf = git://github.com/seankhliao/
-    insteadOf = https://github.com/seankhliao/
-
-[url "arccy@soft-serve:"]
-    insteadOf = ss:
-
-[user]
-    email = sean+git@liao.dev
-    name  = Sean Liao
-    signingKey = ~/.ssh/ssh/id_ed25519
-
 [versionsort]
     suffix = -
 
+[include]
+    path = local.gitconfig
+
 [includeIf "hasconfig:remote.*.url:https://go.googlesource.com/*"]
-    path = go.config
+    path = go.gitconfig

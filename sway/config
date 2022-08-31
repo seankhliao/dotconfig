@@ -139,4 +139,4 @@ input "1739:30382:DLL0704:01_06CB:76AE_Touchpad" {
     middle_emulation    enabled
 }
 
-exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
+exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway XDG_DATA_HOME XDG_STATE_HOME

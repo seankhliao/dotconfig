@@ -97,7 +97,10 @@
 [url "git@github.com:"]
 	insteadOf = g:
 	insteadOf = git://github.com/
-	insteadOf = https://github.com/
+    insteadOf = https://github.com/
+
+[url "https://go.googlesource.com/"]
+    insteadOf = go:
 
 [versionsort]
     suffix = -

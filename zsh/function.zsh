@@ -57,6 +57,13 @@ function t() {
     source /tmp/t_aliases 2>/dev/null
 }
 
+function wt() {
+    local repo_root=$(git rev-parse --show-toplevel)
+    cd "${repo_root}"
+    git worktree add ../"$@"
+    cd ../$1
+}
+
 function colortest () {
     for i in {0..255} ; do
         printf "\x1b[48;5;%sm%3d\e[0m " "$i" "$i"

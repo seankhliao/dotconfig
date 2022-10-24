@@ -110,3 +110,5 @@
 
 [includeIf "hasconfig:remote.*.url:https://go.googlesource.com/*"]
     path = go.gitconfig
+
+[includeIf "hasconfig:remote.*.url:git@github.com/seankhliao/opentelemetry*"]

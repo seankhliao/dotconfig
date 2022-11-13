@@ -71,6 +71,7 @@ systemd/user/*.wants/
 systemd/user/xdg-document-portal.service
 systemd/user/xdg-permission-store.service
 TabNine/
+tailscale/
 testrepo-version
 Trolltech.conf
 VirtualBox/

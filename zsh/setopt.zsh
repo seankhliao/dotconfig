@@ -1,23 +1,29 @@
-setopt AUTOCD
+setopt AUTO_CD
+
 setopt COMPLETE_IN_WORD
 setopt LIST_PACKED
-setopt EXTENDED_GLOB
-setopt GLOB_DOTS
 
+setopt GLOB_DOTS
+setopt GLOB_STAR_SHORT
+
+setopt HIST_EXPIRE_DUPS_FIRST
 setopt HIST_FCNTL_LOCK
+setopt HIST_FIND_NO_DUPS
 setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_IGNORE_DUPS
 setopt HIST_IGNORE_SPACE
 setopt HIST_LEX_WORDS
 setopt HIST_NO_FUNCTIONS
 setopt HIST_NO_STORE
-# setopt HIST_REDUCE_BLANKS # maybe messes with multiline continuation
 setopt HIST_SAVE_NO_DUPS
 setopt SHARE_HISTORY
 
 setopt IGNORE_EOF
 setopt INTERACTIVE_COMMENTS
-setopt PIPE_FAIL
+
 setopt PROMPT_CR
 setopt PROMPT_SP
 setopt PROMPT_SUBST
 setopt PROMPT_PERCENT
+
+setopt PIPE_FAIL

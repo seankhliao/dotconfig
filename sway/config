@@ -30,13 +30,13 @@ bindsym {
     # Screenshot
     Print                   exec grim -g "$(slurp)" "$HOME/data/screen/$(date +'%Y-%m-%d-%H%M%S').png"
     # $mod+n                  exec google-chrome-stable --incognito
-    $mod+Shift+t            exec google-chrome-stable --user-data-dir="$HOME/.config/chrome-custom"
+    $mod+Shift+t            exec google-chrome-unstable --user-data-dir="$HOME/.config/chrome-custom"
     $mod+Return             exec kitty
     $mod+c                  exec makoctl dismiss
     $mod+d                  exec wofi
     $mod+i                  exec kitty -T irc weechat
     $mod+s                  exec spotify
-    $mod+t                  exec google-chrome-stable
+    $mod+t                  exec google-chrome-unstable
     $mod+y                  exec yubioath-desktop
 
     XF86AudioRaiseVolume    exec pulsemixer --change-volume +5
@@ -44,9 +44,9 @@ bindsym {
     XF86AudioMute           exec pulsemixer --toggle-mute
     XF86MonBrightnessUp     exec brightnessctl set +10%
     XF86MonBrightnessDown   exec brightnessctl set 10%-
-    # XF86AudioPlay           exec playerctl play-pause
-    # XF86AudioPrev           exec playerctl previous
-    # XF86AudioNext           exec playerctl next
+    XF86AudioPlay           exec playerctl play-pause
+    XF86AudioPrev           exec playerctl previous
+    XF86AudioNext           exec playerctl next
 
     $mod+q                  kill
     $mod+h                  splith
@@ -142,13 +142,14 @@ input "1739:30382:DLL0704:01_06CB:76AE_Touchpad" {
 # input "PIXA3854:00:093A:0274_Touchpad" {
 input "type:touchpad" {
     tap enabled
+    # accel_profile flat
     accel_profile adaptive
     # pointer_accel 1
     middle_emulation enabled
     natural_scroll enabled
 }
 
-output "Unknown 0x095F 0x00000000" {
+output "BOE 0x095F Unknown" {
     scale 1
 }
 

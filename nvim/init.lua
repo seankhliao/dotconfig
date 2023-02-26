@@ -187,18 +187,23 @@ formatter.setup({
 	filetype = {
 		css = {
 			require("formatter.filetypes.css").prettier,
+			require("formatter.filetypes.any").remove_trailing_whitespace,
 		},
 		html = {
 			require("formatter.filetypes.html").prettier,
+			require("formatter.filetypes.any").remove_trailing_whitespace,
 		},
 		json = {
 			require("formatter.filetypes.json").jq,
+			require("formatter.filetypes.any").remove_trailing_whitespace,
 		},
 		lua = {
 			require("formatter.filetypes.lua").stylua,
+			require("formatter.filetypes.any").remove_trailing_whitespace,
 		},
 		markdown = {
 			require("formatter.util").withl(require("formatter.defaults").prettier, "markdown"),
+			require("formatter.filetypes.any").remove_trailing_whitespace,
 		},
 		terraform = {
 			function()
@@ -208,9 +213,11 @@ formatter.setup({
 					stdin = true,
 				}
 			end,
+			require("formatter.filetypes.any").remove_trailing_whitespace,
 		},
 		yaml = {
 			require("formatter.filetypes.yaml").prettier,
+			require("formatter.filetypes.any").remove_trailing_whitespace,
 		},
 		["*"] = {
 			require("formatter.filetypes.any").remove_trailing_whitespace,
@@ -287,7 +294,7 @@ lspconfig.gopls.setup({
 	},
 	on_init = function(client)
 		local path = client.workspace_folders[1].name
-		if path:find("code/go") then
+		if path:find("sdk/go") then
 			client.config.settings.gopls.gofumpt = false
 		end
 	end,

@@ -60,8 +60,12 @@ function t() {
 function wt() {
     local repo_root=$(git rev-parse --show-toplevel)
     cd "${repo_root}"
-    git worktree add ../"$@"
-    cd ../$1
+    p="$1"
+    if [[ "${p}" == "$(basename "${p}")" ]]; then
+        p="../${p}" # single element, make it a sibling
+    fi
+    git worktree add "${p}"
+    cd "${p}"
 }
 
 function colortest () {

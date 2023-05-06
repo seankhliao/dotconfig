@@ -24,7 +24,9 @@ font IBM Plex Mono 11
 
 # background
 # output * background $HOME/.ssh/bg.png fill
-output * background $XDG_CONFIG_HOME/sway/bg.jpg fill
+output * background $HOME/.ssh/yuina.png fill
+# output * background $HOME/.ssh/bg-shirakawa.png fill
+# output * background $XDG_CONFIG_HOME/sway/bg.jpg fill
 
 bindsym {
     # Screenshot
@@ -37,7 +39,7 @@ bindsym {
     $mod+i                  exec kitty -T irc weechat
     $mod+s                  exec spotify
     $mod+t                  exec google-chrome-unstable
-    $mod+y                  exec yubioath-desktop
+    $mod+y                  exec yubioath-desktop-beta
 
     XF86AudioRaiseVolume    exec pulsemixer --change-volume +5
     XF86AudioLowerVolume    exec pulsemixer --change-volume -5

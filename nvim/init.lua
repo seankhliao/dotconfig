@@ -111,7 +111,7 @@ require("packer").startup(function()
 
 	use({ "hrsh7th/nvim-cmp" })
 	use({ "hrsh7th/cmp-buffer" })
-	use({ "hrsh7th/cmp-path" })
+	-- use({ "hrsh7th/cmp-path" })
 
 	use({ "neovim/nvim-lspconfig" })
 	use({ "hrsh7th/cmp-nvim-lsp" })
@@ -179,7 +179,7 @@ cmp.setup({
 		{ name = "buffer" },
 		{ name = "luasnip" },
 		{ name = "nvim_lsp" },
-		{ name = "path" },
+		-- { name = "path" },
 	},
 })
 
@@ -380,7 +380,7 @@ vim.api.nvim_exec(
 augroup Clean
     autocmd!
     autocmd BufWritePre *.go        silent :lua goimports(1000)
-    autocmd BufWritePre *.go        silent :lua vim.lsp.buf.formatting_sync()
+    autocmd BufWritePre *.go        silent :lua vim.lsp.buf.format()
     autocmd BufWritePre *           silent :FormatWrite
 augroup END
 ]],

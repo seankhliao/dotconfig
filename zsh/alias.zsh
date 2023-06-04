@@ -7,8 +7,8 @@
 (( $+commands[exa] )) \
     && alias ls='exa --group-directories-first' \
     || alias ls='ls -h';
-(( $+commands[yay] )) \
-    && alias p='yay' \
+(( $+commands[paru] )) \
+    && alias p='paru' \
     || alias p='sudo pacman';
 
 alias ..='cd ..'
@@ -30,7 +30,6 @@ alias g='git'
 alias h='htop'
 alias icat='kitty +kitten icat'
 alias k='kubectl'
-alias kctx='kubectx'
 alias kns='kubens'
 alias rr='cd $(git rev-parse --show-toplevel)'
 alias s='ssh'

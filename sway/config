@@ -24,8 +24,7 @@ font IBM Plex Mono 11
 
 # background
 # output * background $HOME/.ssh/bg.png fill
-output * background $HOME/.ssh/yuina.png fill
-# output * background $HOME/.ssh/bg-shirakawa.png fill
+output * background $HOME/.ssh/herokiller.png fill
 # output * background $XDG_CONFIG_HOME/sway/bg.jpg fill
 
 bindsym {
@@ -156,3 +155,4 @@ output "BOE 0x095F Unknown" {
 }
 
 exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway XDG_DATA_HOME XDG_STATE_HOME
+exec swayidle

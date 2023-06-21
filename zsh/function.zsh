@@ -60,12 +60,22 @@ function t() {
 function wt() {
     local repo_root=$(git rev-parse --show-toplevel)
     cd "${repo_root}"
+
+    changes=$(git status --short | wc -l)
+    if (( $changes != 0 )); then
+        git add . &&  git stash
+    fi
+
     p="$1"
     if [[ "${p}" == "$(basename "${p}")" ]]; then
         p="../${p}" # single element, make it a sibling
     fi
     git worktree add "${p}"
     cd "${p}"
+
+    if (( $changes != 0 )); then
+        git stash apply
+    fi
 }
 
 function colortest () {

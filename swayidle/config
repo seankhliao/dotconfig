@@ -1,3 +1,2 @@
-timeout 300 'swaylock -f'
 before-sleep 'swaylock -f'
 lock 'swaylock -f'

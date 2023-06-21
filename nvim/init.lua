@@ -85,32 +85,44 @@ esac
 	end
 end
 
-local packer_install_path = vim.env.XDG_DATA_HOME .. "/nvim/site/pack/packer/start/packer.nvim"
-local packer_dir_file = io.open(packer_install_path)
-local packer_install = false
-if packer_dir_file ~= nil then
-	packer_dir_file:close()
-else
-	os.execute("git clone https://github.com/wbthomason/packer.nvim " .. packer_install_path)
-	vim.cmd([[ packadd packer.nvim ]])
-	packer_install = true
+local ensure_packer = function()
+  local fn = vim.fn
+  local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+  if fn.empty(fn.glob(install_path)) > 0 then
+    fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+    vim.cmd [[packadd packer.nvim]]
+    return true
+  end
+  return false
 end
 
-require("packer").startup(function()
+local packer_bootstrap = ensure_packer()
+require('packer').startup(function(use)
 	use({ "wbthomason/packer.nvim" })
 
 	use({ "fcpg/vim-fahrenheit" })
 	use({ "lukas-reineke/indent-blankline.nvim" })
+    use({ "nvim-treesitter/nvim-treesitter", run = ':TSUpdate' })
 	use({ "lewis6991/gitsigns.nvim", requires = { "nvim-lua/plenary.nvim" } })
 	use({ "sheerun/vim-polyglot" })
 	use({ "jjo/vim-cue" })
+	use({ "norcalli/nvim-colorizer.lua" })
+	use({ "f-person/git-blame.nvim"})
 
-	use({ "tyru/caw.vim" })
+    use {
+        'numToStr/Comment.nvim',
+        config = function()
+            require('Comment').setup()
+        end
+    }
 	use({ "windwp/nvim-autopairs" })
 	use({ "mhartington/formatter.nvim" })
 
 	use({ "hrsh7th/nvim-cmp" })
 	use({ "hrsh7th/cmp-buffer" })
+	use({ "hrsh7th/cmp-nvim-lsp-signature-help" })
+	use({ "ray-x/lsp_signature.nvim" })
+	use({ "hrsh7th/cmp-nvim-lua" })
 	-- use({ "hrsh7th/cmp-path" })
 
 	use({ "neovim/nvim-lspconfig" })
@@ -118,6 +130,11 @@ require("packer").startup(function()
 
 	use({ "L3MON4D3/LuaSnip" })
 	use({ "saadparwaiz1/cmp_luasnip" })
+
+
+    if packer_bootstrap then
+        require('packer').sync()
+    end
 end)
 
 if packer_install then
@@ -131,6 +148,8 @@ local gitsigns = require("gitsigns")
 local indent_blankline = require("indent_blankline")
 local lspconfig = require("lspconfig")
 local luasnip = require("luasnip")
+require "lsp_signature".setup()
+require'colorizer'.setup()
 
 autopairs.setup({
 	check_ts = true,
@@ -179,6 +198,7 @@ cmp.setup({
 		{ name = "buffer" },
 		{ name = "luasnip" },
 		{ name = "nvim_lsp" },
+        { name = 'nvim_lua' },
 		-- { name = "path" },
 	},
 })
@@ -241,9 +261,18 @@ indent_blankline.setup({
 		"nofile",
 	},
 	char_highlight_list = {
-		"IndentBlankline1",
+        "IndentBlanklineIndent1",
+        "IndentBlanklineIndent2",
+        "IndentBlanklineIndent3",
+        "IndentBlanklineIndent4",
+        "IndentBlanklineIndent5",
+        "IndentBlanklineIndent6",
 	},
 	show_first_indent_level = false,
+    show_end_of_line = true,
+    space_char_blankline = " ",
+    show_current_context = true,
+    show_current_context_start = true,
 })
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -290,6 +319,7 @@ lspconfig.gopls.setup({
 		gopls = {
 			gofumpt = true,
 			staticcheck = true,
+			templateExtensions = {"gotmpl"}
 		},
 	},
 	on_init = function(client)
@@ -318,7 +348,8 @@ lspconfig.yamlls.setup({
 				enable = true,
 			},
 			schemas = {
-			    ["file:///home/arccy/.cache/kubernetes-json-schema/v1.24.3-standalone/all.json"] = "*.k8s.yaml"
+			    ["file:///home/arccy/third_party/kubernetes-json-schema/default/v1.26.5-standalone/all.json"] = {"*.k8s.yaml"},
+			    kubernetes = "",
 			},
 			yamlEditor = {
                 ["editor.insertSpaces"] = false,
@@ -331,7 +362,12 @@ lspconfig.yamlls.setup({
 vim.cmd([[ colorscheme fahrenheit ]])
 
 local set_hl = {
-	IndentBlankline1 = { fg = "#262626" },
+    IndentBlanklineIndent1 = { fg = "#E06C75" },
+    IndentBlanklineIndent2 = { fg = "#E5C07B" },
+    IndentBlanklineIndent3 = { fg = "#98C379" },
+    IndentBlanklineIndent4 = { fg = "#56B6C2" },
+    IndentBlanklineIndent5 = { fg = "#61AFEF" },
+    IndentBlanklineIndent6 = { fg = "#C678DD" },
 	DiffAdd = { ctermbg = 235, ctermfg = 108, bg = "#A3BE8C", fg = "#262626" },
 	DiffChange = { ctermbg = 235, ctermfg = 103, bg = "#B48EAD", fg = "#262626" },
 	DiffDelete = { ctermbg = 235, ctermfg = 131, bg = "#BF616A", fg = "#262626" },
@@ -340,6 +376,7 @@ local set_hl = {
 for k, v in pairs(set_hl) do
 	vim.api.nvim_set_hl(0, k, v)
 end
+
 
 function sudowrite()
 	local tmpfilename = os.tmpname()

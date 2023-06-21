@@ -31,13 +31,12 @@ bindsym {
     # Screenshot
     Print                   exec grim -g "$(slurp)" "$HOME/data/screen/$(date +'%Y-%m-%d-%H%M%S').png"
     # $mod+n                  exec google-chrome-stable --incognito
-    $mod+Shift+t            exec google-chrome-unstable --user-data-dir="$HOME/.config/chrome-custom"
     $mod+Return             exec kitty
     $mod+c                  exec makoctl dismiss
     $mod+d                  exec wofi
     $mod+i                  exec kitty -T irc weechat
     $mod+s                  exec spotify
-    $mod+t                  exec google-chrome-unstable
+    $mod+t                  exec $BROWSER
     $mod+y                  exec yubioath-desktop-beta
 
     XF86AudioRaiseVolume    exec pulsemixer --change-volume +5

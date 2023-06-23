@@ -109,12 +109,7 @@ require('packer').startup(function(use)
 	use({ "norcalli/nvim-colorizer.lua" })
 	use({ "f-person/git-blame.nvim"})
 
-    use {
-        'numToStr/Comment.nvim',
-        config = function()
-            require('Comment').setup()
-        end
-    }
+    use({ "numToStr/Comment.nvim"})
 	use({ "windwp/nvim-autopairs" })
 	use({ "mhartington/formatter.nvim" })
 
@@ -150,6 +145,7 @@ local lspconfig = require("lspconfig")
 local luasnip = require("luasnip")
 require "lsp_signature".setup()
 require'colorizer'.setup()
+require "Comment".setup()
 
 autopairs.setup({
 	check_ts = true,

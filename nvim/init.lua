@@ -98,9 +98,88 @@ end
 
 local packer_bootstrap = ensure_packer()
 require('packer').startup(function(use)
+    -- package management
     use({"wbthomason/packer.nvim"})
 
+    -- theme
     use {'dasupradyumna/midnight.nvim'}
+
+    -- system
+    use({
+        'rcarriga/nvim-notify',
+        config = function() vim.notify = require("notify") end,
+    })
+
+    use({
+        'nvim-telescope/telescope.nvim', tag = '0.1.x',
+        requires = {{'nvim-lua/plenary.nvim'}}
+    })
+
+    use({
+        "nvim-treesitter/nvim-treesitter",
+        run = ':TSUpdate',
+        config = function()
+            require'nvim-treesitter.configs'.setup {
+                ensure_installed = {
+                    "awk", "bash", "c", "capnp", "comment", "cpp", "css", "cue", "dart", "diff", "dockerfile", "dot",
+                    "ebnf", "git_config", "git_rebase", "gitattributes", "gitcommit", "gitignore",
+                    "go", "gomod", "gosum", "gowork", "graphql", "hcl", "html",
+                    "java", "javascript", "jq", "json", "jsonnet", "latex", "lua", "luadoc",
+                    "make", "markdown", "markdown_inline", "nix", "passwd", "proto", "python",
+                    "regex", "rego", "rust", "sql", "starlark", "terraform", "toml", "typescript",
+                    "vim", "vimdoc", "yaml" },
+                highlight = {
+                    enable = true,
+                },
+                indent = {
+                    enable = true,
+                },
+            }
+        end,
+    })
+
+    -- utils
+    use({
+        'ruifm/gitlinker.nvim',
+        requires = 'nvim-lua/plenary.nvim',
+        config = function() require"gitlinker".setup() end,
+    })
+    use({
+        "numToStr/Comment.nvim",
+        config = function() require "Comment".setup() end,
+    })
+
+    -- automagic
+    use({"sheerun/vim-polyglot"})
+    use({"jjo/vim-cue"})
+    use({
+        "windwp/nvim-autopairs",
+        config = function()
+            require("nvim-autopairs").setup({
+                check_ts = true,
+            })
+        end,
+    })
+    use({
+        'nmac427/guess-indent.nvim',
+        config = function() require('guess-indent').setup()  end,
+    })
+
+    -- extra info
+    use({
+        "norcalli/nvim-colorizer.lua",
+        config = function() require'colorizer'.setup() end,
+    })
+    use({
+        'nvim-treesitter/nvim-treesitter-context',
+        requires = {{"nvim-treesitter/nvim-treesitter"}},
+        config = function()
+            require'treesitter-context'.setup({
+                enable = true,
+                separator = '-',
+            })
+        end,
+    })
     use({
         "lukas-reineke/indent-blankline.nvim",
         config = function()
@@ -142,28 +221,6 @@ require('packer').startup(function(use)
         end,
     })
     use({
-        "nvim-treesitter/nvim-treesitter",
-        run = ':TSUpdate',
-        config = function()
-            require'nvim-treesitter.configs'.setup {
-                ensure_installed = {
-                    "awk", "bash", "c", "capnp", "comment", "cpp", "css", "cue", "dart", "diff", "dockerfile", "dot",
-                    "ebnf", "git_config", "git_rebase", "gitattributes", "gitcommit", "gitignore",
-                    "go", "gomod", "gosum", "gowork", "graphql", "hcl", "html",
-                    "java", "javascript", "jq", "json", "jsonnet", "latex", "lua", "luadoc",
-                    "make", "markdown", "markdown_inline", "nix", "passwd", "proto", "python",
-                    "regex", "rego", "rust", "sql", "starlark", "terraform", "toml", "typescript",
-                    "vim", "vimdoc", "yaml" },
-                highlight = {
-                    enable = true,
-                },
-                indent = {
-                    enable = true,
-                },
-            }
-        end,
-    })
-    use({
         "lewis6991/gitsigns.nvim",
         requires = { "nvim-lua/plenary.nvim"},
         config = function()
@@ -178,30 +235,24 @@ require('packer').startup(function(use)
             })
         end
     })
-    use({"sheerun/vim-polyglot"})
-    use({"jjo/vim-cue"})
-    use({
-        "norcalli/nvim-colorizer.lua",
-        config = function() require'colorizer'.setup() end,
-    })
     use({"f-person/git-blame.nvim"})
     use({
-        'rcarriga/nvim-notify',
-        config = function() vim.notify = require("notify") end,
-    })
-
-    use({
-        "numToStr/Comment.nvim",
-        config = function() require "Comment".setup() end,
-    })
-    use({
-        "windwp/nvim-autopairs",
+        'kevinhwang91/nvim-hlslens', -- better search
         config = function()
-            require("nvim-autopairs").setup({
-                check_ts = true,
-            })
+            require('hlslens').setup()
+
+            local kopts = {noremap = true, silent = true}
+            vim.api.nvim_set_keymap('n', 'n', [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]], kopts)
+            vim.api.nvim_set_keymap('n', 'N', [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]], kopts)
+            vim.api.nvim_set_keymap('n', '*', [[*<Cmd>lua require('hlslens').start()<CR>]], kopts)
+            vim.api.nvim_set_keymap('n', '#', [[#<Cmd>lua require('hlslens').start()<CR>]], kopts)
+            vim.api.nvim_set_keymap('n', 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], kopts)
+            vim.api.nvim_set_keymap('n', 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], kopts)
+            vim.api.nvim_set_keymap('n', '<Leader>l', '<Cmd>noh<CR>', kopts)
         end,
     })
+
+    -- formatting
     use({
         "mhartington/formatter.nvim",
         config = function()
@@ -249,47 +300,8 @@ require('packer').startup(function(use)
 
         end,
     })
-    use({
-        'kevinhwang91/nvim-hlslens',
-        config = function()
-            require('hlslens').setup()
 
-            local kopts = {noremap = true, silent = true}
-            vim.api.nvim_set_keymap('n', 'n', [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]], kopts)
-            vim.api.nvim_set_keymap('n', 'N', [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]], kopts)
-            vim.api.nvim_set_keymap('n', '*', [[*<Cmd>lua require('hlslens').start()<CR>]], kopts)
-            vim.api.nvim_set_keymap('n', '#', [[#<Cmd>lua require('hlslens').start()<CR>]], kopts)
-            vim.api.nvim_set_keymap('n', 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], kopts)
-            vim.api.nvim_set_keymap('n', 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], kopts)
-            vim.api.nvim_set_keymap('n', '<Leader>l', '<Cmd>noh<CR>', kopts)
-        end,
-    })
-
-    use({
-        'nvim-telescope/telescope.nvim', tag = '0.1.x',
-        requires = {{'nvim-lua/plenary.nvim'}}
-    })
-    use({
-        'ruifm/gitlinker.nvim',
-        requires = 'nvim-lua/plenary.nvim',
-        config = function() require"gitlinker".setup() end,
-    })
-    use({
-        'nmac427/guess-indent.nvim',
-        config = function() require('guess-indent').setup()  end,
-    })
-
-    use({
-        'nvim-treesitter/nvim-treesitter-context',
-        requires = {{"nvim-treesitter/nvim-treesitter"}},
-        config = function()
-            require'treesitter-context'.setup({
-                enable = true,
-                separator = '-',
-            })
-        end,
-    })
-
+    -- completions
     use({
         "L3MON4D3/LuaSnip",
         config = function() require("luasnip.loaders.from_vscode").lazy_load() end,

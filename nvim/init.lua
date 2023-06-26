@@ -469,6 +469,7 @@ if packer_install then
 end
 
 vim.cmd.colorscheme 'midnight'
+vim.api.nvim_set_hl(0, 'Normal', {bg = "#000000"})
 
 function sudowrite()
     local tmpfilename = os.tmpname()

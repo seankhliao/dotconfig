@@ -23,9 +23,7 @@ set {
 font IBM Plex Mono 11
 
 # background
-# output * background $HOME/.ssh/bg.png fill
-output * background $HOME/.ssh/herokiller.png fill
-# output * background $XDG_CONFIG_HOME/sway/bg.jpg fill
+output * background $XDG_CONFIG_HOME/sway/bg.jpg fill
 
 bindsym {
     # Screenshot
@@ -37,6 +35,7 @@ bindsym {
     $mod+i                  exec kitty -T irc weechat
     $mod+s                  exec spotify
     $mod+t                  exec $BROWSER
+    $mod+Shift+t            exec $BROWSER --user-data-dir=$XDG_CONFIG_HOME/chrome-custom
     $mod+y                  exec yubioath-desktop-beta
 
     XF86AudioRaiseVolume    exec pulsemixer --change-volume +5

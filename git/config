@@ -62,6 +62,9 @@
     algorithm = histogram
     renames = copies
 
+[diff "sopsdiffer"]
+    textconf = "sops -d"
+
 [fetch]
     prune     = true
     pruneTags = true

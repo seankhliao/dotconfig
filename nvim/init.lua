@@ -97,6 +97,7 @@ return false
 end
 
 local packer_bootstrap = ensure_packer()
+-- Note: rerun :PackerCompile on edit to config functions
 require('packer').startup(function(use)
     -- package management
     use({"wbthomason/packer.nvim"})
@@ -142,7 +143,23 @@ require('packer').startup(function(use)
     use({
         'ruifm/gitlinker.nvim',
         requires = 'nvim-lua/plenary.nvim',
-        config = function() require"gitlinker".setup() end,
+        config = function()
+            require"gitlinker".setup {
+                -- leader = \
+                mappings = "<leader>gy",
+
+                callbacks = {
+                    ["go.googlesource.com"] = function(url_data)
+                        local url = require"gitlinker.hosts".get_base_https_url(url_data) ..
+                             "/+/" .. url_data.rev .. "/" .. url_data.file
+                        if url_data.lstart then
+                            url = url .. "#" .. url_data.lstart
+                        end
+                        return url
+                    end,
+                },
+            }
+        end,
     })
     use({
         "numToStr/Comment.nvim",
@@ -444,7 +461,7 @@ require('packer').startup(function(use)
                             enable = true,
                          },
                          schemas = {
-                            ["file:///home/arccy/third_party/kubernetes-json-schema/default/v1.26.5-standalone/all.json"] = {"*.k8s.yaml"},
+                            ["file:///home/arccy/third_party/kubernetes-json-schema/default/v1.27.3-standalone/all.json"] = {"*.k8s.yaml"},
                             kubernetes = "",
                          },
                          yamlEditor = {

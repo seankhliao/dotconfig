@@ -65,6 +65,7 @@ rustup/
 .semgrep/
 skaffold/
 Slack/
+sops/
 spicy/
 spotify/
 step/

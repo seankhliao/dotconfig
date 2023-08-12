@@ -1,2 +1,7 @@
 background-color=#000000
 default-timeout=3000
+width=450
+height=200
+margin=5
+border-size=1
+border-radius=5

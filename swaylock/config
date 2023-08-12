@@ -1,4 +1,6 @@
-# no-unlock-indicator
-hide-keyboard-layout
 color=000000
-text-color=ffffff
+inside-ver-color=303030
+indicator-thickness=7
+ring-ver-color=a06be0
+font=Inconsolata
+text-ver-color=eceff1

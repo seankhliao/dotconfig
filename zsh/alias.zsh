@@ -1,11 +1,11 @@
-(( $+commands[exa] )) \
-    && alias l='exa -l --git --time-style iso --group-directories-first' \
+(( $+commands[eza] )) \
+    && alias l='eza -l --git --time-style iso --group-directories-first' \
     || alias l='ls -lh';
-(( $+commands[exa] )) \
-    && alias ll='exa -l -a --git --time-style iso --group-directories-first' \
+(( $+commands[eza] )) \
+    && alias ll='eza -l -a --git --time-style iso --group-directories-first' \
     || alias ll='ls -alh';
-(( $+commands[exa] )) \
-    && alias ls='exa --group-directories-first' \
+(( $+commands[eza] )) \
+    && alias ls='eza --group-directories-first' \
     || alias ls='ls -h';
 (( $+commands[paru] )) \
     && alias p='paru' \

@@ -200,41 +200,37 @@ require('packer').startup(function(use)
     use({
         "lukas-reineke/indent-blankline.nvim",
         config = function()
-            require("indent_blankline").setup({
-                buftype_exclude = {
-                    "terminal",
-                    "nofile",
-                },
-                char_highlight_list = {
-                    "IndentBlanklineIndent1",
-                    "IndentBlanklineIndent2",
-                    "IndentBlanklineIndent3",
-                    "IndentBlanklineIndent4",
-                    "IndentBlanklineIndent5",
-                    "IndentBlanklineIndent6",
-                },
-                show_first_indent_level = false,
-                show_end_of_line = true,
-                space_char_blankline = " ",
-                show_current_context = true,
-                show_current_context_start = true,
-            })
-
-            local set_hl = {
-                IndentBlanklineIndent1 = { fg = "#E06C75" },
-                IndentBlanklineIndent2 = { fg = "#E5C07B" },
-                IndentBlanklineIndent3 = { fg = "#98C379" },
-                IndentBlanklineIndent4 = { fg = "#56B6C2" },
-                IndentBlanklineIndent5 = { fg = "#61AFEF" },
-                IndentBlanklineIndent6 = { fg = "#C678DD" },
-                DiffAdd = { ctermbg = 235, ctermfg = 108, bg = "#A3BE8C", fg = "#262626" },
-                DiffChange = { ctermbg = 235, ctermfg = 103, bg = "#B48EAD", fg = "#262626" },
-                DiffDelete = { ctermbg = 235, ctermfg = 131, bg = "#BF616A", fg = "#262626" },
-                DiffText = { ctermbg = 235, ctermfg = 208, bg = "#5E81AC", fg = "#262626" },
+            local highlight = {
+                "RainbowRed",
+                "RainbowOrange",
+                "RainbowYellow",
+                "RainbowGreen",
+                "RainbowCyan",
+                "RainbowBlue",
+                "RainbowViolet",
             }
-            for k, v in pairs(set_hl) do
-                vim.api.nvim_set_hl(0, k, v)
-            end
+
+            local hooks = require "ibl.hooks"
+            -- create the highlight groups in the highlight setup hook, so they are reset
+            -- every time the colorscheme changes
+            hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
+                vim.api.nvim_set_hl(0, "RainbowRed", { fg = "#E06C75" })
+                vim.api.nvim_set_hl(0, "RainbowOrange", { fg = "#D19A66" })
+                vim.api.nvim_set_hl(0, "RainbowYellow", { fg = "#E5C07B" })
+                vim.api.nvim_set_hl(0, "RainbowGreen", { fg = "#98C379" })
+                vim.api.nvim_set_hl(0, "RainbowCyan", { fg = "#56B6C2" })
+                vim.api.nvim_set_hl(0, "RainbowBlue", { fg = "#61AFEF" })
+                vim.api.nvim_set_hl(0, "RainbowViolet", { fg = "#C678DD" })
+            end)
+
+            require("ibl").setup({
+                indent = {
+                    highlight = highlight,
+                },
+                exclude = {
+                    buftypes = {"terminal", "nofile"},
+                }
+            })
         end,
     })
     use({

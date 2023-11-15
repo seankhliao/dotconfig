@@ -1,52 +1,51 @@
 vim.cmd([[ syntax enable ]])
 
-local config_dir = vim.env.XDG_CONFIG_HOME or "~/.config"
-local bin_dir = config_dir .. "/bin"
-local cache_dir = vim.env.XDG_CACHE_HOME or "~/.cache"
-local backup_dir = cache_dir .. "/nvim/backup"
-local undo_dir = cache_dir .. "/nvim/undo"
-os.execute("mkdir -p " .. backup_dir)
-os.execute("mkdir -p " .. undo_dir)
+local config_dir = vim.env.XDG_CONFIG_HOME or '~/.config'
+local bin_dir = config_dir .. '/bin'
+local cache_dir = vim.env.XDG_CACHE_HOME or '~/.cache'
+local backup_dir = cache_dir .. '/nvim/backup'
+local undo_dir = cache_dir .. '/nvim/undo'
+os.execute('mkdir -p ' .. backup_dir)
+os.execute('mkdir -p ' .. undo_dir)
 
-vim.g.did_load_filetypes = 1
-vim.g.do_filetype_lua = 1
-vim.g.signify_sign_change = "~"
+-- needs to be set before vim-polyglot is loaded
+vim.g.polyglot_disabled = {'cue'}
 
 -- https://neovim.io/doc/user/options.html#options
-vim.o.background = "dark"
+vim.o.background = 'dark'
 vim.o.backupdir = backup_dir
-vim.o.clipboard = "unnamedplus"
-vim.o.completeopt = "menuone,noinsert,noselect"
+vim.o.clipboard = 'unnamedplus'
+vim.o.completeopt = 'menuone,noinsert,noselect'
 vim.o.confirm = true
 vim.o.fsync = true
 vim.o.ignorecase = true
-vim.o.inccommand = "split"
+vim.o.inccommand = 'split'
 vim.o.incsearch = true
-vim.o.mouse = "a"
+vim.o.mouse = 'a'
 vim.o.mousefocus = true
 vim.o.scrolloff = 4
-vim.o.shortmess = "aoOtTIc"
+vim.o.shortmess = 'aoOtTIc'
 vim.o.sidescrolloff = 4
-vim.o.signcolumn = "yes"
+vim.o.signcolumn = 'yes'
 vim.o.smartcase = true
 vim.o.smarttab = true
 vim.o.termguicolors = true
 vim.o.undodir = undo_dir
 vim.o.updatetime = 300
 vim.o.wildignorecase = true
-vim.o.wildmode = "longest,list:longest,full"
+vim.o.wildmode = 'longest,list:longest,full'
 
 vim.wo.breakindent = true
 vim.wo.foldenable = false
 vim.wo.number = true
-vim.wo.statusline = "%-F %-r %-m %= %{&fileencoding} | %y | %3.l/%3.L:%3.c"
+vim.wo.statusline = '%-F %-r %-m %= %{&fileencoding} | %y | %3.l/%3.L:%3.c'
 
 vim.bo.autoindent = true
 vim.bo.autoread = true
-vim.bo.commentstring = "#\\ %s"
+vim.bo.commentstring = '#\\ %s'
 vim.bo.copyindent = true
 vim.bo.expandtab = true
-vim.bo.grepprg = "rg"
+vim.bo.grepprg = 'rg'
 vim.bo.modeline = false
 vim.bo.shiftwidth = 0
 vim.bo.smartindent = true
@@ -54,14 +53,15 @@ vim.bo.swapfile = false
 vim.bo.tabstop = 4
 vim.bo.undofile = true
 
+-- setup remote copy/paste through ssh osc52
 if vim.env.SSH_CONNECTION ~= nil then
     vim.g.clipboard = {
-        name = "osc52clip",
+        name = 'osc52clip',
         copy = {
-            ["+"] = "osc52clip copy",
+            ['+'] = 'osc52clip copy',
         },
         paste = {
-            ["+"] = "osc52clip paste",
+            ['+'] = 'osc52clip paste',
         },
     }
 
@@ -81,175 +81,199 @@ exit 1
 esac
 ]])
         osc52clip:close()
-        os.execute("chmod +x " .. bin_dir .. "/osc52clip")
+        os.execute('chmod +x ' .. bin_dir .. '/osc52clip')
     end
 end
 
-local ensure_packer = function()
-local fn = vim.fn
-local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
-if fn.empty(fn.glob(install_path)) > 0 then
-    fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
-    vim.cmd [[packadd packer.nvim]]
-    return true
+-- load plugins
+local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    'git',
+    'clone',
+    '--filter=blob:none',
+    'https://github.com/folke/lazy.nvim.git',
+    '--branch=stable', -- latest stable release
+    lazypath,
+  })
 end
-return false
-end
-
-local packer_bootstrap = ensure_packer()
--- Note: rerun :PackerCompile on edit to config functions
-require('packer').startup(function(use)
-    -- package management
-    use({"wbthomason/packer.nvim"})
-
+vim.opt.rtp:prepend(lazypath)
+require('lazy').setup({
     -- theme
-    use {'dasupradyumna/midnight.nvim'}
+    {
+        'dasupradyumna/midnight.nvim',
+        config = function()
+            vim.cmd.colorscheme('midnight')
+            vim.api.nvim_set_hl(0, 'Normal', {bg = '#000000'})
+        end,
+    },
+
+    -- shared deps
+    {
+        -- generic shared library of lua utils
+        'nvim-lua/plenary.nvim',
+    },
 
     -- system
-    use({
+    {
+        -- floating notification windows
         'rcarriga/nvim-notify',
-        config = function() vim.notify = require("notify") end,
-    })
+        config = function() 
+            vim.notify = require('notify') 
+        end,
+    },
 
-    use({
-        'nvim-telescope/telescope.nvim', tag = '0.1.x',
-        requires = {{'nvim-lua/plenary.nvim'}}
-    })
-
-    use({
-        "nvim-treesitter/nvim-treesitter",
-        run = ':TSUpdate',
+    -- language support
+    {
+        -- a lot of filetypes, primarily syntax highlighting
+        'sheerun/vim-polyglot',
+    },
+    {
+        -- cuelang
+        'jjo/vim-cue'
+    },
+    {
+        -- treesitter text objects
+        'nvim-treesitter/nvim-treesitter',
+        build = ':TSUpdate',
         config = function()
-            require'nvim-treesitter.configs'.setup {
-                ensure_installed = {
-                    "awk", "bash", "c", "capnp", "comment", "cpp", "css", "cue", "dart", "diff", "dockerfile", "dot",
-                    "ebnf", "git_config", "git_rebase", "gitattributes", "gitcommit", "gitignore",
-                    "go", "gomod", "gosum", "gowork", "graphql", "hcl", "html",
-                    "java", "javascript", "jq", "json", "jsonnet", "latex", "lua", "luadoc",
-                    "make", "markdown", "markdown_inline", "nix", "passwd", "proto", "python",
-                    "regex", "rego", "rust", "sql", "starlark", "terraform", "toml", "typescript",
-                    "vim", "vimdoc", "yaml" },
+            require('nvim-treesitter.configs').setup({
+                ensure_installed = 'all',
                 highlight = {
                     enable = true,
                 },
                 indent = {
                     enable = true,
                 },
-            }
+            })
         end,
-    })
+    },
 
     -- utils
-    use({
+    {
+        -- link to git host with <space>gl
         'ruifm/gitlinker.nvim',
-        requires = 'nvim-lua/plenary.nvim',
-        config = function()
-            require"gitlinker".setup {
-                -- leader = \
-                mappings = "<leader>gy",
-
-                callbacks = {
-                    ["go.googlesource.com"] = function(url_data)
-                        local url = require"gitlinker.hosts".get_base_https_url(url_data) ..
-                             "/+/" .. url_data.rev .. "/" .. url_data.file
-                        if url_data.lstart then
-                            url = url .. "#" .. url_data.lstart
-                        end
-                        return url
-                    end,
-                },
-            }
-        end,
-    })
-    use({
-        "numToStr/Comment.nvim",
-        config = function() require "Comment".setup() end,
-    })
+        opts = {
+            mappings = '<space>gl',
+            callbacks = {
+                ['go.googlesource.com'] = function(url_data)
+                    local url = require('gitlinker.hosts').get_base_https_url(url_data)
+                    url = url .. '/+/' .. url_data.rev .. '/' .. url_data.file
+                    if url_data.lstart then
+                        url = url .. '#' .. url_data.lstart
+                    end
+                    return url
+                end,
+            },
+        },
+    },
+    {
+        -- comment out blocks with gcc
+        'numToStr/Comment.nvim',
+        opts = {},
+    },
 
     -- automagic
-    use({"sheerun/vim-polyglot"})
-    use({"jjo/vim-cue"})
-    use({
-        "windwp/nvim-autopairs",
-        config = function()
-            require("nvim-autopairs").setup({
-                check_ts = true,
-            })
-        end,
-    })
-    use({
-        'nmac427/guess-indent.nvim',
-        config = function() require('guess-indent').setup()  end,
-    })
+    {
+        -- pair close insertion
+        'windwp/nvim-autopairs',
+        event = 'InsertEnter',
+        opts = {
+            check_ts = true,
+        },
+    },
+    {
+        -- guess indent level/char
+        'NMAC427//guess-indent.nvim',
+        opts = {},
+    },
+
+    -- git integration
+    {
+        -- end of line blame
+        'f-person/git-blame.nvim',
+    },
+    {
+        -- :DiffviewOpen [ref]
+        'sindrets/diffview.nvim',
+    },
+    {
+        -- gutter signs
+        'lewis6991/gitsigns.nvim',
+        opts = {
+            signs = {
+                add = { hl = 'DiffAdd', text = '+' },
+                change = { hl = 'DiffChange', text = '~' },
+                delete = { hl = 'DiffDelete' },
+                topdelete = { hl = 'DiffDelete' },
+                changedelete = { hl = 'DiffChange' },
+            },
+        }
+    },
 
     -- extra info
-    use({
-        "norcalli/nvim-colorizer.lua",
-        config = function() require'colorizer'.setup() end,
-    })
-    use({
+    {
+        -- highlight TODO comments
+        'folke/todo-comments.nvim',
+    },
+    {
+        -- colorize #hex
+        'norcalli/nvim-colorizer.lua',
+        opts = {},
+    },
+    {
+        -- current block header
         'nvim-treesitter/nvim-treesitter-context',
-        requires = {{"nvim-treesitter/nvim-treesitter"}},
-        config = function()
-            require'treesitter-context'.setup({
-                enable = true,
-                separator = '-',
-            })
-        end,
-    })
-    use({
-        "lukas-reineke/indent-blankline.nvim",
+        opts = {
+            separator = '-',
+        },
+    },
+    {
+        'lukas-reineke/indent-blankline.nvim',
         config = function()
             local highlight = {
-                "RainbowRed",
-                "RainbowOrange",
-                "RainbowYellow",
-                "RainbowGreen",
-                "RainbowCyan",
-                "RainbowBlue",
-                "RainbowViolet",
+                'RainbowRed',
+                'RainbowOrange',
+                'RainbowYellow',
+                'RainbowGreen',
+                'RainbowCyan',
+                'RainbowBlue',
+                'RainbowViolet',
             }
 
-            local hooks = require "ibl.hooks"
+            local hooks = require('ibl.hooks')
             -- create the highlight groups in the highlight setup hook, so they are reset
             -- every time the colorscheme changes
             hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
-                vim.api.nvim_set_hl(0, "RainbowRed", { fg = "#E06C75" })
-                vim.api.nvim_set_hl(0, "RainbowOrange", { fg = "#D19A66" })
-                vim.api.nvim_set_hl(0, "RainbowYellow", { fg = "#E5C07B" })
-                vim.api.nvim_set_hl(0, "RainbowGreen", { fg = "#98C379" })
-                vim.api.nvim_set_hl(0, "RainbowCyan", { fg = "#56B6C2" })
-                vim.api.nvim_set_hl(0, "RainbowBlue", { fg = "#61AFEF" })
-                vim.api.nvim_set_hl(0, "RainbowViolet", { fg = "#C678DD" })
+                vim.api.nvim_set_hl(0, 'RainbowRed', { fg = '#E06C75' })
+                vim.api.nvim_set_hl(0, 'RainbowOrange', { fg = '#D19A66' })
+                vim.api.nvim_set_hl(0, 'RainbowYellow', { fg = '#E5C07B' })
+                vim.api.nvim_set_hl(0, 'RainbowGreen', { fg = '#98C379' })
+                vim.api.nvim_set_hl(0, 'RainbowCyan', { fg = '#56B6C2' })
+                vim.api.nvim_set_hl(0, 'RainbowBlue', { fg = '#61AFEF' })
+                vim.api.nvim_set_hl(0, 'RainbowViolet', { fg = '#C678DD' })
             end)
 
-            require("ibl").setup({
+            require('ibl').setup({
                 indent = {
-                    highlight = highlight,
+                    highlight = {
+                        'RainbowRed',
+                        'RainbowOrange',
+                        'RainbowYellow',
+                        'RainbowGreen',
+                        'RainbowCyan',
+                        'RainbowBlue',
+                        'RainbowViolet',
+                    },
                 },
                 exclude = {
-                    buftypes = {"terminal", "nofile"},
+                    buftypes = {'terminal', 'nofile'},
                 }
             })
         end,
-    })
-    use({
-        "lewis6991/gitsigns.nvim",
-        requires = { "nvim-lua/plenary.nvim"},
-        config = function()
-            require("gitsigns").setup({
-                signs = {
-                    add = { hl = "DiffAdd", text = "+" },
-                    change = { hl = "DiffChange", text = "~" },
-                    delete = { hl = "DiffDelete" },
-                    topdelete = { hl = "DiffDelete" },
-                    changedelete = { hl = "DiffChange" },
-                },
-            })
-        end
-    })
-    use({"f-person/git-blame.nvim"})
-    use({
+    },
+    {
+        -- search hover info
         'kevinhwang91/nvim-hlslens', -- better search
         config = function()
             require('hlslens').setup()
@@ -263,11 +287,12 @@ require('packer').startup(function(use)
             vim.api.nvim_set_keymap('n', 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], kopts)
             vim.api.nvim_set_keymap('n', '<Leader>l', '<Cmd>noh<CR>', kopts)
         end,
-    })
+    },
 
     -- formatting
-    use({
-        "mhartington/formatter.nvim",
+    {
+        -- format on write
+        'mhartington/formatter.nvim',
         config = function()
             require("formatter").setup({
                 filetype = {
@@ -310,84 +335,18 @@ require('packer').startup(function(use)
                     },
                 },
             })
-
         end,
-    })
+    },
 
-    -- completions
-    use({
-        "L3MON4D3/LuaSnip",
-        config = function() require("luasnip.loaders.from_vscode").lazy_load() end,
-    })
-    use({"saadparwaiz1/cmp_luasnip"})
-    use({
-        "hrsh7th/nvim-cmp",
-        requires = {{"L3MON4D3/LuaSnip"}},
+    -- lsp
+    {
+        'neovim/nvim-lspconfig',
         config = function()
-            local luasnip = require("luasnip")
-            local has_words_before = function()
-                local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-                return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-            end
-            local cmp = require("cmp")
-            cmp.setup({
-                mapping = {
-                    ["<CR>"] = cmp.mapping.confirm({
-                        behavior = cmp.ConfirmBehavior.Replace,
-                    }),
-                    ["<Tab>"] = cmp.mapping(function(fallback)
-                        if cmp.visible() then
-                            cmp.select_next_item()
-                        elseif luasnip.expand_or_jumpable() then
-                            luasnip.expand_or_jump()
-                        elseif has_words_before() then
-                            cmp.complete()
-                        else
-                            fallback()
-                        end
-                    end, { "i", "s" }),
-
-                    ["<S-Tab>"] = cmp.mapping(function(fallback)
-                        if cmp.visible() then
-                            cmp.select_prev_item()
-                        elseif luasnip.jumpable(-1) then
-                            luasnip.jump(-1)
-                        else
-                            fallback()
-                        end
-                    end, { "i", "s" }),
-
-                    ["<Down>"] = cmp.mapping(cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }), { "i" }),
-                    ["<Up>"] = cmp.mapping(cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }), { "i" }),
-                },
-                snippet = {
-                    expand = function(args)
-                        luasnip.lsp_expand(args.body)
-                    end,
-                },
-                sources = {
-                    { name = "buffer" },
-                    { name = "luasnip" },
-                    { name = "nvim_lsp" },
-                    { name = 'nvim_lua' },
-                },
-            })
-        end,
-    })
-    use({"hrsh7th/cmp-buffer"})
-    use({"hrsh7th/cmp-nvim-lsp-signature-help"})
-    use({
-        "ray-x/lsp_signature.nvim",
-        config = function() require "lsp_signature".setup() end,
-    })
-    use({"hrsh7th/cmp-nvim-lua"})
-
-    use({
-        "neovim/nvim-lspconfig",
-        config = function()
-            local capabilities = vim.lsp.protocol.make_client_capabilities()
-            capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
+            local capabilities = require('cmp_nvim_lsp').default_capabilities()
             capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+            vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
+            vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist)
 
             local on_attach = function(client, bufnr)
                 -- Enable completion triggered by <c-x><c-o>
@@ -401,11 +360,6 @@ require('packer').startup(function(use)
                 vim.keymap.set("n", "<space>h", vim.lsp.buf.hover, bufopts)
                 vim.keymap.set("n", "<space>i", vim.lsp.buf.implementation, bufopts)
                 vim.keymap.set("n", "<space>s", vim.lsp.buf.signature_help, bufopts)
-                -- vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, bufopts)
-                -- vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
-                -- vim.keymap.set('n', '<space>wl', function()
-                --   print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-                -- end, bufopts)
                 -- vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
                 vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, bufopts)
                 vim.keymap.set("n", "<space>a", vim.lsp.buf.code_action, bufopts)
@@ -422,6 +376,7 @@ require('packer').startup(function(use)
                 on_attach = on_attach,
             })
             lspconfig.gopls.setup({
+                -- cmd = { 'gopls', '-logfile=/tmp/gopls.log' }, -- save file and :PackerCompile to take effect
                 capabilities = capabilities,
                 on_attach = on_attach,
                 settings = {
@@ -453,56 +408,131 @@ require('packer').startup(function(use)
                     yaml = {
                          disableDefaultProperties = true,
                          schemaStore = {
-                            url = "https://www.schemastore.org/api/json/catalog.json",
+                            url = 'https://www.schemastore.org/api/json/catalog.json',
                             enable = true,
                          },
                          schemas = {
-                            ["file:///home/arccy/third_party/kubernetes-json-schema/default/v1.27.3-standalone/all.json"] = {"*.k8s.yaml"},
-                            kubernetes = "",
+                            ['file:///home/arccy/third_party/kubernetes-json-schema/default/v1.27.3-standalone/all.json'] = {'*.k8s.yaml'},
+                            kubernetes = '',
                          },
                          yamlEditor = {
-                            ["editor.insertSpaces"] = false,
-                            ["editor.formatOnType"] = false,
+                            ['editor.insertSpaces'] = false,
+                            ['editor.formatOnType'] = false,
                          },
                     },
                 },
             })
         end,
-    })
-    use({"hrsh7th/cmp-nvim-lsp"})
+    },
 
+    -- completions
+    {'hrsh7th/cmp-nvim-lsp'}, -- lsp integration
+    {'hrsh7th/cmp-buffer'},
+    {'hrsh7th/cmp-path'}, --filesystem path completion
+    {'hrsh7th/cmp-vsnip'}, -- snippet completion
+    {'hrsh7th/vim-vsnip'}, -- snippet engine
+    {'hrsh7th/cmp-nvim-lua'}, -- nvim lua runtime api completion
+    {'hrsh7th/cmp-nvim-lsp-signature-help'}, -- display function signatures
+    {
+        'hrsh7th/nvim-cmp',
+        config = function()
+            local has_words_before = function()
+              unpack = unpack or table.unpack
+              local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+              return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+            end
 
-    if packer_bootstrap then
-        require('packer').sync()
-    end
-end)
+            local feedkey = function(key, mode)
+              vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
+            end
 
-if packer_install then
-    require("packer").install()
-end
+            local cmp = require("cmp")
+            cmp.setup({
+                mapping = {
+                    ["<CR>"] = cmp.mapping({
+                        i = function(fallback)
+                            if cmp.visible() and cmp.get_active_entry() then
+                                cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
+                            else
+                                fallback()
+                            end
+                        end,
+                        s = cmp.mapping.confirm({ select = true }),
+                        c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
+                    }),
 
-vim.cmd.colorscheme 'midnight'
-vim.api.nvim_set_hl(0, 'Normal', {bg = "#000000"})
+                    ["<Tab>"] = cmp.mapping(function(fallback)
+                      if cmp.visible() then
+                        cmp.select_next_item()
+                      elseif vim.fn["vsnip#available"](1) == 1 then
+                        feedkey("<Plug>(vsnip-expand-or-jump)", "")
+                      elseif has_words_before() then
+                        cmp.complete()
+                      else
+                        fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
+                      end
+                    end, { "i", "s" }),
 
+                    ["<S-Tab>"] = cmp.mapping(function()
+                      if cmp.visible() then
+                        cmp.select_prev_item()
+                      elseif vim.fn["vsnip#jumpable"](-1) == 1 then
+                        feedkey("<Plug>(vsnip-jump-prev)", "")
+                      end
+                    end, { "i", "s" }),
+
+                    ['<Down>'] = cmp.mapping(cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }), { 'i' }),
+                    ['<Up>'] = cmp.mapping(cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }), { 'i' }),
+                },
+                snippet = {
+                    expand = function(args)
+                        vim.fn["vsnip#anonymous"](args.body)
+                    end,
+                },
+                sources = {
+                    { name = 'buffer' },
+                    { name = 'nvim_lsp' },
+                    { name = 'nvim_lua' },
+                    { name = 'vsnip' },
+                    { name = 'path' },
+                },
+            })
+            
+            local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+            cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done())
+        end,
+    },
+    {
+        "ray-x/lsp_signature.nvim",
+        config = function() require "lsp_signature".setup() end,
+    },
+})
+
+-- :W write with sudo
 function sudowrite()
     local tmpfilename = os.tmpname()
-    local tmpfile = io.open(tmpfilename, "w")
+    local tmpfile = io.open(tmpfilename, 'w')
     for i, line in ipairs(vim.api.nvim_buf_get_lines(0, 0, -1, false)) do
-        tmpfile:write(line .. "\n")
+        tmpfile:write(line .. '\n')
     end
     tmpfile:close()
     local curfilename = vim.api.nvim_buf_get_name(0)
-    os.execute(string.format("sudo tee %s < %s > /dev/null", curfilename, tmpfilename))
+    os.execute(string.format('sudo tee %s < %s > /dev/null', curfilename, tmpfilename))
     vim.cmd([[ edit! ]])
     os.remove(tmpfilename)
 end
 vim.cmd([[ command W :lua sudowrite() ]])
 
-vim.api.nvim_set_keymap("c", "WQ", "wq", { noremap = true })
+-- common typo
+vim.api.nvim_set_keymap('c', 'WQ', 'wq', { noremap = true })
+vim.api.nvim_set_keymap('c', 'Wq', 'wq', { noremap = true })
+-- easier to remember delete without yank
 vim.api.nvim_set_keymap("v", "s", '"_d', { noremap = true })
 vim.api.nvim_set_keymap("n", "ss", '"_dd', { noremap = true })
-vim.api.nvim_set_keymap("n", ";", ":", { noremap = true, silent = true })
+-- less shifting
+vim.api.nvim_set_keymap('n', ';', ':', { noremap = true, silent = true })
 
+-- more format on writes
 function goimports(wait_ms)
     local params = vim.lsp.util.make_range_params()
     params.context = { only = { "source.organizeImports" } }
@@ -527,12 +557,13 @@ autocmd BufWritePre *           silent :FormatWrite
 augroup END
 ]],false)
 
+-- indenting
 local ft_tab_width = {
-    [2] = { "html", "javascript", "markdown", "toml", "yaml" },
-    [8] = { "go" },
+    [2] = { 'html', 'javascript', 'markdown', 'toml', 'yaml' },
+    [8] = { 'go' },
 }
 for k, v in pairs(ft_tab_width) do
-    vim.api.nvim_create_autocmd("FileType", {
+    vim.api.nvim_create_autocmd('FileType', {
         pattern = v,
         callback = function()
             vim.opt_local.shiftwidth = k

@@ -27,6 +27,7 @@ gnuais/
 GNU Radio/
 google-*
 gops/
+go/telemetry/
 gqrx/
 gsutil/
 gtk-*
@@ -45,10 +46,11 @@ menus/
 mimeapps.list
 neofetch/
 nvim/autoload
+nvim/lazy-lock.json
 nvim/.netrwhist
+nvim/pack
 nvim/plugged
 nvim/plugin/
-nvim/pack
 nvim/schema.*
 Outline Manager/
 packer/

@@ -39,6 +39,7 @@ alias title='printf "\033[1m%s\n==========\033[0m\n"'
 alias tf='terraform'
 alias v='${EDITOR}'
 alias vbare='${EDITOR} -u NONE'
+alias vfzf='${EDITOR} $(fzf)'
 
 case "${OSTYPE}" in
     linux*)

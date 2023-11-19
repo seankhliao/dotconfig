@@ -8,9 +8,6 @@ local undo_dir = cache_dir .. '/nvim/undo'
 os.execute('mkdir -p ' .. backup_dir)
 os.execute('mkdir -p ' .. undo_dir)
 
--- needs to be set before vim-polyglot is loaded
-vim.g.polyglot_disabled = {'cue'}
-
 -- https://neovim.io/doc/user/options.html#options
 vim.o.background = 'dark'
 vim.o.backupdir = backup_dir
@@ -42,7 +39,7 @@ vim.wo.statusline = '%-F %-r %-m %= %{&fileencoding} | %y | %3.l/%3.L:%3.c'
 
 vim.bo.autoindent = true
 vim.bo.autoread = true
-vim.bo.commentstring = '#\\ %s'
+vim.bo.commentstring = '# %s'
 vim.bo.copyindent = true
 vim.bo.expandtab = true
 vim.bo.grepprg = 'rg'
@@ -52,6 +49,22 @@ vim.bo.smartindent = true
 vim.bo.swapfile = false
 vim.bo.tabstop = 4
 vim.bo.undofile = true
+
+-- indenting
+local ft_tab_width = {
+    [2] = { 'html', 'javascript', 'markdown', 'toml', 'yaml' },
+    [8] = { 'go' },
+}
+for k, v in pairs(ft_tab_width) do
+    vim.api.nvim_create_autocmd('FileType', {
+        pattern = v,
+        callback = function()
+            vim.opt_local.shiftwidth = k
+            vim.opt_local.softtabstop = k
+            vim.opt_local.tabstop = k
+        end,
+    })
+end
 
 -- setup remote copy/paste through ssh osc52
 if vim.env.SSH_CONNECTION ~= nil then
@@ -86,19 +99,25 @@ esac
 end
 
 -- load plugins
-local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
-if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
-    'git',
-    'clone',
-    '--filter=blob:none',
-    'https://github.com/folke/lazy.nvim.git',
-    '--branch=stable', -- latest stable release
-    lazypath,
-  })
+local function bootstrap_pckr()
+  local pckr_path = vim.fn.stdpath("data") .. "/pckr/pckr.nvim"
+
+  if not vim.loop.fs_stat(pckr_path) then
+    vim.fn.system({
+      'git',
+      'clone',
+      "--filter=blob:none",
+      'https://github.com/lewis6991/pckr.nvim',
+      pckr_path
+    })
+  end
+
+  vim.opt.rtp:prepend(pckr_path)
 end
-vim.opt.rtp:prepend(lazypath)
-require('lazy').setup({
+
+bootstrap_pckr()
+
+require('pckr').add({
     -- theme
     {
         'dasupradyumna/midnight.nvim',
@@ -118,8 +137,8 @@ require('lazy').setup({
     {
         -- floating notification windows
         'rcarriga/nvim-notify',
-        config = function() 
-            vim.notify = require('notify') 
+        config = function()
+            vim.notify = require('notify')
         end,
     },
 
@@ -127,6 +146,9 @@ require('lazy').setup({
     {
         -- a lot of filetypes, primarily syntax highlighting
         'sheerun/vim-polyglot',
+        config_pre = function()
+            vim.g.polyglot_disabled = {'cue'}
+        end,
     },
     {
         -- cuelang
@@ -135,7 +157,8 @@ require('lazy').setup({
     {
         -- treesitter text objects
         'nvim-treesitter/nvim-treesitter',
-        build = ':TSUpdate',
+        requires = {'neovim/nvim-lspconfig'},
+        run = ':TSUpdate',
         config = function()
             require('nvim-treesitter.configs').setup({
                 ensure_installed = 'all',
@@ -153,39 +176,52 @@ require('lazy').setup({
     {
         -- link to git host with <space>gl
         'ruifm/gitlinker.nvim',
-        opts = {
-            mappings = '<space>gl',
-            callbacks = {
-                ['go.googlesource.com'] = function(url_data)
-                    local url = require('gitlinker.hosts').get_base_https_url(url_data)
-                    url = url .. '/+/' .. url_data.rev .. '/' .. url_data.file
-                    if url_data.lstart then
-                        url = url .. '#' .. url_data.lstart
+        requires = {'nvim-lua/plenary.nvim'},
+        config = function()
+            require('gitlinker').setup({
+                mappings = '<space>gl',
+                callbacks = {
+                    ['go.googlesource.com'] = function(url_data)
+                        local url = require('gitlinker.hosts').get_base_https_url(url_data)
+                        url = url .. '/+/' .. url_data.rev .. '/' .. url_data.file
+                        if url_data.lstart then
+                            url = url .. '#' .. url_data.lstart
+                        end
+                        return url
+                    end,
+                    ['lucid-git'] = function(url_data)
+                        url_data.host = "github.com"
+                        url_data.repo = "seankhliao/" .. url_data.repo
+                        return require"gitlinker.hosts".get_github_type_url(url_data)
                     end
-                    return url
-                end,
-            },
-        },
+                },
+            })
+        end,
     },
     {
         -- comment out blocks with gcc
         'numToStr/Comment.nvim',
-        opts = {},
+        config = function()
+            require('Comment').setup({})
+        end,
     },
 
     -- automagic
     {
         -- pair close insertion
         'windwp/nvim-autopairs',
-        event = 'InsertEnter',
-        opts = {
-            check_ts = true,
-        },
+        config = function()
+            require('nvim-autopairs').setup({
+                check_ts = true,
+            })
+        end,
     },
     {
         -- guess indent level/char
-        'NMAC427//guess-indent.nvim',
-        opts = {},
+        'NMAC427/guess-indent.nvim',
+        config = function()
+            require('guess-indent').setup({})
+        end,
     },
 
     -- git integration
@@ -200,33 +236,40 @@ require('lazy').setup({
     {
         -- gutter signs
         'lewis6991/gitsigns.nvim',
-        opts = {
-            signs = {
-                add = { hl = 'DiffAdd', text = '+' },
-                change = { hl = 'DiffChange', text = '~' },
-                delete = { hl = 'DiffDelete' },
-                topdelete = { hl = 'DiffDelete' },
-                changedelete = { hl = 'DiffChange' },
-            },
-        }
+        config = function()
+            require('gitsigns').setup({
+                signs = {
+                    add = { hl = 'DiffAdd', text = '+' },
+                    change = { hl = 'DiffChange', text = '~' },
+                    delete = { hl = 'DiffDelete' },
+                    topdelete = { hl = 'DiffDelete' },
+                    changedelete = { hl = 'DiffChange' },
+                },
+            })
+        end,
     },
 
     -- extra info
     {
         -- highlight TODO comments
         'folke/todo-comments.nvim',
+        requires = {'nvim-lua/plenary.nvim'},
     },
     {
         -- colorize #hex
         'norcalli/nvim-colorizer.lua',
-        opts = {},
+        config = function()
+            require('colorizer').setup({})
+        end,
     },
     {
         -- current block header
         'nvim-treesitter/nvim-treesitter-context',
-        opts = {
-            separator = '-',
-        },
+        config = function()
+            require('treesitter-context').setup({
+                separator = '-',
+            })
+        end,
     },
     {
         'lukas-reineke/indent-blankline.nvim',
@@ -341,6 +384,10 @@ require('lazy').setup({
     -- lsp
     {
         'neovim/nvim-lspconfig',
+        requires = {
+            'hrsh7th/cmp-nvim-lsp',
+            'sheerun/vim-polyglot',
+        },
         config = function()
             local capabilities = require('cmp_nvim_lsp').default_capabilities()
             capabilities.textDocument.completion.completionItem.snippetSupport = true
@@ -426,15 +473,9 @@ require('lazy').setup({
     },
 
     -- completions
-    {'hrsh7th/cmp-nvim-lsp'}, -- lsp integration
-    {'hrsh7th/cmp-buffer'},
-    {'hrsh7th/cmp-path'}, --filesystem path completion
-    {'hrsh7th/cmp-vsnip'}, -- snippet completion
-    {'hrsh7th/vim-vsnip'}, -- snippet engine
-    {'hrsh7th/cmp-nvim-lua'}, -- nvim lua runtime api completion
-    {'hrsh7th/cmp-nvim-lsp-signature-help'}, -- display function signatures
     {
         'hrsh7th/nvim-cmp',
+        requires = {'windwp/nvim-autopairs'},
         config = function()
             local has_words_before = function()
               unpack = unpack or table.unpack
@@ -450,13 +491,14 @@ require('lazy').setup({
             cmp.setup({
                 mapping = {
                     ["<CR>"] = cmp.mapping({
-                        i = function(fallback)
-                            if cmp.visible() and cmp.get_active_entry() then
-                                cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
-                            else
-                                fallback()
-                            end
-                        end,
+                        -- i = function(fallback)
+                        --     if cmp.visible() and cmp.get_active_entry() then
+                        --         cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
+                        --     else
+                        --         fallback()
+                        --     end
+                        -- end,
+                        i = cmp.mapping.confirm({ select = true }),
                         s = cmp.mapping.confirm({ select = true }),
                         c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
                     }),
@@ -497,14 +539,23 @@ require('lazy').setup({
                     { name = 'path' },
                 },
             })
-            
+
             local cmp_autopairs = require('nvim-autopairs.completion.cmp')
             cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done())
         end,
     },
+    {'hrsh7th/cmp-nvim-lsp'}, -- lsp integration
+    {'hrsh7th/cmp-buffer'},
+    {'hrsh7th/cmp-path'}, --filesystem path completion
+    {'hrsh7th/cmp-vsnip'}, -- snippet completion
+    {'hrsh7th/vim-vsnip'}, -- snippet engine
+    {'hrsh7th/cmp-nvim-lua'}, -- nvim lua runtime api completion
+    {'hrsh7th/cmp-nvim-lsp-signature-help'}, -- display function signatures
     {
-        "ray-x/lsp_signature.nvim",
-        config = function() require "lsp_signature".setup() end,
+        'ray-x/lsp_signature.nvim',
+        config = function()
+            require('lsp_signature').setup({})
+        end,
     },
 })
 
@@ -556,19 +607,3 @@ autocmd BufWritePre *.go        silent :lua vim.lsp.buf.format()
 autocmd BufWritePre *           silent :FormatWrite
 augroup END
 ]],false)
-
--- indenting
-local ft_tab_width = {
-    [2] = { 'html', 'javascript', 'markdown', 'toml', 'yaml' },
-    [8] = { 'go' },
-}
-for k, v in pairs(ft_tab_width) do
-    vim.api.nvim_create_autocmd('FileType', {
-        pattern = v,
-        callback = function()
-            vim.opt_local.shiftwidth = k
-            vim.opt_local.softtabstop = k
-            vim.opt_local.tabstop = k
-        end,
-    })
-end

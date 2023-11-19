@@ -57,6 +57,10 @@ function t() {
     source /tmp/t_aliases 2>/dev/null
 }
 
+function lfcd() {
+    cd "$(command lf -print-last-dir "$@")"
+}
+
 function wt() {
     local repo_root=$(git rev-parse --show-toplevel)
     cd "${repo_root}"

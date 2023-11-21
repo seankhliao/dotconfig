@@ -216,13 +216,6 @@ require('pckr').add({
             })
         end,
     },
-    {
-        -- guess indent level/char
-        'NMAC427/guess-indent.nvim',
-        config = function()
-            require('guess-indent').setup({})
-        end,
-    },
 
     -- git integration
     {

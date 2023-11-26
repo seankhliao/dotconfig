@@ -40,6 +40,7 @@ alias tf='terraform'
 alias v='${EDITOR}'
 alias vbare='${EDITOR} -u NONE'
 alias vfzf='${EDITOR} $(fzf)'
+alias wifi-portal='curl -I http://neverssl.com'
 
 case "${OSTYPE}" in
     linux*)

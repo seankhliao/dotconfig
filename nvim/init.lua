@@ -244,24 +244,10 @@ require('pckr').add({
 
     -- extra info
     {
-        -- highlight TODO comments
-        'folke/todo-comments.nvim',
-        requires = {'nvim-lua/plenary.nvim'},
-    },
-    {
         -- colorize #hex
-        'norcalli/nvim-colorizer.lua',
+        'NvChad/nvim-colorizer.lua',
         config = function()
             require('colorizer').setup({})
-        end,
-    },
-    {
-        -- current block header
-        'nvim-treesitter/nvim-treesitter-context',
-        config = function()
-            require('treesitter-context').setup({
-                separator = '-',
-            })
         end,
     },
     {
@@ -304,7 +290,10 @@ require('pckr').add({
                 },
                 exclude = {
                     buftypes = {'terminal', 'nofile'},
-                }
+                },
+                scope = {
+                    highlight = highlight,
+                },
             })
         end,
     },

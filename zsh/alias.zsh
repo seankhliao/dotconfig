@@ -38,9 +38,10 @@ alias scu='systemctl --user'
 alias title='printf "\033[1m%s\n==========\033[0m\n"'
 alias tf='terraform'
 alias v='${EDITOR}'
+# alias v='helix'
 alias vbare='${EDITOR} -u NONE'
 alias vfzf='${EDITOR} $(fzf)'
-alias wifi-portal='curl -I http://neverssl.com'
+alias wifi-portal='curl -sI http://neverssl.com | rg -o -r "$1" "Location: (.*)"'
 
 case "${OSTYPE}" in
     linux*)

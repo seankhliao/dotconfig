@@ -20,7 +20,7 @@
     insteadOf = git://github.com/seankhliao/
     insteadOf = https://github.com/seankhliao/
 
-[url "arccy@lucid-git:"]
+[url "arccy@softserve:"]
     insteadOf = l:
 
 [user]

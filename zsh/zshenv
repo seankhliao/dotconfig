@@ -88,7 +88,7 @@ export ZDOTDIR="${XDG_CONFIG_HOME}/zsh"
 
 # path
 export GOPATH="${XDG_DATA_HOME}/go"
-for d in "${GOPATH}/bin" "${XDG_CONFIG_HOME}/bin" "${KREW_ROOT}/bin" "${XDG_DATA_HOME}/google-cloud-sdk/bin" ; do
+for d in "${GOPATH}/bin" "${XDG_CONFIG_HOME}/bin" "${KREW_ROOT}/bin" "${XDG_DATA_HOME}/google-cloud-sdk/bin" "${XDG_CONFIG_HOME}/cargo/bin" ; do
     if [[ -d "${d}" ]] ; then
         [[ "${PATH}" =~ "${d}" ]] || export PATH="${d}:${PATH}"
     fi

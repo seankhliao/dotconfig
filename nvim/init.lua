@@ -159,6 +159,7 @@ require("pckr").add({
         "nvim-treesitter/nvim-treesitter",
         requires = { "neovim/nvim-lspconfig" },
         run = ":TSUpdate",
+        tag = "v0.9.2",
         config = function()
             require("nvim-treesitter.configs").setup({
                 ensure_installed = "all",

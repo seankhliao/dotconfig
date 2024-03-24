@@ -69,6 +69,12 @@
     prune     = true
     pruneTags = true
 
+[filter "lfs"]
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+
 [http]
 	cookiefile = ~/.ssh/git/cookies
 
@@ -119,9 +125,3 @@
 [includeIf "hasconfig:remote.*.url:https://go.googlesource.com/*"]
     path = go.gitconfig
 
-[includeIf "hasconfig:remote.*.url:git@github.com/seankhliao/opentelemetry*"]
-[filter "lfs"]
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
-	clean = git-lfs clean -- %f

@@ -45,6 +45,7 @@ matplotlib/
 menus/
 mimeapps.list
 neofetch/
+noisetorch/
 nvim/autoload
 nvim/lazy-lock.json
 nvim/.netrwhist

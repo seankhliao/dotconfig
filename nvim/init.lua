@@ -384,6 +384,7 @@ require("pckr").add({
         config = function()
             local capabilities = require("cmp_nvim_lsp").default_capabilities()
             capabilities.textDocument.completion.completionItem.snippetSupport = true
+            capabilities.workspace = { didChangeWatchedFiles = { dynamicRegistration = true } }
 
             vim.keymap.set("n", "<space>e", vim.diagnostic.open_float)
             vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist)

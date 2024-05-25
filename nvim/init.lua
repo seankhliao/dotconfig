@@ -159,7 +159,7 @@ require("pckr").add({
         "nvim-treesitter/nvim-treesitter",
         requires = { "neovim/nvim-lspconfig" },
         run = ":TSUpdate",
-        tag = "v0.9.2",
+        -- tag = "v0.9.2",
         config = function()
             require("nvim-treesitter.configs").setup({
                 ensure_installed = "all",
@@ -412,6 +412,10 @@ require("pckr").add({
                 capabilities = capabilities,
                 on_attach = on_attach,
             })
+            lspconfig.dartls.setup({
+                capabilities = capabilities,
+                on_attach = on_attach,
+            })
             lspconfig.dockerls.setup({
                 capabilities = capabilities,
                 on_attach = on_attach,
@@ -509,7 +513,7 @@ require("pckr").add({
                 mapping = {
                     ["<CR>"] = cmp.mapping({
                         i = function(fallback)
-                            if cmp.visible() and cmp.get_active_entry() then
+                            if cmp.get_active_entry() and cmp.visible() then
                                 cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
                             else
                                 fallback()

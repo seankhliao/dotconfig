@@ -511,17 +511,18 @@ require("pckr").add({
             local cmp = require("cmp")
             cmp.setup({
                 mapping = {
-                    ["<CR>"] = cmp.mapping({
-                        i = function(fallback)
-                            if cmp.get_active_entry() and cmp.visible() then
-                                cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
-                            else
-                                fallback()
-                             end
-                        end,
-                        s = cmp.mapping.confirm({ select = true }),
-                        c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
-                    }),
+                    ["<CR>"] = cmp.mapping.confirm({ select = true }),
+                    -- ["<CR>"] = cmp.mapping({
+                    --     i = function(fallback)
+                    --         if cmp.get_active_entry() and cmp.visible() then
+                    --             cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true })
+                    --         else
+                    --             fallback()
+                    --          end
+                    --     end,
+                    --     s = cmp.mapping.confirm({ select = true }),
+                    --     c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
+                    -- }),
 
                     ["<Tab>"] = cmp.mapping(function(fallback)
                         if cmp.visible() then
@@ -542,6 +543,8 @@ require("pckr").add({
                             feedkey("<Plug>(vsnip-jump-prev)", "")
                         end
                     end, { "i", "s" }),
+
+                    ['<C-e>'] = cmp.mapping.abort(),
 
                     ["<Down>"] = cmp.mapping(
                         cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),

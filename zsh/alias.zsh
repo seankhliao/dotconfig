@@ -40,7 +40,7 @@ alias tf='terraform'
 alias v='${EDITOR}'
 # alias v='helix'
 alias vbare='${EDITOR} -u NONE'
-alias vfzf='${EDITOR} $(fzf)'
+alias vfzf='fzf --bind "enter:become(nvim {})"'
 alias wifi-portal='curl -sI http://neverssl.com | rg -o -r "$1" "Location: (.*)"'
 
 case "${OSTYPE}" in

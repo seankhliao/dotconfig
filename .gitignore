@@ -66,6 +66,7 @@ remmina/
 Riot/
 rustup/
 .semgrep/
+Signal/
 skaffold/
 Slack/
 sops/

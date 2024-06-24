@@ -159,12 +159,12 @@ require("pckr").add({
         "nvim-treesitter/nvim-treesitter",
         requires = { "neovim/nvim-lspconfig" },
         run = ":TSUpdate",
-        -- tag = "v0.9.2",
         config = function()
             require("nvim-treesitter.configs").setup({
                 ensure_installed = "all",
                 highlight = {
                     enable = true,
+                    disable = { "dockerfile" },
                 },
                 indent = {
                     enable = true,
@@ -233,11 +233,8 @@ require("pckr").add({
         config = function()
             require("gitsigns").setup({
                 signs = {
-                    add = { hl = "DiffAdd", text = "+" },
-                    change = { hl = "DiffChange", text = "~" },
-                    delete = { hl = "DiffDelete" },
-                    topdelete = { hl = "DiffDelete" },
-                    changedelete = { hl = "DiffChange" },
+                    add = { text = "+" },
+                    change = { text = "~" },
                 },
             })
         end,
@@ -418,7 +415,7 @@ require("pckr").add({
             })
             lspconfig.dockerls.setup({
                 capabilities = capabilities,
-                on_attach = on_attach,
+                -- on_attach = on_attach,
             })
             lspconfig.gopls.setup({
                 -- cmd = { 'gopls', '-logfile=/tmp/gopls.log' }, -- save file and :PackerCompile to take effect

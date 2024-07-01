@@ -39,8 +39,8 @@ builtin unalias -m '[^+]*'
 0=${(%):-%N}
 if true; then
   # $0 is reliable
-  typeset -g ZSH_HIGHLIGHT_VERSION=$(<"${0:A:h}"/.version)
-  typeset -g ZSH_HIGHLIGHT_REVISION=$(<"${0:A:h}"/.revision-hash)
+  typeset -g ZSH_HIGHLIGHT_VERSION=0.8.1-dev
+  typeset -g ZSH_HIGHLIGHT_REVISION=$Format:%H$
   if [[ $ZSH_HIGHLIGHT_REVISION == \$Format:* ]]; then
     # When running from a source tree without 'make install', $ZSH_HIGHLIGHT_REVISION
     # would be set to '$Format:%H$' literally.  That's an invalid value, and obtaining

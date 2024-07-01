@@ -10,16 +10,17 @@ function _sudo_cmdline() {
 
 bindkey -e
 # ^[ == escape
-bindkey '^[^[' _sudo_cmdline
-bindkey '^[w' vi-forward-word
-bindkey '^[e' vi-forward-word-end
-bindkey '^[b' vi-backward-word
-bindkey '^[[A' history-substring-search-up
+bindkey '^[^[' _sudo_cmdline # esc esc
+bindkey '^[w' vi-forward-word # esc w
+bindkey '^[[1;5C' vi-forward-word # ctrl-right
+bindkey '^[e' vi-forward-word-end # esc e
+bindkey '^[b' vi-backward-word # esc b
+bindkey '^[[A' history-substring-search-up # up
 bindkey '\eOA' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
+bindkey '^[[B' history-substring-search-down # down
 bindkey '\eOB' history-substring-search-down
-bindkey '^[[H' beginning-of-line
-bindkey '^[[F' end-of-line
+bindkey '^[[H' beginning-of-line # home
+bindkey '^[[F' end-of-line # end
 
 zstyle ':completion:*:make:*:targets' call-command true # exec make to get targets
 zstyle ':completion:*:make:*' tag-order targets # ignore make variables

@@ -244,7 +244,12 @@ require("pckr").add({
     {
         "mikesmithgh/kitty-scrollback.nvim",
         config = function()
-            require("kitty-scrollback").setup({})
+            require("kitty-scrollback").setup({
+                {
+                    restore_options = true,
+                    keymaps_enabled = false,
+                },
+            })
         end,
     },
 
@@ -410,7 +415,7 @@ require("pckr").add({
                 vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, bufopts)
                 vim.keymap.set("n", "<space>a", vim.lsp.buf.code_action, bufopts)
                 vim.keymap.set("n", "<space>r", vim.lsp.buf.references, bufopts)
-                vim.keymap.set("n", "<space>f", vim.lsp.buf.formatting, bufopts)
+                -- vim.keymap.set("n", "<space>f", vim.lsp.buf.formatting, bufopts)
             end
             local lspconfig = require("lspconfig")
             lspconfig.bashls.setup({

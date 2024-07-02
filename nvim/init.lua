@@ -240,6 +240,14 @@ require("pckr").add({
         end,
     },
 
+    -- kitty integration
+    {
+        "mikesmithgh/kitty-scrollback.nvim",
+        config = function()
+            require("kitty-scrollback").setup({})
+        end,
+    },
+
     -- extra info
     {
         -- colorize #hex

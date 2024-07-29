@@ -439,6 +439,10 @@ require("pckr").add({
                         gofumpt = true,
                         staticcheck = true,
                         templateExtensions = { "gotmpl" },
+                        vulncheck = "Imports",
+                        analyses = {
+                            shadow = true,
+                        },
                     },
                 },
                 on_init = function(client)
@@ -578,9 +582,6 @@ require("pckr").add({
                     { name = "path" },
                 },
             })
-
-            local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-            cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
         end,
     },
     { "hrsh7th/cmp-nvim-lsp" }, -- lsp integration

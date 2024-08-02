@@ -1,0 +1,15 @@
+[user]
+name = "Sean Liao"
+email = "sean+git@liao.dev"
+
+[signing]
+sign-all = true
+backend = "ssh"
+key = "/home/user/.ssh/ssh/id_ed25519"
+
+[ui]
+pager = "delta"
+default-command = "status"
+
+[ui.diff]
+format = "git"

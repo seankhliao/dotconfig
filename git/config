@@ -124,4 +124,3 @@
 
 [includeIf "hasconfig:remote.*.url:https://go.googlesource.com/*"]
     path = go.gitconfig
-

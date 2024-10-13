@@ -10,6 +10,9 @@
 (( $+commands[paru] )) \
     && alias p='paru' \
     || alias p='sudo pacman';
+(( $+commands[tofu] )) \
+    && alias tf='tofu' \
+    || alias tf='terraform'
 
 alias ..='cd ..'
 alias ...='cd ../..'

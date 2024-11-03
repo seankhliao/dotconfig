@@ -115,18 +115,12 @@ local function bootstrap_pckr()
     vim.opt.rtp:prepend(pckr_path)
 end
 
+vim.cmd.colorscheme("default") -- seems to have best support for various highlights
+vim.api.nvim_set_hl(0, "Normal", { bg = "#000000" })
+
 bootstrap_pckr()
 
 require("pckr").add({
-    -- theme
-    {
-        "dasupradyumna/midnight.nvim",
-        config = function()
-            vim.cmd.colorscheme("midnight")
-            vim.api.nvim_set_hl(0, "Normal", { bg = "#000000" })
-        end,
-    },
-
     -- shared deps
     {
         -- generic shared library of lua utils

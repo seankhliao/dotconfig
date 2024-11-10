@@ -484,12 +484,6 @@ require("pckr").add({
                             url = "https://www.schemastore.org/api/json/catalog.json",
                             enable = true,
                         },
-                        schemas = {
-                            ["file:///home/arccy/third_party/kubernetes-json-schema/default/v1.27.3-standalone/all.json"] = {
-                                "*.k8s.yaml",
-                            },
-                            kubernetes = "",
-                        },
                         yamlEditor = {
                             ["editor.insertSpaces"] = false,
                             ["editor.formatOnType"] = false,
@@ -497,6 +491,12 @@ require("pckr").add({
                     },
                 },
             })
+        end,
+    },
+    {
+        "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+        config = function()
+            require("lsp_lines").setup()
         end,
     },
 

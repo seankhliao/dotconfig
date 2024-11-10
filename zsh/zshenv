@@ -7,7 +7,8 @@ export LANG=en_US.UTF-8
 export BROWSER="google-chrome-stable"
 export EDITOR=nvim
 export MANPAGER="nvim +Man!"
-export KO_DOCKER_REPO=ghcr.io/seankhliao
+# export KO_DOCKER_REPO=ghcr.io/seankhliao
+export KO_DOCKER_REPO=registry.liao.dev
 
 # programs
 export DOCKER_BUILDKIT=1

@@ -76,7 +76,7 @@
 	clean = git-lfs clean -- %f
 
 [http]
-	cookiefile = ~/.ssh/git/cookies
+	cookiefile = ~/.config/git/cookies
 
 [init]
     defaultBranch = main
@@ -108,10 +108,11 @@
 [tag]
     sort    = version:refname
 
-[url "git@github.com:"]
+; [url "git@github.com:"]
+[url "https://github.com/"]
 	insteadOf = g:
 	insteadOf = git://github.com/
-    insteadOf = https://github.com/
+    ; insteadOf = https://github.com/
 
 [url "https://go.googlesource.com/"]
     insteadOf = go:
@@ -124,3 +125,11 @@
 
 [includeIf "hasconfig:remote.*.url:https://go.googlesource.com/*"]
     path = go.gitconfig
+[credential]
+	helper = store
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential

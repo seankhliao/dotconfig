@@ -15,7 +15,8 @@
 [tag]
     gpgSign = true
 
-[url "git@github.com:seankhliao/"]
+; [url "git@github.com:seankhliao/"]
+[url "https://github.com/seankhliao/"]
     insteadOf = s:
     insteadOf = git://github.com/seankhliao/
     insteadOf = https://github.com/seankhliao/

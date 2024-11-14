@@ -2,4 +2,3 @@ CGO_ENABLED=0
 GOAMD64=v3
 GOFLAGS=-trimpath "-ldflags=-s -w" -vet=all
 GOTOOLCHAIN=path
-GOEXPERIMENT=cacheprog

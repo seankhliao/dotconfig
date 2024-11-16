@@ -12,19 +12,10 @@
 [gpg "ssh"]
     allowedSignersFile = ~/.ssh/git/allowed_signers
 
-[tag]
-    gpgSign = true
-
-; [url "git@github.com:seankhliao/"]
-[url "https://github.com/seankhliao/"]
-    insteadOf = s:
-    insteadOf = git://github.com/seankhliao/
-    insteadOf = https://github.com/seankhliao/
-
-[url "arccy@softserve:"]
-    insteadOf = l:
-
 [user]
-    email = sean+git@liao.dev
+    email = sean@liao.dev
     name  = Sean Liao
     signingKey = ~/.ssh/ssh/id_ed25519
+
+[tag]
+    gpgSign = true

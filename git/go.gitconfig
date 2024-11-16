@@ -1,8 +1,5 @@
 [commit]
     gpgSign = false
 
-[user]
-    email = sean@liao.dev
-
 [tag]
     gpgSign = false

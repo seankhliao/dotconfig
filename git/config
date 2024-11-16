@@ -51,6 +51,16 @@
 [core]
     pager = delta
 
+[credential]
+    ; https credentials
+	helper = store
+; [credential "https://github.com"]
+; 	helper = 
+; 	helper = !/usr/bin/gh auth git-credential
+; [credential "https://gist.github.com"]
+; 	helper = 
+; 	helper = !/usr/bin/gh auth git-credential
+
 [delta]
     file-decoration-style = none
     file-style            = bold yellow ul
@@ -108,14 +118,16 @@
 [tag]
     sort    = version:refname
 
-; [url "git@github.com:"]
+
 [url "https://github.com/"]
 	insteadOf = g:
 	insteadOf = git://github.com/
-    ; insteadOf = https://github.com/
-
 [url "https://go.googlesource.com/"]
     insteadOf = go:
+[url "https://softserve.liao.dev/"]
+    insteadOf = l:
+[url "https://github.com/seankhliao/"]
+    insteadOf = s:
 
 [versionsort]
     suffix = -
@@ -125,11 +137,3 @@
 
 [includeIf "hasconfig:remote.*.url:https://go.googlesource.com/*"]
     path = go.gitconfig
-[credential]
-	helper = store
-[credential "https://github.com"]
-	helper = 
-	helper = !/usr/bin/gh auth git-credential
-[credential "https://gist.github.com"]
-	helper = 
-	helper = !/usr/bin/gh auth git-credential

@@ -98,6 +98,12 @@ bindsym {
     $mod+l                  exec swaylock
 }
 
+# swipe
+bindgesture {
+    swipe:left workspace prev
+    swipe:right workspace next
+}
+
 
 # resize
 mode "resize" {

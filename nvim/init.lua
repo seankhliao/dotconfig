@@ -230,10 +230,6 @@ require("pckr").add({
         "f-person/git-blame.nvim",
     },
     {
-        -- :DiffviewOpen [ref]
-        "sindrets/diffview.nvim",
-    },
-    {
         -- gutter signs
         "lewis6991/gitsigns.nvim",
         config = function()
@@ -446,9 +442,9 @@ require("pckr").add({
                         staticcheck = true,
                         templateExtensions = { "gotmpl" },
                         vulncheck = "Imports",
-                        analyses = {
-                            shadow = true,
-                        },
+                        -- analyses = {
+                        --     shadow = true,
+                        -- },
                     },
                 },
                 on_init = function(client)

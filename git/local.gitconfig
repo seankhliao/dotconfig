@@ -10,7 +10,7 @@
     format = ssh
 
 [gpg "ssh"]
-    allowedSignersFile = ~/.ssh/git/allowed_signers
+    allowedSignersFile = ~/.config/git/allowed_signers
 
 [user]
     email = sean@liao.dev

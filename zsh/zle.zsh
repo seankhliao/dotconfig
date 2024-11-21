@@ -10,17 +10,20 @@ function _sudo_cmdline() {
 
 bindkey -e
 # ^[ == escape
+# \e == alt
 bindkey '^[^[' _sudo_cmdline # esc esc
 bindkey '^[w' vi-forward-word # esc w
+bindkey '^[[1;5D' vi-backward-word # ctrl-left
 bindkey '^[[1;5C' vi-forward-word # ctrl-right
-bindkey '^[e' vi-forward-word-end # esc e
-bindkey '^[b' vi-backward-word # esc b
 bindkey '^[[A' history-substring-search-up # up
-bindkey '\eOA' history-substring-search-up
 bindkey '^[[B' history-substring-search-down # down
-bindkey '\eOB' history-substring-search-down
 bindkey '^[[H' beginning-of-line # home
 bindkey '^[[F' end-of-line # end
+source "${ZDOTDIR}/_fzf"
+
+# bindkey '\eOA' history-substring-search-up
+# bindkey '\eOB' history-substring-search-down
+bindkey '\ed' fzf-cd-widget
 
 zstyle ':completion:*:make:*:targets' call-command true # exec make to get targets
 zstyle ':completion:*:make:*' tag-order targets # ignore make variables

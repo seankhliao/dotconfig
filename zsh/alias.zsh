@@ -43,10 +43,9 @@ alias scu='systemctl --user'
 alias title='printf "\033[1m%s\n==========\033[0m\n"'
 alias tf='terraform'
 alias v='${EDITOR}'
-# alias v='helix'
 alias vbare='${EDITOR} -u NONE'
-alias vfzf='fzf --bind "enter:become(nvim {})"'
-alias wifi-portal='curl -sI http://neverssl.com | rg -o -r "$1" "Location: (.*)"'
+alias vf='fzf --bind "enter:become(nvim {})"'
+alias wifi-portal='curl -sI http://neverssl.com | rg -o "(?:Location: (.*)|href=[\u{22}\u{27}](.*)[\u{22}\u{27}])" --replace "\$1" -N -L'
 
 case "${OSTYPE}" in
     linux*)

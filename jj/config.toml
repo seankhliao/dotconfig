@@ -1,7 +1,3 @@
-[user]
-name = "Sean Liao"
-email = "sean@liao.dev"
-
 [signing]
 sign-all = true
 backend = "ssh"
@@ -13,3 +9,10 @@ default-command = "status"
 
 [ui.diff]
 format = "git"
+
+[ui.graph]
+style = "ascii"
+
+[user]
+name = "Sean Liao"
+email = "sean@liao.dev"

@@ -3,6 +3,21 @@ sign-all = true
 backend = "ssh"
 key = "/home/user/.ssh/ssh/id_ed25519"
 
+[template-aliases]
+	'gerrit_change_id(change_id)' = '"Id0000000" ++ change_id.normal_hex()'
+
+[templates]
+	draft_commit_description = '''
+		separate("\n",
+			description.remove_suffix("\n"),
+			if(!description.contains(change_id.normal_hex()),
+				"\nChange-Id: " ++ gerrit_change_id(change_id)
+			),
+			"\n",
+			surround("JJ: Changes:\n", "", indent("JJ: \t", diff.summary()))
+		)
+	'''
+
 [ui]
 pager = "delta"
 default-command = "status"

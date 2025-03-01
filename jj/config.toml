@@ -1,10 +1,21 @@
+[aliases]
+master-diff = ["diff", "--from", "master"]
+master-push = ["util", "exec", "--" ,"bash", "-c",
+  "jj bookmark move -r @- master && jj git push -b master && jj git push --remote github -b master"]
+
+[git]
+sign-on-push = true
+
+[revsets]
+log = "git_head() | ancestors(tracked_remote_bookmarks(), 5) | tracked_remote_bookmarks().. | @.."
+
 [signing]
-sign-all = true
+behavior = "drop" # for git.sign-on-push
 backend = "ssh"
 key = "/home/user/.ssh/ssh/id_ed25519"
 
 [template-aliases]
-	'gerrit_change_id(change_id)' = '"Id0000000" ++ change_id.normal_hex()'
+'gerrit_change_id(change_id)' = '"Id0000000" ++ change_id.normal_hex()'
 
 [templates]
 	draft_commit_description = '''
@@ -19,15 +30,15 @@ key = "/home/user/.ssh/ssh/id_ed25519"
 	'''
 
 [ui]
-pager = "delta"
 default-command = "status"
+pager = "delta"
 
 [ui.diff]
-format = "git"
+format = "git" # for delta
 
 [ui.graph]
-style = "ascii"
+style = "ascii-large"
 
 [user]
-name = "Sean Liao"
 email = "sean@liao.dev"
+name = "Sean Liao"

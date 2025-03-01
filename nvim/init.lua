@@ -442,9 +442,9 @@ require("pckr").add({
                         staticcheck = true,
                         templateExtensions = { "gotmpl" },
                         vulncheck = "Imports",
-                        -- analyses = {
-                        --     shadow = true,
-                        -- },
+                        analyses = {
+                            shadow = true,
+                        },
                     },
                 },
                 on_init = function(client)

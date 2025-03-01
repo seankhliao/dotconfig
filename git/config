@@ -48,6 +48,9 @@
 	changed   = yellow
     untracked = red
 
+[commit]
+    verbose = true
+
 [core]
     pager = delta
 
@@ -65,12 +68,14 @@
     file-decoration-style = none
     file-style            = bold yellow ul
     line-numbers          = true
+    navigate              = true
     side-by-side          = true
     syntax-theme          = zenburn
 
 [diff]
     algorithm = histogram
     renames = copies
+    colorMoved = plain
 
 [diff "sopsdiffer"]
     textconf = "sops -d"
@@ -89,7 +94,7 @@
 	cookiefile = ~/.config/git/cookies
 
 [init]
-    defaultBranch = main
+    defaultBranch = master
 
 [interactive]
     diffFilter = delta --color-only
@@ -109,6 +114,7 @@
 
 [rebase]
     autoStash           = true
+    autosquash          = true
     abbreviateCommands  = true
     updateRefs          = true
 

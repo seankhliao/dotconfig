@@ -30,6 +30,7 @@ key = "/home/user/.ssh/ssh/id_ed25519"
 	'''
 
 [ui]
+conflict-marker-style = "git"
 default-command = "status"
 pager = "delta"
 

@@ -50,6 +50,15 @@ function repos() {
     rm "${evalFile}"
 }
 
+function kswitch() {
+    # get a temporary file
+    local evalFile=$(mktemp)
+    command kswitch -eval-file "${evalFile}" "$@"
+    # exec any commands we get
+    eval "$(<"${evalFile}")"
+    rm "${evalFile}"
+}
+
 function t() {
     command t -i "$@"
     source /tmp/t_aliases 2>/dev/null

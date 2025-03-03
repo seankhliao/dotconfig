@@ -9,9 +9,8 @@ function _preexec() {
 function _precmd() {
     local kubecontext=""
     if [[ ! -z "${KUBECONFIG}" ]]; then
-        local context=$(rg --no-heading --no-line-number --only-matching --replace '$1' 'current-context: (.*)' "${KUBECONFIG}")
-        local namespace=$(rg --no-heading --no-line-number --only-matching --replace '$1' --multiline 'namespace: (.*)\n\s+name: '"${context}" "${KUBECONFIG}")
-        kubecontext="${context} :: ${namespace} "
+        local kout=$(kswitch current)
+        kubecontext="${kout//*CONTEXT /} "
     fi
 
     integer elapsed=$(( EPOCHSECONDS - ${prompt_timestamp:-$EPOCHSECONDS} ))
@@ -23,7 +22,7 @@ function _precmd() {
 
     # %* current time
     # %~ current directory reltive to HOME
-    PROMPT="$F{red}${kubecontext}%f"
+    PROMPT="%F{red}${kubecontext}%f"
     PROMPT+="%F{green}%*%f %F{blue}%~%f %F{yellow}${human}%f"
     PROMPT+="${newline}"
 

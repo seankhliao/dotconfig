@@ -284,6 +284,10 @@ vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("my.lsp", { clear = false }),
 				buffer = args.buf,
 				callback = function()
+					if client.name == "gopls" then
+						vim.lsp.buf.code_action({ bufnr = args.buf, id = client.id, context = { only = { 'source.organizeImports' } }, apply = true })
+						vim.lsp.buf.code_action({ bufnr = args.buf, id = client.id, context = { only = { 'source.fixAll' } }, apply = true })
+					end
 					vim.lsp.buf.format({ bufnr = args.buf, id = client.id, timeout_ms = 1000 })
 				end,
 			})
@@ -505,6 +509,19 @@ require("pckr").add({
 				vim.cmd.normal({ "N", bang = true })
 				require("hlslens").start()
 			end, { silent = true })
+		end,
+	},
+
+	-- show diagnostics as virtual text
+	{
+		"https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+		config = function()
+			require("lsp_lines").setup()
+			vim.diagnostic.config({
+				virtual_text = false,
+				virtual_lines = true,
+				-- virtual_lines = { only_current_line = true },
+			})
 		end,
 	},
 })

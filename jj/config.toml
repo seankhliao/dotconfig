@@ -1,7 +1,7 @@
 [aliases]
-master-diff = ["diff", "--from", "master"]
-master-push = ["util", "exec", "--" ,"bash", "-c",
-  "jj bookmark move --to @- master && jj git push -b master && jj git push --remote github -b master"]
+master-diff   = ["diff", "--from", "master"]
+master-update = ["bookmark", "move", "--to", "@-", "master"]
+master-push   = ["util", "exec", "--" ,"bash", "-c", "jj bookmark move --to @- master && jj git push -b master"]
 
 [git]
 sign-on-push = true

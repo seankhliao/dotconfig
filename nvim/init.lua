@@ -52,11 +52,11 @@ end
 
 --
 -- common typo
-vim.keymap.set("c", "WQ", "wq")
-vim.keymap.set("c", "Wq", "wq")
+vim.keymap.set("c", "WQ", "wq", { desc = "write and quit" })
+vim.keymap.set("c", "Wq", "wq", { desc = "write and quit" })
 -- easier to remember delete without yank
-vim.keymap.set("v", "s", '"_d')
-vim.keymap.set("n", "ss", '"_dd')
+vim.keymap.set("v", "s", '"_d', { desc = "delete selection without yank" })
+vim.keymap.set("n", "ss", '"_dd', { desc = "delete line without yank" })
 -- less shifting
 vim.keymap.set("n", ";", ":", { silent = true })
 
@@ -114,19 +114,30 @@ vim.lsp.config("*", {
 	root_markers = { ".git" },
 })
 
--- vim.lsp.config("bash", {
--- 	-- https://github.com/bash-lsp/bash-language-server
--- 	cmd = { "bash-language-server", "start" },
--- 	filetypes = { "sh", "bash" },
--- 	root_markers = nil,
--- })
--- vim.lsp.config("buf-beta-lsp", {
--- 	-- https://buf.build/docs/reference/cli/buf/beta/lsp/
--- 	-- TODO: compare with https://github.com/coder3101/protols
--- 	cmd = { "buf", "beta", "lsp", "--timeout=0", "--log-format=text" },
--- 	filetypes = { "proto" },
--- 	root_markers = { "buf.yaml", ".git" },
--- })
+vim.lsp.config("bash", {
+	-- https://github.com/bash-lsp/bash-language-server
+	cmd = { "bash-language-server", "start" },
+	filetypes = { "sh", "bash" },
+	root_markers = nil,
+})
+vim.lsp.enable("bash")
+
+vim.lsp.config("buf", {
+	-- https://buf.build/docs/reference/cli/buf/beta/lsp/
+	-- TODO: compare with https://github.com/coder3101/protols
+	cmd = { "buf", "beta", "lsp", "--timeout=0", "--log-format=text" },
+	filetypes = { "proto" },
+	root_markers = { "buf.yaml", ".git" },
+})
+vim.lsp.enable("buf")
+
+vim.lsp.config("css", {
+	-- https://github.com/hrsh7th/vscode-langservers-extracted
+	cmd = { 'vscode-css-language-server', '--stdio' },
+	filetypes = { "css" },
+	root_markers = nil,
+})
+vim.lsp.enable("css")
 
 vim.lsp.config("cue", {
 	-- https://github.com/cue-lang/cue/wiki/cue-lsp
@@ -136,12 +147,14 @@ vim.lsp.config("cue", {
 })
 vim.lsp.enable("cue")
 
--- vim.lsp.config("docker-langserver", {
--- 	-- https://github.com/rcjsuen/dockerfile-language-server-nodejs
--- 	cmd = { "docker-langserver", "--stdio" },
--- 	filetypes = { "dockerfile" },
--- 	root_markers = nil,
--- })
+vim.lsp.config("docker", {
+	-- https://github.com/rcjsuen/dockerfile-language-server-nodejs
+	cmd = { "docker-langserver", "--stdio" },
+	filetypes = { "dockerfile" },
+	root_markers = nil,
+})
+vim.lsp.enable("docker")
+
 -- vim.lsp.config("gh-actions", {
 -- 	-- https://github.com/lttb/gh-actions-language-server
 -- 	cmd = { "gh-actions-language-server", "--stdio" },
@@ -176,27 +189,42 @@ vim.lsp.config("gopls", {
 })
 vim.lsp.enable("gopls")
 
--- vim.lsp.config('json', {
---     -- https://github.com/hrsh7th/vscode-langservers-extracted
---     cmd = { '' }
--- })
+vim.lsp.config('json', {
+	-- https://github.com/hrsh7th/vscode-langservers-extracted
+	cmd = { 'vscode-json-language-server', '--stdio' },
+	filetypes = { "json" },
+	root_markers = nil,
+})
+vim.lsp.enable("json")
+
 -- vim.lsp.config("helm", {
 -- 	-- https://github.com/mrjosh/helm-ls
 -- 	cmd = { "helm-ls", "serve" },
 -- 	filetypes = { "helm" },
 -- 	root_markers = { "Chart.yaml" },
 -- })
--- vim.lsp.config("html", {
--- 	-- https://github.com/hrsh7th/vscode-langservers-extracted
--- 	cmd = { "vscode-html-language-server", "--stdio" },
--- 	filetypes = { "html" },
--- 	root_markers = nil,
--- })
+
+vim.lsp.config("html", {
+	-- https://github.com/hrsh7th/vscode-langservers-extracted
+	cmd = { "vscode-html-language-server", "--stdio" },
+	filetypes = { "html" },
+	root_markers = nil,
+})
+vim.lsp.enable("html")
 
 vim.lsp.config("lua", {
 	-- https://github.com/luals/lua-language-server
 	cmd = { "lua-language-server" },
 	filetypes = { "lua" },
+	settings = {
+		Lua = {
+			workspace = {
+				library = {
+					vim.env.VIMRUNTIME,
+				},
+			},
+		},
+	},
 	on_attach = function(client, bufnr)
 		vim.lsp.completion.enable(true, client.id, bufnr, {
 			autotrigger = true,
@@ -210,7 +238,9 @@ vim.lsp.enable("lua")
 
 vim.lsp.config("markdown", {
 	-- https://github.com/artempyanykh/marksman
-	cmd = { "marksman", "server" },
+	-- cmd = { "marksman", "server" },
+	-- https://github.com/hrsh7th/vscode-langservers-extracted
+	cmd = { "vscode-markdown-language-server", "--stdio" },
 	filetypes = { "markdown" },
 	root_markers = nil,
 })
@@ -251,17 +281,16 @@ vim.api.nvim_create_autocmd("LspAttach", {
 	callback = function(args)
 		local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
 
-		local bufopts = { silent = true }
-		vim.keymap.set("n", "<space>e", vim.diagnostic.open_float)
-		vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist)
-		vim.keymap.set("n", "<space>d", vim.lsp.buf.definition, bufopts)
-		vim.keymap.set("n", "<space>h", vim.lsp.buf.hover, bufopts)
-		vim.keymap.set("n", "<space>i", vim.lsp.buf.implementation, bufopts)
-		vim.keymap.set("n", "<space>s", vim.lsp.buf.signature_help, bufopts)
-		-- vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
-		vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, bufopts)
-		vim.keymap.set("n", "<space>a", vim.lsp.buf.code_action, bufopts)
-		vim.keymap.set("n", "<space>r", vim.lsp.buf.references, bufopts)
+		vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, { desc = "open diagnostic window" })
+		vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist, { desc = "set diagnostic loclist" })
+		vim.keymap.set("n", "<space>d", vim.lsp.buf.definition, { silent = true, desc = "go to definition" })
+		vim.keymap.set("n", "<space>h", vim.lsp.buf.hover, { silent = true, desc = "show hover info" })
+		vim.keymap.set("n", "<space>i", vim.lsp.buf.implementation, { silent = true, desc = "go to implementation" })
+		vim.keymap.set("n", "<space>s", vim.lsp.buf.signature_help, { silent = true, desc = "show signature help" })
+		-- vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, { silent = true, desc = "go to type definition" })
+		vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, { silent = true, desc = "rename symbol" })
+		vim.keymap.set("n", "<space>a", vim.lsp.buf.code_action, { silent = true, desc = "show code actions" })
+		vim.keymap.set("n", "<space>r", vim.lsp.buf.references, { silent = true, desc = "show references" })
 
 		-- Enable auto-completion. Note: Use CTRL-Y to select an item. |complete_CTRL-Y|
 		if client:supports_method("textDocument/completion") then
@@ -285,8 +314,16 @@ vim.api.nvim_create_autocmd("LspAttach", {
 				buffer = args.buf,
 				callback = function()
 					if client.name == "gopls" then
-						vim.lsp.buf.code_action({ bufnr = args.buf, id = client.id, context = { only = { 'source.organizeImports' } }, apply = true })
-						vim.lsp.buf.code_action({ bufnr = args.buf, id = client.id, context = { only = { 'source.fixAll' } }, apply = true })
+						vim.lsp.buf.code_action({
+							bufnr = args.buf,
+							id = client.id,
+							context = {
+								diagnostics = {},
+								only = { 'source.organizeImports' },
+							},
+							apply = true,
+						})
+						-- vim.lsp.buf.code_action({ bufnr = args.buf, id = client.id, context = { only = { 'source.fixAll' } }, apply = true })
 					end
 					vim.lsp.buf.format({ bufnr = args.buf, id = client.id, timeout_ms = 1000 })
 				end,
@@ -383,6 +420,11 @@ require("pckr").add({
 				check_ts = true,
 			})
 		end,
+	},
+
+	-- keybind reminder
+	{
+		"folke/which-key.nvim",
 	},
 
 	-- git integration

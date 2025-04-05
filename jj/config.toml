@@ -1,13 +1,20 @@
 [aliases]
 master-diff   = ["diff", "--from", "master"]
 master-update = ["bookmark", "move", "--to", "@-", "master"]
-master-push   = ["util", "exec", "--" ,"bash", "-c", "jj bookmark move --to @- master && jj git push -b master"]
+master-push   = ["util", "exec", "--" ,"sh", "-c", "jj bookmark move --to @- master && jj git push -b master"]
+master-pull   = ["util", "exec", "--", "sh", "-c", "jj git fetch && jj new master"]
+
+push-branch   = ["util", "exec", "--", "sh", "-c", """
+name="$(jj log --no-graph --no-pager --color=never -r 'fork_point(@ | master)+ & fork_point(@ | master)..@' -T '"push-" ++ change_id.short()')"
+jj bookmark move --to @- "${name}"
+jj git push -b "${name}"
+"""]
 
 [git]
 sign-on-push = true
 
 [revsets]
-log = "git_head() | ancestors(tracked_remote_bookmarks(), 5) | tracked_remote_bookmarks().. | @.."
+log = "ancestors(master | @ | working_copies() | bookmarks(), 5)"
 
 [signing]
 behavior = "drop" # for git.sign-on-push

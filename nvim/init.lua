@@ -110,8 +110,13 @@ end
 
 --
 -- lsp configs
+local cap = vim.lsp.protocol.make_client_capabilities()
+local cap_ws = cap.workspace
+local cap_ws_did = cap_ws.didChangeWatchedFiles
+cap_ws_did.dynamicRegistration = true
 vim.lsp.config("*", {
 	root_markers = { ".git" },
+	capabilities = cap
 })
 
 vim.lsp.config("bash", {
@@ -301,6 +306,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
 			end
 			client.server_capabilities.completionProvider.triggerCharacters = chars
 			vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = true })
+
+			vim.keymap.set("i", "<cr>", function() return vim.fn.pumvisible() == 1 and '<c-y>' or '<cr>' end,
+				{ silent = true, expr = true })
 		end
 
 		-- Auto-format ("lint") on save.

@@ -259,17 +259,27 @@ vim.lsp.enable("markdown")
 -- 	root_markers = nil,
 -- })
 
+-- get directory name from file path
+function Dirname(str)
+	return str:match("(.*[/\\])")
+end
+
 vim.lsp.config("terraform", {
 	-- https://github.com/hashicorp/terraform-ls
 	cmd = { "terraform-ls", "serve" },
 	filetypes = { "terraform" },
-	root_markers = { ".terraform", ".terraform.lock", "providers.tf", "main.tf" },
+	root_dir = function(bufnr, cb)
+		local bufpath = vim.api.nvim_buf_get_name(bufnr)
+		local bufdir = Dirname(bufpath)
+		cb(bufdir)
+	end
 })
 vim.lsp.enable("terraform")
 
 vim.lsp.config("typos", {
-	-- https://github.com/neovim/nvim-lspconfig
+	-- https://github.com/tekumara/typos-lsp
 	cmd = { "typos-lsp" },
+	root_markers = nil,
 })
 vim.lsp.enable("typos")
 
@@ -278,6 +288,13 @@ vim.lsp.config("yaml", {
 	cmd = { "yaml-language-server", "--stdio" },
 	filetypes = { "yaml" },
 	root_markers = nil,
+	settings = {
+		['yaml.format.enable'] = true,
+		['yaml.validate'] = true,
+		['yaml.hover'] = true,
+		['yaml.completion'] = true,
+		['yaml.schemaStore.enable'] = true,
+	},
 })
 vim.lsp.enable("yaml")
 

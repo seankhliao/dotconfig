@@ -1,2 +1,1 @@
 cache=${XDG_CACHE_HOME}/npm
-func=false

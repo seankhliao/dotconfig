@@ -1,14 +1,14 @@
 [aliases]
-master-diff   = ["diff", "--from", "master"]
-master-update = ["bookmark", "move", "--to", "@-", "master"]
 master-push   = ["util", "exec", "--" ,"sh", "-c", "jj bookmark move --to @- master && jj git push -b master"]
 master-pull   = ["util", "exec", "--", "sh", "-c", "jj git fetch && jj new master"]
 
-push-branch   = ["util", "exec", "--", "sh", "-c", """
+branch-push   = ["util", "exec", "--", "sh", "-c", """
 name="$(jj log --no-graph --no-pager --color=never -r 'fork_point(@ | master)+ & fork_point(@ | master)..@' -T '"push-" ++ change_id.short()')"
-jj bookmark move --to @- "${name}"
+jj bookmark set -r @- "${name}"
 jj git push -b "${name}"
 """]
+
+push-branch = ["branch-push"] # alias
 
 [git]
 sign-on-push = true
@@ -20,21 +20,6 @@ log = "ancestors(master | @ | working_copies() | bookmarks(), 5)"
 behavior = "drop" # for git.sign-on-push
 backend = "ssh"
 key = "/home/user/.ssh/ssh/id_ed25519"
-
-[template-aliases]
-'gerrit_change_id(change_id)' = '"Id0000000" ++ change_id.normal_hex()'
-
-[templates]
-	draft_commit_description = '''
-		separate("\n",
-			description.remove_suffix("\n"),
-			if(!description.contains(change_id.normal_hex()),
-				"\nChange-Id: " ++ gerrit_change_id(change_id)
-			),
-			"\n",
-			surround("JJ: Changes:\n", "", indent("JJ: \t", diff.summary()))
-		)
-	'''
 
 [ui]
 conflict-marker-style = "git"

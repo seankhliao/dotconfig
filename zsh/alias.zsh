@@ -48,7 +48,7 @@ alias tf='terraform'
 alias v='${EDITOR}'
 alias vbare='${EDITOR} -u NONE'
 alias vf='fzf --bind "enter:become(nvim {})"'
-alias wifi-portal='curl -sI http://neverssl.com | rg -o "(?:Location: (.*)|href=[\u{22}\u{27}](.*)[\u{22}\u{27}])" --replace "\$1" -N -L'
+# alias wifi-portal='curl -sI http://neverssl.com | rg -o "(?:Location: (.*)|href=[\u{22}\u{27}](.*)[\u{22}\u{27}])" --replace "\$1" -N -L'
 
 case "${OSTYPE}" in
     linux*)

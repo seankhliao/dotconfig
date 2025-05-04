@@ -32,7 +32,6 @@ vim.bo.smartindent = true -- tbd: messes with yaml?
 vim.bo.swapfile = false
 vim.bo.tabstop = 4
 vim.bo.undofile = true
-
 --
 -- indenting
 local ft_tab_width = {
@@ -64,7 +63,13 @@ vim.keymap.set("n", ";", ":", { silent = true })
 vim.api.nvim_create_user_command("W", function()
 	local tmpfilename = os.tmpname()
 	local tmpfile = io.open(tmpfilename, "w")
-	for i, line in ipairs(vim.api.nvim_buf_get_lines(0, 0, -1, false)) do
+	if not tmpfile then
+		vim.api.nvim_echo({ { "failed to open tmp file" }, { tmpfilename } }, false, {
+			err = true
+		})
+		return
+	end
+	for _, line in ipairs(vim.api.nvim_buf_get_lines(0, 0, -1, false)) do
 		tmpfile:write(line .. "\n")
 	end
 	tmpfile:close()
@@ -73,6 +78,20 @@ vim.api.nvim_create_user_command("W", function()
 	vim.cmd([[ edit! ]])
 	os.remove(tmpfilename)
 end, {})
+
+vim.api.nvim_create_autocmd("BufWritePre", {
+	pattern = "*",
+	callback = function()
+		for i, line in ipairs(vim.api.nvim_buf_get_lines(0, 0, -1, false)) do
+			local trimmed = string.gsub(line, "%s+$", "")
+			vim.api.nvim_buf_set_lines(0, i - 1, i, false, { trimmed })
+		end
+	end,
+})
+vim.api.nvim_create_autocmd("BufWritePre", {
+	pattern = { "*.md" },
+	command = "%!prettier --parser markdown",
+})
 
 -- setup remote copy/paste through ssh osc52
 if vim.env.SSH_CONNECTION ~= nil then

@@ -369,7 +369,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
 						})
 						-- vim.lsp.buf.code_action({ bufnr = args.buf, id = client.id, context = { only = { 'source.fixAll' } }, apply = true })
 					end
-					vim.lsp.buf.format({ bufnr = args.buf, id = client.id, timeout_ms = 1000 })
+
+					local path = client.workspace_folders[1].name
+					if not path:find("/sdk/") then
+						vim.lsp.buf.format({ bufnr = args.buf, id = client.id, timeout_ms = 1000 })
+					end
 				end,
 			})
 		end

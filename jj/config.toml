@@ -12,6 +12,7 @@ push-branch = ["branch-push"] # alias
 
 [git]
 sign-on-push = true
+write-change-id-header = true
 
 [revsets]
 log = "ancestors(master | @ | working_copies() | bookmarks(), 5)"
@@ -25,9 +26,7 @@ key = "/home/user/.ssh/ssh/id_ed25519"
 conflict-marker-style = "git"
 default-command = "status"
 pager = "delta"
-
-[ui.diff]
-format = "git" # for delta
+diff-formatter = ":git"
 
 [ui.graph]
 style = "ascii-large"

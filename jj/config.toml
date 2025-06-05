@@ -26,9 +26,7 @@ key = "/home/user/.ssh/ssh/id_ed25519"
 conflict-marker-style = "git"
 default-command = "status"
 pager = "delta"
-
-[ui.diff]
-format = "git"
+diff-formatter = ":git"
 
 [ui.graph]
 style = "ascii-large"

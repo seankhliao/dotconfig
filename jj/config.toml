@@ -15,7 +15,7 @@ sign-on-push = true
 write-change-id-header = true
 
 [revsets]
-log = "ancestors(master | @ | working_copies() | bookmarks(), 5)"
+log = "ancestors(master | @ | working_copies() | bookmarks() | latest(mine(), 3), 5)"
 
 [signing]
 behavior = "drop" # for git.sign-on-push

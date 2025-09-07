@@ -3,4 +3,7 @@
 sudo rfkill unblock bluetooth
 sudo systemctl start bluetooth
 bluetoothctl power on
-bluetoothctl connect CC:98:8B:F5:00:14
+# WH-1000XM6
+bluetoothctl connect 58:18:62:00:CD:EF
+# WH-1000XM3
+# bluetoothctl connect CC:98:8B:F5:00:14

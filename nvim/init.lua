@@ -380,6 +380,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
 	end,
 })
 
+vim.diagnostic.config({
+	virtual_text = true,
+	virtual_lines = true,
+})
+
+
 --
 -- load plugins
 local pckr_path = vim.fn.stdpath("data") .. "/pckr/pckr.nvim"
@@ -599,19 +605,6 @@ require("pckr").add({
 				vim.cmd.normal({ "N", bang = true })
 				require("hlslens").start()
 			end, { silent = true })
-		end,
-	},
-
-	-- show diagnostics as virtual text
-	{
-		"https://git.sr.ht/~whynothugo/lsp_lines.nvim",
-		config = function()
-			require("lsp_lines").setup()
-			vim.diagnostic.config({
-				virtual_text = false,
-				virtual_lines = true,
-				-- virtual_lines = { only_current_line = true },
-			})
 		end,
 	},
 })

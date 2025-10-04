@@ -55,14 +55,15 @@
     pager = delta
 
 [credential]
-    ; https credentials
-	helper = store
-; [credential "https://github.com"]
-; 	helper =
-; 	helper = !/usr/bin/gh auth git-credential
-; [credential "https://gist.github.com"]
-; 	helper =
-; 	helper = !/usr/bin/gh auth git-credential
+	helper = cache --timeout 21600
+    helper = oauth
+    helper = store
+[credential "https://github.com"]
+	helper =
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper =
+	helper = !/usr/bin/gh auth git-credential
 
 [delta]
     file-decoration-style = none

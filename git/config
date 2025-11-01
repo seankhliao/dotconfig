@@ -5,10 +5,9 @@
     a     = add
 
     b     = switch
-    bd    = branch -D
     bn    = checkout -b
 
-    c     = clone --recursive
+    c     = clone
 
     cam   = !git commit -a -m "\""$*"\"" && :
     camp  = !git commit -a -m "\""$*"\"" && git push && :
@@ -23,7 +22,6 @@
     l     = pull --rebase --autostash
 
     lo    = log --all --graph --format='%C(auto)%h %d %s %C(black)%ar/%cr %C(blue)<%an>'
-    lob   = log --graph --format='%C(auto)%h %d %s %C(black)%ar/%cr %C(blue)<%an>'
     los   = log --all --graph --simplify-by-decoration --format='%C(auto)%h %d %s %C(black)%ar/%cr %C(blue)<%an>'
 
     p     = push
@@ -58,12 +56,6 @@
 	helper = cache --timeout 21600
     helper = oauth
     helper = store
-[credential "https://github.com"]
-	helper =
-	helper = !/usr/bin/gh auth git-credential
-[credential "https://gist.github.com"]
-	helper =
-	helper = !/usr/bin/gh auth git-credential
 
 [delta]
     file-decoration-style = none
@@ -77,9 +69,6 @@
     algorithm = histogram
     renames = copies
     colorMoved = plain
-
-[diff "sopsdiffer"]
-    textconf = "sops -d"
 
 [fetch]
     prune     = true
@@ -128,11 +117,6 @@
 
 [url "https://github.com/"]
 	insteadOf = g:
-	insteadOf = git://github.com/
-[url "https://go.googlesource.com/"]
-    insteadOf = go:
-[url "https://softserve.liao.dev/"]
-    insteadOf = l:
 [url "https://github.com/seankhliao/"]
     insteadOf = s:
 

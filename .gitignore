@@ -33,6 +33,7 @@ gqrx/
 gsutil/
 gtk-*
 helm/
+htop/
 hub/
 inkscape/
 java/
@@ -86,7 +87,6 @@ Trolltech.conf
 VirtualBox/
 vlc/
 weechat/
-wgetrc
 whoozle.github.io/
 wireshark/
 yarn/

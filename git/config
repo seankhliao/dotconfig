@@ -54,8 +54,8 @@
 
 [credential]
 	helper = cache --timeout 21600
-    helper = oauth
     helper = store
+    helper = oauth
 
 [delta]
     file-decoration-style = none

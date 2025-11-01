@@ -3,7 +3,7 @@ master-push   = ["util", "exec", "--" ,"sh", "-c", "jj bookmark move --to @- mas
 master-pull   = ["util", "exec", "--", "sh", "-c", "jj git fetch && jj new master"]
 
 branch-push   = ["util", "exec", "--", "sh", "-c", """
-name="$(jj log --no-graph --no-pager --color=never -r 'fork_point(@ | master)+ & fork_point(@ | master)..@' -T '"push-" ++ change_id.short()')"
+name="$(jj log --no-graph --no-pager --color=never -r 'fork_point(@ | trunk())+ & fork_point(@ | trunk())..@' -T '"push-" ++ change_id.short()')"
 jj bookmark set -r @- "${name}"
 jj git push -b "${name}"
 """]
@@ -15,7 +15,7 @@ sign-on-push = true
 write-change-id-header = true
 
 [revsets]
-log = "ancestors(master | @ | working_copies() | bookmarks() | latest(mine(), 3), 5)"
+log = "ancestors(trunk() | @ | working_copies() | bookmarks() | latest(mine(), 3), 5)"
 
 [signing]
 behavior = "drop" # for git.sign-on-push

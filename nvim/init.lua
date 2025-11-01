@@ -444,6 +444,10 @@ require("pckr").add({
 		"jjo/vim-cue",
 	},
 	{
+		"terrastruct/d2-vim",
+		filetypes = { "d2" },
+	},
+	{
 		-- treesitter text objects
 		"nvim-treesitter/nvim-treesitter",
 		-- requires = { "neovim/nvim-lspconfig" },
@@ -463,6 +467,10 @@ require("pckr").add({
 			vim.wo.foldmethod = "expr"
 			vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 		end,
+	},
+	{
+		"ravsii/tree-sitter-d2",
+		run = "make nvim-install",
 	},
 
 	-- automagic

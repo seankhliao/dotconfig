@@ -24,7 +24,7 @@ key = "/home/user/.ssh/ssh/id_ed25519"
 
 [ui]
 conflict-marker-style = "git"
-default-command = "status"
+default-command = ["util", "exec", "--", "sh", "-c", "jj status && jj log -r 'ancestors(@, 5)'" ]
 pager = "delta"
 diff-formatter = ":git"
 

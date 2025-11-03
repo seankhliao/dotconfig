@@ -32,25 +32,26 @@ alias ln='ln -v'
 alias mv='mv -v'
 alias g='git'
 alias h='htop'
-alias icat='kitty +kitten icat'
-source "${ZDOTDIR}/_switch"
 alias k='kubectl'
-# alias kctx='switch --kubeconfig-path ${XDG_CONFIG_HOME}/kube/config --state-directory ${XDG_CACHE_HOME}/switch'
-# alias kns='switch namespace --kubeconfig-path ${XDG_CONFIG_HOME}/kube/config --state-directory ${XDG_CACHE_HOME}/switch'
 alias kctx='kswitch context'
 alias kns='kswitch namespace'
+
 alias rr='cd $(git rev-parse --show-toplevel)'
-alias s='ssh'
 alias sc='sudo systemctl'
 alias scu='systemctl --user'
 alias title='printf "\033[1m%s\n==========\033[0m\n"'
-alias tf='terraform'
-alias tsup='sudo systemctl start tailscaled'
-alias tsdown='sudo systemctl stop tailscaled'
+
 alias v='${EDITOR}'
 alias vbare='${EDITOR} -u NONE'
 alias vf='fzf --bind "enter:become(nvim {})"'
-# alias wifi-portal='curl -sI http://neverssl.com | rg -o "(?:Location: (.*)|href=[\u{22}\u{27}](.*)[\u{22}\u{27}])" --replace "\$1" -N -L'
+
+if (( $+commands[tailscale] )); then
+    alias tsup='sudo systemctl start tailscaled'
+    alias tsdown='sudo systemctl stop tailscaled'
+    alias tsie='tailscale set --exit-node ie-dub-wg-101.mullvad.ts.net'
+    alias tsjp='tailscale set --exit-node jp-tyo-wg-001.mullvad.ts.net'
+    alias tsuk='tailscale set --exit-node gb-lon-wg-001.mullvad.ts.net'
+fi
 
 case "${OSTYPE}" in
     linux*)

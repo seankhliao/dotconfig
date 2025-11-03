@@ -53,8 +53,8 @@
     pager = delta
 
 [credential]
-	helper = cache --timeout 21600
-    helper = store
+    helper = cache --timeout 21600
+    ; helper = store
     helper = oauth
 
 [delta]

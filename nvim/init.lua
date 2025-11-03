@@ -131,8 +131,9 @@ end
 -- lsp configs
 local cap = vim.lsp.protocol.make_client_capabilities()
 local cap_ws = cap.workspace
-local cap_ws_did = cap_ws.didChangeWatchedFiles
-cap_ws_did.dynamicRegistration = true
+if cap_ws ~= nil then
+	cap_ws.didChangeWatchedFiles.dynamicRegistration = true
+end
 vim.lsp.config("*", {
 	root_markers = { ".git" },
 	capabilities = cap
@@ -179,14 +180,6 @@ vim.lsp.config("docker", {
 })
 vim.lsp.enable("docker")
 
--- vim.lsp.config("gh-actions", {
--- 	-- https://github.com/lttb/gh-actions-language-server
--- 	cmd = { "gh-actions-language-server", "--stdio" },
--- 	filetypes = { "yaml" },
--- 	root_dir = ".github/workflows",
--- 	root_markers = { ".github", ".git" },
--- })
-
 vim.lsp.config("gopls", {
 	-- https://github.com/golang/tools/tree/master/gopls
 	cmd = { "gopls" },
@@ -221,13 +214,6 @@ vim.lsp.config('json', {
 })
 vim.lsp.enable("json")
 
--- vim.lsp.config("helm", {
--- 	-- https://github.com/mrjosh/helm-ls
--- 	cmd = { "helm-ls", "serve" },
--- 	filetypes = { "helm" },
--- 	root_markers = { "Chart.yaml" },
--- })
-
 vim.lsp.config("html", {
 	-- https://github.com/hrsh7th/vscode-langservers-extracted
 	cmd = { "vscode-html-language-server", "--stdio" },
@@ -261,22 +247,12 @@ vim.lsp.config("lua", {
 vim.lsp.enable("lua")
 
 vim.lsp.config("markdown", {
-	-- https://github.com/artempyanykh/marksman
-	-- cmd = { "marksman", "server" },
 	-- https://github.com/hrsh7th/vscode-langservers-extracted
 	cmd = { "vscode-markdown-language-server", "--stdio" },
 	filetypes = { "markdown" },
 	root_markers = nil,
 })
 vim.lsp.enable("markdown")
-
--- vim.lsp.config("sqls", {
--- 	-- https://github.com/sqls-server/sqls
--- 	-- TODO: compare with https://github.com/joe-re/sql-language-server
--- 	cmd = { "sqls" },
--- 	filetypes = { "sql", "mysql" },
--- 	root_markers = nil,
--- })
 
 -- get directory name from file path
 function Dirname(str)
@@ -389,7 +365,7 @@ vim.diagnostic.config({
 --
 -- load plugins
 local pckr_path = vim.fn.stdpath("data") .. "/pckr/pckr.nvim"
-if not (vim.uv or vim.loop).fs_stat(pckr_path) then
+if not vim.uv.fs_stat(pckr_path) then
 	vim.fn.system({
 		"git",
 		"clone",

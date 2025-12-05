@@ -183,6 +183,7 @@ vim.lsp.enable("docker")
 vim.lsp.config("gopls", {
     -- https://github.com/golang/tools/tree/master/gopls
     cmd = { "gopls" },
+    -- cmd = { "gopls", "-rpc.trace", "-logfile=/home/user/gopls.log" },
     filetypes = { "go", "gomod", "gowork", "gotmpl" },
     root_markers = { "go.mod", "go.sum", "go.work", ".git" },
     settings = {
@@ -415,10 +416,11 @@ require("pckr").add({
     -- 		vim.g.polyglot_disabled = { "cue" }
     -- 	end,
     -- },
-    -- {
-    --     -- cuelang
-    --     "jjo/vim-cue",
-    -- },
+    {
+        -- cuelang
+        -- fixes tab issues?
+        "jjo/vim-cue",
+    },
     -- {
     --     "terrastruct/d2-vim",
     --     filetypes = { "d2" },

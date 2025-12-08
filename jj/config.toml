@@ -10,6 +10,11 @@ jj git push -b "${name}"
 
 push-branch = ["branch-push"] # alias
 
+
+[gerrit]
+default-remote = "gerrit"
+default-remote-branch = "master"
+
 [git]
 sign-on-push = true
 write-change-id-header = true

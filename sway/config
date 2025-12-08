@@ -138,17 +138,10 @@ for_window [class="Vncviewer"] fullscreen enable
 assign [class="Spotify"] workspace $ws9
 assign [title="irc"] workspace $ws10
 
-input "1739:30382:DLL0704:01_06CB:76AE_Touchpad" {
-    tap                 enabled
-    natural_scroll      enabled
-    middle_emulation    enabled
-}
-
-# input "PIXA3854:00:093A:0274_Touchpad" {
 input "type:touchpad" {
     tap enabled
-    # accel_profile flat
     accel_profile adaptive
+    scroll_factor 1.5
     # pointer_accel 1
     middle_emulation enabled
     natural_scroll enabled
